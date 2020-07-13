@@ -1,0 +1,25 @@
+Registered S3 methods overwritten by 'ggplot2':
+  method         from 
+  [.quosures     rlang
+  c.quosures     rlang
+  print.quosures rlang
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Warning message:
+package ‘hrbrthemes’ was built under R version 3.6.2 
+Loading required package: viridisLite
+Warning message:
+package ‘eulerr’ was built under R version 3.6.2 
+Warning message:
+position_dodge requires non-overlapping x intervals 
+Warning message:
+position_dodge requires non-overlapping x intervals 
