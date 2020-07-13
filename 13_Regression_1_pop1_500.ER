@@ -1,6 +1,0 @@
-Loading required package: sandwich
-Loading required package: msm
-/var/spool/gridengine/compute-2-58/job_scripts/6196973: line 41: 15352 Killed                  /homes/aliu/DSGE_LRS/software/Rscript --vanilla 13_Regression_1_pop1_500.R
-Loading required package: sandwich
-Loading required package: msm
-/var/spool/gridengine/compute-2-58/job_scripts/6196978: line 41: 17156 Killed                  /homes/aliu/DSGE_LRS/software/Rscript --vanilla 13_Regression_1_pop1_500.R
