@@ -1,6 +1,0 @@
-Loading required package: sandwich
-Loading required package: msm
-/var/spool/gridengine/compute-2-58/job_scripts/6196975: line 41: 15800 Killed                  /homes/aliu/DSGE_LRS/software/Rscript --vanilla 13_Regression_1_pop501_1000.R
-Loading required package: sandwich
-Loading required package: msm
-There were 50 or more warnings (use warnings() to see the first 50)
