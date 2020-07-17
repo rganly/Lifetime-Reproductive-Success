@@ -26,10 +26,10 @@ library(haven)
 ##  Comment on each file  #  See "Data_comments_FIN.xlsx", which was adapted from "Data_comments_FIN.csv".
 ###########################
 
+# system("rm Data_comments_FIN.csv")
 wfile <- c(list.files(in_dir, pattern="*.sas7bdat"), "fcr_all_data.csv")
 
-for (k in  c("thl2019_804_hilmo_9618.sas7bdat", "thl2019_804_poisto_6986.sas7bdat","thl2019_804_poisto_8793.sas7bdat","thl2019_804_roolit.sas7bdat","thl2019_804_tljslv.sas7bdat","thl2019_804_tutkhenk.sas7bdat","fcr_all_data.csv")){
-#for (k in wfile){
+for (k in wfile){
 
 	if (k != "fcr_all_data.csv"){
 		d <- read_sas(paste0(in_dir, k))
@@ -57,11 +57,7 @@ for (k in  c("thl2019_804_hilmo_9618.sas7bdat", "thl2019_804_poisto_6986.sas7bda
 	
 	rm(d)  # save memory
 	
-	#if (which(wfile==k)==1){
-	#	write.table(info, "Data_comments_FIN.csv", append=F, quote=F, sep=" ", row.names=F, col.names=T)
-	#}else{
-		write.table(info, "Data_comments_FIN.csv", append=T, quote=F, sep=" ", row.names=F, col.names=F)
-	#}
+	write.table(info, "Data_comments_FIN.csv", append=T, quote=F, sep=" ", row.names=F, col.names=F)
 	print(paste0("Done for file: ", k))
 	
 }
@@ -77,6 +73,7 @@ for (k in  c("thl2019_804_hilmo_9618.sas7bdat", "thl2019_804_poisto_6986.sas7bda
 # check whether the 1st column of "roolit" are for indexperson and children of indexperson and sibling
 tlj <- get(load(paste0(r_dir,"thl2019_804_tljslv.Rdata")))
 child_lst <- unique(tlj$KANTAHENKILON_TNRO); length(child_lst)      # 2,631,986
+
 index <- get(load(paste0(r_dir,"index.Rdata")))                     # 2,365,707 
 length(unique(c(child_lst, index$KANTAHENKILON_TNRO)))              # 4,546,684
 
