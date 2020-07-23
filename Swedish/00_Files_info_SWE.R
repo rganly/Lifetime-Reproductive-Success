@@ -18,8 +18,6 @@ library(haven)
 
 
 
-
-
 #############################
 #  Upload or download files #
 #############################
@@ -56,8 +54,6 @@ library(haven)
 
 
 
-
-
 #############################
 #   Comment on each files   #
 #############################
@@ -67,96 +63,20 @@ library(haven)
 ## 0.1.1 release 1
 system("ls /proj/sens2019018/SCB_data/release1/r_files/")
 
-#set 1: tove_lev_lisa_1990.Rdata                   # more individuals/details in release 2, 1990 to 2017
-#set 2: tove_lev_rtb_1977.Rdata                    # more individuals/details in release 2, 1977 to 2017
-#set 3: tove_lev_dispink_1977.Rdata                # more individuals/details in release 2, 1977 to 1989
-#set 4: tove_lev_hog_gymn_1989_1977.Rdata          # more individuals/details in release 2
-#set 5: tove_lev_doddatum.Rdata                    # more individuals/details in release 2
-#set 6: tove_lev_migrationer.Rdata                 # more individuals/details in release 2
-#set 7: tove_lev_koppl_index_barn.Rdata            # more individuals/details in release 2
-#set 8: tove_lev_koppl_index_barnbarn.Rdata        # more individuals/details in release 2
-#set 9: tove_lev_koppl_index_syskonbarn.Rdata      # more individuals/details in release 2
-#set 10: tove_lev_bakgrund.Rdata                   # missing in release 2, background of indexperson 
-#set 11: tove_lev_koppl_barn_vardh_1998.Rdata      # missing in release 2, 1999 to 2017 ???what's this file for
-#set 12: tove_lev_koppl_index_vhfor_1998.Rdata     # missing in release 2, 1998 to 2017 ???what's this file for
-#set 13: tove_lev_koppl_index_foraldrar.Rdata      # missing in release 2, parents of the indexperson
-#set 14: tove_lev_koppl_barn_foraldrar.Rdata       # missing in release 2, parents of the child
-
-
 
 #-----------------------------------------------------------------------------------------
 ## 0.1.2 release 2
 system("ls /proj/sens2019018/SCB_data/release2/r_files/")
-
-#set 1: tove2_lev_dink_parsyssyspar1977.Rdata      # 1977 to 1989, information [2][id, disposable_income (individual)] of spouse (indexperson), siblings, and siblings' spouse
-#set 2: tove2_lev_hoggym_pssp_1989_1977.Rdata      # Information [5][id, year, highest_education_level (SUN2000), highest_educational_orientation, highest_education_level(aggregated to 7 'Swedish' level)] of spouse (indexperson), siblings, and siblings' spouse
-#set 3: tove2_lev_lisa_1990.Rdata                  # 1900 to 2017, information [11][id, socioeconomic, highest_education_level(old SUN), highest_education_level(aggregated to 7 'Swedish' level), highest_education_level(SUN2000), highest_educational_orientation, employment_status(old definition), house_bill, disposable_income(individual from family), disposable_income(individual), disposable_income(individual from family)] of spouse (indexperson), siblings, and siblings' spouse
-#set 4: tove2_lev_rtb_partsyssyspar1977.Rdata      # 1977 to 2017, information [5][id, residence_country, residence_municipality, house_group, civil_status] of spouse (indexperson), siblings, and siblings' spouse (Register of total population (RTB))
-
-#set 5: tove2_lev_indexpartn1977.Rdata             # 1977 to 2017, information [6][id, id_spouse, spouse_birth_year, spouse_birth_country, spouse_birth_municipality, spouse_gender] of spouse (indexperson)
-#set 6: tove2_lev_syskonpartn1977.Rdata            # 1977 to 2017, information [6][id_sibling, id_siblingspouse, siblingspouse_birth_year, siblingspouse_birth_country, siblingspouse_birth_municipality, siblingspouse_gender] of siblings' spouse
-
-#set 7: tove2_lev_doddatum.Rdata                   # Information [2][id, death] of everyone in the population
-#set 8: tove2_lev_migr_partsyssyspart.Rdata        # Information [4][id, date, country, type(immigration_emigration)] of spouse (indexperson), siblings, and siblings' spouse ????how about the index person???
-
-#set 9: tove2_lev_koppl_index_barn.Rdata           # Links and information [7][id, id_child, child_birth_year, child_birth_country, child_birth_municipality, child_birth_continent, child_gender] of child (indexperson)
-#set 10: tove2_lev_koppl_index_barnbarn.Rdata      # Information [6][id, id_grandchild, grandchild_birth_year, grandchild_birth_country, grandchild_birth_municipality, grand_child_gender]of indexperson's grandchild
-#set 11: tove2_lev_koppl_index_syskon.Rdata        # Links and information [7][id, id_sibling, type_of_sibling, sibling_birth_year, sibling_birth_country, sibling_birth_municipality, sibling_gender] of sibling
-#set 12: tove2_lev_koppl_ind_barn_bb.Rdata         # Links of [3]indexperson-child-grandchild
-#set 13: tove2_lev_koppl_ind_sys_sysbarn.Rdata     # Links of [3]indexperson-sibling-siblingchild
-#set 14: tove2_lev_koppl_syskon_syskbarn.Rdata     # Links and information [7][id, id_sibling, id_siblingchild, siblingchild_birth_year, siblingchild_birth_country, siblingchild_birth_municipality, siblingchild_gender] of sibling and siblingchild
-
 
 
 #-----------------------------------------------------------------------------------------
 ## 0.1.3 release 3 
 system("ls /proj/sens2019018/SCB_data/release3")
 
-# social economic 
-#set 1: tove_lev_rtb_1977-2017.sas7bdat
-#set 2: tove_lev_dispink_1977-1989.sas7bdat
-#set 3: tove_lev_hog_gymn_1989_1977.sas7bdat
-#set 4: tove_lev_lisa_1990-2017.sas7bdat
-
-#set 5: tove_lev_koppl_barn_vardh_1998-2017.sas7bdat
-#set 6: tove_lev_koppl_index_vhfor_1998-2017.sas7bdat
-
-# spouse of index and sibling
-#set 7: tove_lev_koppl_index_part_1998-2017.sas7bdat
-#set 8: tove_lev_koppl_sys_part_1998-2017.sas7bdat
-
-# family relationship (indexperson, child, grandchild, sibling, sibling's child)
-#set 9: tove_lev_index.sas7bdat
-#set 10: tove_lev_koppl_index_barn.sas7bdat
-#set 11: tove_lev_koppl_index_barnbarn.sas7bdat
-#set 12: tove_lev_koppl_index_syskon.sas7bdat
-#set 13: tove_lev_koppl_index_sysbarn.sas7bdat
-
-# pedigree (parents) information for index, child, and siblings's child
-#set 14: tove_lev_koppl_index_foraldrar.sas7bdat
-#set 15: tove_lev_koppl_barn_foraldrar.sas7bdat
-#set 16: tove_lev_koppl_sysbarn_foraldr.sas7bdat
-
-# migration and death
-#set 17: tove_lev_migrationer.sas7bdat
-#set 18: tove_lev_doddatum.sas7bdat
-
-
 
 #-----------------------------------------------------------------------------------------
 ## 0.1.4 release 4
 system("ls /proj/sens2019018/SCB_data/release4")
-
-#set 1: ut_par_ov_27035_2018.sas7bdat            # Outpatient Registry 1997-2018
-#set 2: ut_par_sv_27035_2018.sas7bdat            # Inpatient Registry 1969-2018
-
-#set 3: ut_dors_indexpers_27035_2018.sas7bdat    # Death Registry for Index persons 1956-2019
-#set 4: ut_dors_b_bbarn_27035_2018.sas7bdat      # Death Registry for children and grandchildren 1956-2019
-
-#set 5: ut_mfr_indexpers_27035_2018.sas7bdat     # Medical Birth Registry 1973-2018 for index person
-#set 6: ut_mfr_b_bbarn_27035_2018.sas7bdat       # Medical Birth Registry 1973-2018 for Children and grandchildren
-
-
 
 
 
@@ -203,12 +123,9 @@ sibchild_parent <- get(load(paste0(r_dir, "tove_lev_koppl_sysbarn_foraldr.Rdata"
 
 
 
-
-
 ###########################
 ##  Comment on each file  #  See "Data_comments_SWE.xlsx", which was adapted from "Data_comments_SWE.csv".
 ###########################
-
 
 for (release_n in 3:4){
 	r_dir <- paste0("/proj/sens2019018/SCB_data/release",release_n,"/r_files/")
@@ -237,11 +154,7 @@ for (release_n in 3:4){
 		
 		rm(d)  # save memory
 		
-		if (which(wfile==k)==1){
-			write.table(info, paste0("Data_comments_SWE_r",release_n,".csv"), append=F, quote=F, sep=" ", row.names=F, col.names=T)
-		}else{
-			write.table(info, paste0("Data_comments_SWE_r",release_n,".csv"), append=T, quote=F, sep=" ", row.names=F, col.names=F)
-		}
+		write.table(info, paste0("Data_comments_SWE_r",release_n,".csv"), append=T, quote=F, sep=" ", row.names=F, col.names=F)
 		
 		print(paste0("Done for file: ", k))
 	}
