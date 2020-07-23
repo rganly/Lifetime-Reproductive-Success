@@ -20,6 +20,7 @@ library(eulerr, lib.loc="/homes/aliu/anaconda3/envs/r_env/lib/R/library/")
 # conda install -c conda-forge r-scatterpie
 library(scatterpie, lib.loc="/homes/aliu/anaconda3/lib/R/library")
 
+
 fr <- function(lrs, pop){
 	gen_lrs <- mean(lrs[lrs$SUKUPUOLI==2,pop])
 	lrs_mbr <- lrs[lrs$KANTAHENKILON_TNRO %in% setdiff(mbr_m$TNRO, mal_m_dg$TNRO), pop]/gen_lrs   # divide the general population
