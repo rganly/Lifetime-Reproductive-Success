@@ -2,17 +2,17 @@
 
 
 ## 00_Files_info.R
-### Aim: convert all registry data to Rdata format and comment on each file.
-### Input: 
-### Output:
-### Notes:
+Aim: convert all registry data to Rdata format and comment on each file.
+Input: 
+Output:
+Notes:
 
 
 ## 01_Indexperson.R
-### Aim: 
-### Input: 
-### Output:
-### Notes:
+Aim: 
+Input: 
+Output:
+Notes:
 
 
 ## 02_
