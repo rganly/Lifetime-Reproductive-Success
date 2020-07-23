@@ -1,5 +1,4 @@
-
-## 5. This script is to construct pedigree for the full population (in a format "id, father_id, mother_id, "sex", birth_year")
+## 5. This script is to construct pedigree for the full population (in a format "id, father_id, mother_id, "sex", birth_date")
 
 
 setwd("/homes/aliu/DSGE_LRS/output/registry_edit/")
@@ -49,9 +48,11 @@ index_fm <- merge(index_f, index_m, by="id", all=T)
 
 # Add birth_year and sex
 index <- get(load(paste0(r_dir, "index.Rdata")))
-index$b_year <- substr(index$SUKULAISEN_SYNTYMAPV,1,4)
-index_bas <- index[ ,c("KANTAHENKILON_TNRO","SUKUPUOLI","b_year")]  # 2,365,707
-colnames(index_bas) <- c("id","sex","b_year")
+# index$b_year <- substr(index$SUKULAISEN_SYNTYMAPV,1,4)
+index$b_date <- index$SUKULAISEN_SYNTYMAPV      # YYYYMMDD
+#index_bas <- index[ ,c("KANTAHENKILON_TNRO","SUKUPUOLI","b_year")]  # 2,365,707
+index_bas <- index[ ,c("KANTAHENKILON_TNRO","SUKUPUOLI","b_date")]  # 2,365,707
+colnames(index_bas) <- c("id","sex","b_date")
 
 
 index_ped <- merge(index_fm, index_bas, by="id", all=T)     # 2,365,834
@@ -70,7 +71,7 @@ nrow(index) - nrow(index_fm)  # 374358 index person without any parent info
 ##   children and sib_children   #
 ##################################
 
-tlj_uniq <- get(load(paste(r_dir,"thl2019_804_tljslv_uniq.Rdata")))
+tlj_uniq <- get(load(paste0(r_dir,"thl2019_804_tljslv_uniq.Rdata")))
 nrow(tlj_uniq)       # 5,132,871
 length(unique(tlj_uniq$KANTAHENKILON_TNRO))   # 2,631,986
 
@@ -92,8 +93,12 @@ nrow(sibchild)       # 2,392,471
 
 child_a <- unique(rbind(child, sibchild))
 nrow(child_a)        # 2,632,301		
-child_bas <- child_a[ ,c("SUKULAISEN_TNRO","SUKUPUOLI","b_year")]  
-colnames(child_bas) <- c("id","sex","b_year")
+# child_bas <- child_a[ ,c("SUKULAISEN_TNRO","SUKUPUOLI","b_year")]  
+# colnames(child_bas) <- c("id","sex","b_year")
+child_bas <- child_a[ ,c("SUKULAISEN_TNRO","SUKUPUOLI","SUKULAISEN_SYNTYMAPV")]  
+colnames(child_bas) <- c("id","sex","b_date")
+
+
 
 
 child_ped <- merge(child_fm, child_bas, by="id", all=T)
@@ -130,9 +135,11 @@ sib_fm <- merge(sib_f, sib_m, by="id", all=T)
 # Add birth_year and sex
 sib_uniq <- get(load(paste0(r_dir,"sib_uniq.Rdata")))
 nrow(sib_uniq)       # 2307224
-sib_uniq[,"b_year"] <- substr(sib_uniq$SUKULAISEN_SYNTYMAPV,1,4)
-sib_bas <- sib_uniq[ ,c("SUKULAISEN_TNRO","SUKUPUOLI","b_year")]
-colnames(sib_bas) <- c("id","sex","b_year")
+# sib_uniq[,"b_year"] <- substr(sib_uniq$SUKULAISEN_SYNTYMAPV,1,4)
+# sib_bas <- sib_uniq[ ,c("SUKULAISEN_TNRO","SUKUPUOLI","b_year")]
+# colnames(sib_bas) <- c("id","sex","b_year")
+sib_bas <- sib_uniq[ ,c("SUKULAISEN_TNRO","SUKUPUOLI","SUKULAISEN_SYNTYMAPV")]
+colnames(sib_bas) <- c("id","sex","b_date")
 
 sib_ped <- merge(sib_fm, sib_bas, by="id", all=T)
 save(sib_ped, file=paste0(r_dir,"sib_ped.Rdata"))
@@ -169,8 +176,12 @@ grandchild_fm <- merge(grandchild_f, grandchild_m, by="id", all=T)
 # Add birth_year and sex
 grandchild_uniq <- get(load(paste0(r_dir,"grandchild_uniq.Rdata")))
 nrow(grandchild_uniq)   # 482777 
-grandchild_bas <- grandchild_uniq[ ,c("SUKULAISEN_TNRO","SUKUPUOLI","b_year")]
-colnames(grandchild_bas) <- c("id","sex","b_year")
+# grandchild_bas <- grandchild_uniq[ ,c("SUKULAISEN_TNRO","SUKUPUOLI","b_year")]
+# colnames(grandchild_bas) <- c("id","sex","b_year")
+grandchild_bas <- grandchild_uniq[ ,c("SUKULAISEN_TNRO","SUKUPUOLI","SUKULAISEN_SYNTYMAPV")]
+colnames(grandchild_bas) <- c("id","sex","b_date")
+
+
 
 grandchild_ped <- merge(grandchild_fm, grandchild_bas, by="id", all=T)
 save(grandchild_ped, file=paste0(r_dir,"grandchild_ped.Rdata"))
@@ -178,7 +189,6 @@ save(grandchild_ped, file=paste0(r_dir,"grandchild_ped.Rdata"))
 nrow(grandchild_ped)    # 482897
 nrow(grandchild_fm)     # 482897
 nrow(grandchild_bas)    # 482777
-
 
 
 
@@ -247,18 +257,26 @@ all_omm_m <- all_omm[is.na(all_omm$father_id),]       # with mother but father m
 nrow(all_omm_m)  # 61
 
 
-all_omm_fm <- merge(all_omm_f[,c("id","father_id","sex","b_year")], all_omm_m[,c("id","mother_id")], by="id")
+# all_omm_fm <- merge(all_omm_f[,c("id","father_id","sex","b_year")], all_omm_m[,c("id","mother_id")], by="id")
+all_omm_fm <- merge(all_omm_f[,c("id","father_id","sex","b_date")], all_omm_m[,c("id","mother_id")], by="id")
 all_omm_fm[,"n"] <- 2
 all_omm_fm <- all_omm_fm[,colnames(all)]                    # ***
 all_omm_dup <- all_omm[all_omm$id %!in% all_omm_fm$id, ]    # ***
 
 
 ped_all <- rbind(all_b, all_oo, all_omo, all_omm_fm, all_omm_dup)  
+# ped_all <- ped_all[,c("id","father_id","mother_id","sex","b_year")]
+ped_all <- ped_all[,c("id","father_id","mother_id","sex","b_date")]
 
-save(ped_all, file=paste0(r_dir,"ped_all.Rdata"))
+# save(ped_all, file=paste0(r_dir,"ped_all.Rdata"))
+save(ped_all, file=paste0(r_dir,"ped_all_bdate.Rdata"))
 
 
-# summary
+
+######################
+#       Summary      #
+######################
+
 male_lst <- unique(c(ped_all[ped_all$sex==1,"id"], ped_all$father_id))
 length(male_lst)     # 3500235
 female_lst <- unique(c(ped_all[ped_all$sex==2,"id"], ped_all$mother_id))
@@ -279,10 +297,7 @@ avio_add_sex <- merge(avio_add, index_sex, by.x="TUTKHENK_TNRO", by.y="KANTAHENK
 nrow(avio_add_sex)  # 19550
 
 
-length(unique(c(male_lst,avio_add_sex[avio_add_sex$s_sex==1,"PUOLISON_TNRO"])))    # 3,510,434 males in Finnish data
-length(unique(c(female_lst,avio_add_sex[avio_add_sex$s_sex==2,"PUOLISON_TNRO"])))  # 3,259,875 females in Finnish data
-
-
-
+length(unique(c(male_lst, avio_add_sex[avio_add_sex$s_sex==1,"PUOLISON_TNRO"])))    # 3,510,434 males in Finnish data
+length(unique(c(female_lst, avio_add_sex[avio_add_sex$s_sex==2,"PUOLISON_TNRO"])))  # 3,259,875 females in Finnish data
 
 
