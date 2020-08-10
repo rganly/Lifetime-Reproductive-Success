@@ -57,10 +57,10 @@ for (f in 1:2){
 # Add sex and birth year to individual-level occupation data 
 demo <- get(load(paste0(paste0(r_dir, "demo.Rdata"))))
 demo <- demo[,c("SUKULAISEN_TNRO","SUKUPUOLI","b_year")]
-dim(demo)          # 6752171      3
+nrow(demo)          # 6752171     
 
 sce_demo <- merge(sce, demo, by.x="TNRO", by.y="SUKULAISEN_TNRO")
-dim(sce_demo)      # 88008334        6
+nrow(sce_demo)      # 88008334      
 rm(demo, sce)
 
 sce_demo <- within(sce_demo, {
