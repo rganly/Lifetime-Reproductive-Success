@@ -45,7 +45,6 @@ plt <- function(dat, var, y_lab, m_lab, t_lab){   # plot aggregated income with 
 
 
 
-
 #############################################################
 #   N and Eur for two time periods (1990-1993, 1995-2017)   #
 #############################################################
