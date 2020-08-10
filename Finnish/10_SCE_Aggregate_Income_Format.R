@@ -1,10 +1,12 @@
 ## Editing aggregate-level info as part of application TK-52-306-20, prepared by Kaisa Herranen <kaisa.herranen@stat.fi> from Statistic Finland
 
+# Input
+# Output
 
-# Comments:
-# Two changes of original input EXCEL files: 
+# We made three changes in original input EXCEL files: 
 # (1) "Socioeconomic group: 54 Other workers" of the sheet "59" of the file "Income_1990_1993.xlsx" has changed to "Socioeconomic group: 59 Other workers"
 # (2) "The mean income subject to state taxation" was added to row 2 of the sheet "41,f" of the file "Income_1995_2017.xlsx"    # all other sheets have this row
+# (3) 1st column and 9th row of the sheet "70, f" of the file "Income_1995_2017.xlsx" should be changed from "10" to "19"
 
 
 
