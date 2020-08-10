@@ -15,13 +15,11 @@
 #   Setup working environment  #
 ################################
 
-
 setwd("/homes/aliu/DSGE_LRS/output/registry_edit/")
 r_dir <- "/homes/aliu/DSGE_LRS/input/r_files/"
 
 library("readxl")
 library(dplyr)
-
 
 
 # Parameters
@@ -31,7 +29,6 @@ code <- list("p1"=c(10,20,31:34,41:44,51:54,59,60,70,91:93,99), "p2"=c(paste0(re
              
 print(setdiff(code$p1, substr(code$p2,1,2)))   # 59 91 92 93 specific for period 1
 print(setdiff(substr(code$p2,1,2), code$p1))   # "81" "82" specific for period 2
-
 
 
 # Functions
@@ -45,7 +42,6 @@ fmt <- function(x, f="123") {        # Format columns as character or numeric
 }
 
 
-
 plt <- function(dat, var, y_lab, m_lab, t_lab){   # plot aggregated income with statistical year
 	y <- c(dat[ ,paste0(var,"_Male")], dat[ ,paste0(var,"_Female")])
 	
@@ -54,8 +50,6 @@ plt <- function(dat, var, y_lab, m_lab, t_lab){   # plot aggregated income with 
 	points(dat[ ,"Year"], dat[ ,paste0(var,"_Female")], type="b", col="red", lwd=2)
 	dev.off()
 }
-
-
 
 
 
@@ -108,17 +102,15 @@ for (f in 1:length(files)){
 			s_k[, c("N","Eur","Year")] <- lapply(s_k[, c("N","Eur","Year")], fmt, "123")
 			
 			AVG_INCOME <- rbind(AVG_INCOME, s_k)
-		}
-	
+		}	
 	}
 } 
 
 print(sum(is.na(AVG_INCOME$Eur)))  # 1,708
 print(as.data.frame(table(AVG_INCOME$Age)))
 
-AVG_INCOME <- within(AVG_INCOME, {Age <- ifelse(Age=="-18", "0-18", ifelse(Age=="95->", "95-", Age))})   # Format the Age column 
+AVG_INCOME <- within(AVG_INCOME, {Age <- ifelse(Age=="-18", "0-18", ifelse(Age=="95->", "95-", Age))})    # Format the Age column 
 print(as.data.frame(table(AVG_INCOME$Age)))
 
 write.table(AVG_INCOME, "AVG_INCOME.txt", append=F, quote=F, sep="\t", row.names=F, col.names=T)
-
 
