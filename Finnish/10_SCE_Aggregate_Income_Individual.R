@@ -1,8 +1,8 @@
-## Editing aggregate-level info as part of application TK-52-306-20, prepared by Kaisa Herranen <kaisa.herranen@stat.fi> from Statistic Finland
+## Add Eur (average income by occupation-sex-age-year) and N to the individual-level SCE data 
 
-# Input: "A_INCOME.txt", 
-# Output:
-# Comments:
+# Input: "sose_u1477_a.Rdata", "demo.Rdata", and "A_INCOME.txt", 
+# Output: "sce_inc.Rdata"
+# Comments: 
 
 
 
