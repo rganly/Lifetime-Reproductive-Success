@@ -1,7 +1,7 @@
 ## Format the aggregate-level SCE info (N and income (Eur) for each occupation-sex-age-year group) prepared by Statistics Finland (application TK-52-306-20)
 
 # Input: "Income_1990_1993.xlsx" and "Income_1995_2017.xlsx"
-# Output: "AVG_INCOME.txt"
+# Output: "AVG_INCOME.txt" and "A_INCOME.txt"
 
 # Comments: We revised three typo of the original EXCEL files
 # (1) "Socioeconomic group: 54 Other workers" of the sheet "59" of the file "Income_1990_1993.xlsx" has changed to "Socioeconomic group: 59 Other workers"
@@ -30,7 +30,7 @@ print(setdiff(substr(code$p2,1,2), code$p1))   # "81" "82" specific for period 2
 
 
 # Functions
-fmt <- function(x, f="123") {        # Format columns as character or numeric 
+fmt <- function(x, f="123") {            # Format columns as character(abc) or numeric (123)
     if(f=="123") {
     	x <- as.numeric(as.character(x))
     } else if (f=="abc"){
@@ -38,6 +38,8 @@ fmt <- function(x, f="123") {        # Format columns as character or numeric
     }
     return(x)
 }
+
+'%!in%' <- function(x,y)!('%in%'(x,y))    # not in
 
 
 
@@ -101,5 +103,51 @@ AVG_INCOME <- within(AVG_INCOME, {Age <- ifelse(Age=="-18", "0-18", ifelse(Age==
 print(as.data.frame(table(AVG_INCOME$Age)))
 
 write.table(AVG_INCOME, "AVG_INCOME.txt", append=F, quote=F, sep="\t", row.names=F, col.names=T)
+
+
+
+###############################################
+#  One occupation-sex-age-year group per row  #
+###############################################
+
+print(AVG_INCOME[AVG_INCOME$Age %!in% 0:105, "Age"])    # Ages are not numbers within 0:105
+
+# Expand ages 0-18
+ADD_18 <- NULL
+for (i in c("0-18")){
+	d <- AVG_INCOME[AVG_INCOME$Age==i, ]
+	
+	for (k in 0:18){
+		d$Age <- k
+		ADD_18 <- rbind(ADD_18, d)
+	}
+}
+ADD_18 <- ADD_18[is.na(ADD_18$Sex)==F,]   # remove rows with NA
+dim(ADD_18)    # 13,148
+
+
+# Expand ages 25- and 95-
+ADD_105 <- NULL
+for (i in c("25-", "95-")){
+	d <- AVG_INCOME[AVG_INCOME$Age==i, ]
+	n <- ifelse(i=="25-", 25, 95)
+	
+	for (k in n:105){
+		d$Age <- k
+		ADD_105 <- rbind(ADD_105, d)
+	}
+}
+ADD_105 <- ADD_105[is.na(ADD_105$Sex)==F,]   # remove rows with NA
+dim(ADD_105)    # 2,988
+
+
+# Combine and format
+A_INCOME <- rbind(AVG_INCOME[AVG_INCOME$Age %in% 0:105, ], ADD_18, ADD_105)
+dim(A_INCOME)   # 54,008     7
+print(as.data.frame(table(A_INCOME$Age)))
+
+A_INCOME[, c("Age","Code")] <- lapply(A_INCOME[, c("Age","Code")], fmt, "123")
+write.table(A_INCOME, "A_INCOME.txt", append=F, quote=F, sep="\t", row.names=F, col.names=T)
+
 
 
