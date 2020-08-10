@@ -1,9 +1,9 @@
-## Format the aggregate-level SCE info (N and income (Eur) for each occupation-sex-age-year group) prepared by Statistic Finland (application TK-52-306-20)
+## Format the aggregate-level SCE info (N and income (Eur) for each occupation-sex-age-year group) prepared by Statistics Finland (application TK-52-306-20)
 
 # Input: "Income_1990_1993.xlsx" and "Income_1995_2017.xlsx"
 # Output: "AVG_INCOME.txt"
 
-# Comments: We made three changes in original input EXCEL files: 
+# Comments: We revised three typo of the original EXCEL files
 # (1) "Socioeconomic group: 54 Other workers" of the sheet "59" of the file "Income_1990_1993.xlsx" has changed to "Socioeconomic group: 59 Other workers"
 # (2) "The mean income subject to state taxation" was added to row 2 of the sheet "41,f" of the file "Income_1995_2017.xlsx"    # all other sheets have this row
 # (3) (1st column, 9th row) of the sheet "70, f" of the file "Income_1995_2017.xlsx" should be changed from "10" to "19"
