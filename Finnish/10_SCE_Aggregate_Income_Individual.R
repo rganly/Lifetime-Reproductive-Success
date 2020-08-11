@@ -64,8 +64,8 @@ nrow(sce_demo)      # 88008334
 rm(demo, sce)
 
 sce_demo <- within(sce_demo, {
-  Age <- vuosi - b_year
-  b_year <- fmt(b_year, "123")
+    b_year <- fmt(b_year, "123")
+    Age <- vuosi - b_year
 })
 
 
@@ -74,12 +74,12 @@ A_INCOME <- read.table("A_INCOME.txt",sep="\t",header=T)
 nrow(A_INCOME)    # 54008    
 
 A_INCOME <- within(A_INCOME, {
-  Sex <- ifelse(Sex=="Male", 1, 2)
-  Age <- fmt(Age, "123")
-  Code <- fmt(Code, "abc")
+    Sex <- ifelse(Sex=="Male", 1, 2)
+    Age <- fmt(Age, "123")
+    Code <- fmt(Code, "abc")
 })
 
-sce_inc <- left_join(sce_demo, A_INCOME, by = c("vuosi"="Year", "sose"="Code", "SUKUPUOLI"="Sex", "Age"="Age"))  # problem with library(dplyr)
+sce_inc <- left_join(sce_demo, A_INCOME, by = c("vuosi"="Year", "sose"="Code", "SUKUPUOLI"="Sex", "Age"="Age")) 
 nrow(sce_inc)   # 88008334
 
 save(sce_inc, file=paste0(r_dir, "sce_inc.Rdata"))
