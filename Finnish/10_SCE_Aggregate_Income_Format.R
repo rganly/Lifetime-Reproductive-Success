@@ -1,6 +1,6 @@
-## Format the aggregate-level SCE info (N and income (Eur) for each occupation-sex-age-year group) prepared by Statistics Finland (application TK-52-306-20)
+## Format the aggregate-level SCE info (N and income (Eur) for each occupation-sex-age-year group)
 
-# Input: "Income_1990_1993.xlsx" and "Income_1995_2017.xlsx"
+# Input: "Income_1990_1993.xlsx" and "Income_1995_2017.xlsx", prepared by Statistics Finland (application TK-52-306-20)
 # Output: "AVG_INCOME.txt" and "A_INCOME.txt"
 
 # Comments: We revised three typo of the original EXCEL files
