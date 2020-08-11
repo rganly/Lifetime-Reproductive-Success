@@ -1,13 +1,17 @@
-## 0. This script is to convert all registry data to Rdata format and comment on each file.
+## This script is to convert all registry data to .Rdata format and comment on each file
+
+# Input: all original files 
+# Output: "Data_comments_FIN.csv"
+# Comments: See "Data_comments_FIN.xlsx", which was adapted from "Data_comments_FIN.csv"
+
 
 
 #    ############################
 #    ##  Upload to FIMM epouta  #
 #    ############################
 #
-#    scp   /Users/aoxliu/Downloads/Files/*  aliu@ssh.fimm.fi:/homes/aliu/LRS/input/FINREG/
-#    rsync -P -e ssh /Users/aoxliu/Downloads/Files/*  aliu@ssh.fimm.fi:/homes/aliu/LRS/input/FINREG    # recover the uploading, faster than scp
-#    
+#    scp   /Users/aoxliu/Downloads/Files/*  aliu@ssh.fimm.fi:/homes/aliu/DSGE_LRS/input/              # local terminal
+#    rsync -P -e ssh /Users/aoxliu/Downloads/Files/*  aliu@ssh.fimm.fi:/homes/aliu/DSGE_LRS/input/    # local terminal, recover the uploading, faster than scp
 
 
 # system("mkdir /homes/aliu/DSGE_LRS/output/registry_edit/")
@@ -23,19 +27,18 @@ library(haven)
 
 
 ###########################
-##  Comment on each file  #  See "Data_comments_FIN.xlsx", which was adapted from "Data_comments_FIN.csv".
+##  Comment on each file  #  
 ###########################
 
 # system("rm Data_comments_FIN.csv")
 wfile <- c(list.files(in_dir, pattern="*.sas7bdat"), "fcr_all_data.csv")
 
 for (k in wfile){
-
 	if (k != "fcr_all_data.csv"){
 		d <- read_sas(paste0(in_dir, k))
-		save(d, file=paste0(r_dir, gsub(".sas7bdat",".Rdata",k)))   # convert to Rdata format
+	#	save(d, file=paste0(r_dir, gsub(".sas7bdat",".Rdata",k)))   # convert to Rdata format
 	}else{
-		d <- read.table(paste0(in_dir,"fcr_all_data.csv"), header=T)
+		d <- read.table(paste0(in_dir,"fcr_all_data.csv"), sep=";", header=T)
 	}
 	
 	info <- matrix(NA, nrow=ncol(d), ncol=14)
@@ -54,15 +57,11 @@ for (k in wfile){
 		}
 		info[i, "DataType"] <- ifelse(as.numeric(info[i, "NumberOfLevels"])<20, paste(unique(unlist(d[, i])),collapse = ","), paste(head(unique(unlist(d[, i])),5),collapse = ","))		
 	}
-	
 	rm(d)  # save memory
 	
 	write.table(info, "Data_comments_FIN.csv", append=T, quote=F, sep=" ", row.names=F, col.names=F)
-	print(paste0("Done for file: ", k))
-	
+	print(paste0("Done for file: ", k))	
 }
-
-
 
 
 
@@ -71,19 +70,18 @@ for (k in wfile){
 ############################
 
 # check whether the 1st column of "roolit" are for indexperson and children of indexperson and sibling
-tlj <- get(load(paste0(r_dir,"thl2019_804_tljslv.Rdata")))
-child_lst <- unique(tlj$KANTAHENKILON_TNRO); length(child_lst)      # 2,631,986
+tlj <- get(load(paste0(r_dir, "thl2019_804_tljslv.Rdata")))
+child_lst <- unique(tlj$KANTAHENKILON_TNRO)
+length(child_lst)      # 2,631,986
 
 index <- get(load(paste0(r_dir,"index.Rdata")))                     # 2,365,707 
 length(unique(c(child_lst, index$KANTAHENKILON_TNRO)))              # 4,546,684
-
 
 roolit <- get(load(paste0(r_dir,"thl2019_804_roolit.Rdata")))  
 length(setdiff(unique(roolit$KANTAHENKILON_TNRO), unique(c(child_lst, index_lst))))    # 0
 length(setdiff(unique(c(child_lst, index_lst)), unique(roolit$KANTAHENKILON_TNRO)))    # 0
 
-
-child_notindex_lst <- setdiff(child_lst,index$KANTAHENKILON_TNRO)   # 2,180,977
+child_notindex_lst <- setdiff(child_lst, index$KANTAHENKILON_TNRO)   # 2,180,977
 roolit_cni <- roolit[roolit$KANTAHENKILON_TNRO %in%  child_notindex_lst, ]
 table(roolit_cni$SUKUL_SUHDE)   #  only 3a and 3j, indicate for children of index and siblings, only parents were provided, therefore the same as "thl2019_804_tljslv.sas7bdat"
 
@@ -99,7 +97,8 @@ table(roolit_cni$SUKUL_SUHDE)   #  only 3a and 3j, indicate for children of inde
 # Extract each population  #
 ############################
 
-tuk <- get(load(paste0(r_dir,"thl2019_804_tutkhenk.Rdata")))    # all relatives of index person
+# tuk for all relatives of index person
+tuk <- get(load(paste0(r_dir,"thl2019_804_tutkhenk.Rdata")))    
 nrow(tuk)     # 33,449,716
 table(tuk$SUKUL_SUHDE)   
 
@@ -117,17 +116,17 @@ tuk_bas <- unique(tuk_bas)
 nrow(tuk_bas)
 
 
-# dup <- duplicated(tlj)    # this step need large memory
-# tlj_uniq <- tlj[!dup, ]   
-# nrow(tlj_uniq)       # 5,132,871 
-# save(tlj_uniq, file=paste0(r_dir,"thl2019_804_tljslv_uniq.Rdata"))
+# tlj for 
+dup <- duplicated(tlj)    # this step need large memory
+tlj_uniq <- tlj[!dup, ]   
+nrow(tlj_uniq)       # 5,132,871 
+save(tlj_uniq, file=paste0(r_dir, "thl2019_804_tljslv_uniq.Rdata"))
 
 
 
 # creat a dataset including demographic info for all individuals
 demo_extract <- function(dat_name){
-	dat <- get(load(paste0(r_dir,"thl2019_804_",dat_name,".Rdata")))
-	dat <- dat[ ,5:15]
+	dat <- get(load(paste0(r_dir,"thl2019_804_",dat_name,".Rdata")))[ ,5:15]
 	demo <- dat[!duplicated(dat$SUKULAISEN_TNRO), ]
 	print(paste0("n_rows=",nrow(dat),"; n_individuals=",nrow(demo)))   	
 	return(demo)
