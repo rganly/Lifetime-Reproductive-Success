@@ -101,8 +101,8 @@ print(as.data.frame(table(AVG_INCOME$Age)))
 AVG_INCOME <- within(AVG_INCOME, {Age <- ifelse(Age=="-18", "0-18", ifelse(Age=="95->", "95-", Age))})   # Format the Age column
 print(as.data.frame(table(AVG_INCOME$Age)))
 
-write.table(AVG_INCOME, "AVG_INCOME.txt", append=F, quote=F, sep="\t", row.names=F, col.names=T)
-
+# write.table(AVG_INCOME, "AVG_INCOME.txt", append=F, quote=F, sep="\t", row.names=F, col.names=T)
+save(AVG_INCOME, file=paste0(r_dir, "AVG_INCOME.Rdata"))
 
 
 ###############################################
