@@ -2,7 +2,6 @@
 
 # Input: "AVG_INCOME.txt"
 # Output: "Average_income_Code**_FINLAND.tiff" and "Sample_size_Code**_FINLAND.tiff"
-
 # Comments: From the plot, we can check whether the definition of SCE code is consistent across statistical years
 
 
