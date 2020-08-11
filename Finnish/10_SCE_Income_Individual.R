@@ -2,7 +2,7 @@
 
 # Input: "sose_u1477_a.Rdata", "demo.Rdata", and "A_INCOME.txt", 
 # Output: "sce_inc.Rdata"
-# Comments: 
+# Comments: create an individual-level yearly income data
 
 
 
