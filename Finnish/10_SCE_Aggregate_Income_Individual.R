@@ -70,7 +70,7 @@ sce_demo <- within(sce_demo, {
 
 
 # Add Eur and N to individual-level occupation data 
-A_INCOME <- read.table("A_INCOME.txt",sep="\t",header=T)
+A_INCOME <- read.table("A_INCOME.txt", sep="\t", header=T)
 nrow(A_INCOME)    # 54008    
 
 A_INCOME <- within(A_INCOME, {
