@@ -49,7 +49,7 @@ plt <- function(dat, var, y_lab, m_lab, t_lab){   # plot aggregated income with 
 #   N and Eur for two time periods (1990-1993, 1995-2017)   #
 #############################################################
 
-AVG_INCOME <- read.table("AVG_INCOME.txt", sep="/t", header=T)
+AVG_INCOME <- read.table("AVG_INCOME.txt", sep="\t", header=T)
 
 # N and Average income for each statistical year
 AVG_YS <- matrix(NA, nrow=length(c(year$p1, year$p2)), ncol=5)
@@ -91,12 +91,12 @@ for (k in kod){
 	print(paste0("Code ", which(kod==k), "/", length(kod)))
 	n <- 1
 	
-	for (year in c(year$p1, year$p2)){
-		AVG_YSC[n, "Year"] <- year
+	for (y in c(year$p1, year$p2)){
+		AVG_YSC[n, "Year"] <- y
 		AVG_YSC[n, "Code"] <- k
 	
 		for (sex in c("Male", "Female")){
-			ys <- AVG_INCOME[AVG_INCOME[,"Year"]==year & AVG_INCOME[,"Sex"]==sex & AVG_INCOME[,"Code"]==k, ]
+			ys <- AVG_INCOME[AVG_INCOME[,"Year"]==y & AVG_INCOME[,"Sex"]==sex & AVG_INCOME[,"Code"]==k, ]
 			AVG_YSC[n, paste0("N_",sex)] <- sum(ys[,"N"], na.rm=T)
 			AVG_YSC[n, paste0("Eur_",sex)] <- weighted.mean(ys[,"Eur"], ys[,"N"], na.rm=T)		
 		}
