@@ -1,7 +1,7 @@
 ## Convert from ICD codes to endpoints using HILMO, CANCER, and DEATH registry
 
-# Input: 
-# Output: 
+# Input: "thl2019_804_poisto_6986_COMPLETE", "thl2019_804_poisto_8793_COMPLETE", "thl2019_804_hilmo_9495_COMPLETE", "THL2019_804_hilmo_COMPLETE", "kuolemansyyt_u1477_a.Rdata", "fcr.Rdata", and "HILMO_UPDATED_FIN.lst"
+# Output: "HILMO_ICD_LONG_COMPLETE.Rdata", "CANCER_long.Rdata", "DEATH_long.Rdata", 
 # Comments: 
 
 
