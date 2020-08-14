@@ -19,9 +19,13 @@ library(tidyverse)
 
 
 # Parameters
-efiles <- c("thl2019_804_poisto_6986_COMPLETE", "thl2019_804_poisto_8793_COMPLETE", "thl2019_804_hilmo_9495_COMPLETE", "THL2019_804_hilmo_COMPLETE")
-hilmo_v <- c("DG1,DG2,DG3,DG4", "PDG,SDG1,SDG2,SDG3", "PDG,SDG1,TUTAP", apply(as.matrix(c(paste0(rep("ICD10",56),rep(c("E_","O_"),each=28),1:28),paste0(rep("PITKADIAG",66),rep(c("E_","O_"),each=33),1:33))),2,paste, collapse=","))   # "TUTAP"="SDG2"
-fcr_v <- c("icd10_topo")
+health_files <- c("thl2019_804_poisto_6986_COMPLETE", "thl2019_804_poisto_8793_COMPLETE", "thl2019_804_hilmo_9495_COMPLETE", "THL2019_804_hilmo_COMPLETE")
+health_vars <- c("DG1,DG2,DG3,DG4", "PDG,SDG1,SDG2,SDG3", "PDG,SDG1,TUTAP", apply(as.matrix(c(paste0(rep("ICD10",56),rep(c("E_","O_"),each=28),1:28),paste0(rep("PITKADIAG",66),rep(c("E_","O_"),each=33),1:33))),2,paste, collapse=","))   # "TUTAP"="SDG2"
+cancer_vars <- c("icd10_topo")
+
+# efiles <- c("thl2019_804_poisto_6986_COMPLETE", "thl2019_804_poisto_8793_COMPLETE", "thl2019_804_hilmo_9495_COMPLETE", "THL2019_804_hilmo_COMPLETE")
+# hilmo_v <- c("DG1,DG2,DG3,DG4", "PDG,SDG1,SDG2,SDG3", "PDG,SDG1,TUTAP", apply(as.matrix(c(paste0(rep("ICD10",56),rep(c("E_","O_"),each=28),1:28),paste0(rep("PITKADIAG",66),rep(c("E_","O_"),each=33),1:33))),2,paste, collapse=","))   # "TUTAP"="SDG2"
+# fcr_v <- c("icd10_topo")
 
 palas <- c(rep("inpatient",3),"in/outpatient")
 icdvs <- c("8","9","9","10")
