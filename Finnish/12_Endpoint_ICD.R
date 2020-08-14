@@ -161,6 +161,41 @@ print(paste0("Done for DEATH Registry, with ", nrow(DEATH_long)," rows in total"
 
 
 
+###############################################################
+#  Combine and add endpoint to three registry (longitudinal)  #
+###############################################################
+
+rl <- rbind(HILMO_long, CANCER_long, DEATH_long)
+nrow(rl)      # 54,554,742
+
+
+## format ICD codes
+rl[ ,"ICD_CODE"] <- gsub("-|\\+|\\?|\\*|\\?|\\&|\\!|\\)|\\@|\\ ", '', rl[ ,"ICD_CODE"])       # remove unexpected characters i
+rl <- rl[!( (rl$ICD_VER!="9" & substr(rl$ICD_CODE,5,5) %in% LETTERS)  |  (rl$ICD_VER=="9" & substr(rl$ICD_CODE,5,5) %in% 0:9) ), ]
+rl <- rl[!( (rl$ICD_VER!="10" & substr(rl$ICD_CODE,1,1) %in% LETTERS[c(1:24,26)])  |  (rl$ICD_VER=="10" & substr(rl$ICD_CODE,1,1) %in% LETTERS[c(22:24,26)]) ), ] 
+rl <- rl[!(nchar(rl$ICD_CODE)<3|nchar(rl$ICD_CODE)>6), ]
+print(paste0("A total of ", nrow(rl), " records for ", length(unique(rl$ID)), " individuals"))  # OLD: "A total of 54,323,398 records for 4,051,467 individuals"; NEW: "A total of 162,745,182 records for 5,416,958 individuals"
+save(rl, file=paste0(r_dir, "rl_COMPLETE.Rdata"))
+
+
+
+## count of ICD codes (& morpho) by ICD version
+rl_f <- as.data.frame(table(rl$ICD_CODE, rl$ICD_VER, rl$morpho, useNA="always"))
+colnames(rl_f) <- c("ICD_CODE","ICD_VER","morpho","count")
+
+
+rl_f[ ,"ICD_CODE"]<- as.character(rl_f[ ,"ICD_CODE"])
+rl_f <- rl_f[rl_f$count>0, ]
+rl_f <- rl_f[order(-rl_f$count), ]
+nrow(rl_f)    # 49,982
+
+for (k in 3:5){
+	rl_f[ ,paste0("ICD_p",k)] <- ifelse(nchar(rl_f[ ,"ICD_CODE"])>=k, substr(rl_f[ ,"ICD_CODE"], 1, k), NA)
+}
+
+
+
+
 ################################################
 # ICD codes and their corresponding endpoints  #
 ################################################
