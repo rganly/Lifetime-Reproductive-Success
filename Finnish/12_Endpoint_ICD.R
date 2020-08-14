@@ -54,13 +54,11 @@ print("Start for HILMO Registry")
 
 for (i in 1:length(efiles)){
     print(paste0("Start for ", efiles[i],".")) 
-    
     d <- as.data.frame(get(load(paste0(r_dir, efiles[i], ".Rdata"))))
     v <- unlist(strsplit(hilmo_v[i],","))
 		
     for (k in 1:length(v)){
-        print(paste0("Diagnose ", k, "/", length(v), " start."))
-        
+        print(paste0("Diagnose ", k, "/", length(v), " start."))    
         dat <- d[d[,v[k]]!="" & is.na(d[,v[k]])==F, c("TNRO", dates[i], hos[i], mus[i], v[k])]     
         if (nrow(dat)>0){
             colnames(dat) <- c("ID", "EVENT_DATE", "hospital", "municipality", "ICD_CODE")
@@ -68,8 +66,8 @@ for (i in 1:length(efiles)){
             if (efiles[i]=="THL2019_804_hilmo_COMPLETE"){    # format the diagnose date
                 dat[, "EVENT_DATE"] <- gsub("-", '',as.Date(dat[ ,"EVENT_DATE"],format="%d%B%Y:%H:%M:%S"))
             } else{
-				        dat[, "EVENT_DATE"] <- gsub("-", '', dat[ ,"EVENT_DATE"])
-			      }
+		dat[, "EVENT_DATE"] <- gsub("-", '', dat[ ,"EVENT_DATE"])
+            }
 			
             dat[, "EVENT_FILE"] <- efiles[i]
             dat[, "EVENT_VAR"] <- v[k]
@@ -78,11 +76,10 @@ for (i in 1:length(efiles)){
             dat[, "morpho"] <- NA
 		
             HILMO_long <- rbind(HILMO_long, dat)	
-	    	}       
-        print(paste0("Diagnose ", k, "/", length(v), " done, including ", nrow(dat), " records."))
+	    }       
+	    print(paste0("Diagnose ", k, "/", length(v), " done, including ", nrow(dat), " records."))
 	}
 	print(paste0("Done for ", efiles[i],"."))
-  
 }
 
 HILMO_long <- as.data.frame(HILMO_long)
