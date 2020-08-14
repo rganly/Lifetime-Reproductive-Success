@@ -40,7 +40,7 @@ fmt <- function(x, f="123") {            # Format columns as character(abc) or n
     return(x)
 }
 
-'%!in%' <- function(x,y)!('%in%'(x,y))     # not in function
+'%!in%' <- function(x,y)!('%in%'(x,y))     # not in
 
 
 
