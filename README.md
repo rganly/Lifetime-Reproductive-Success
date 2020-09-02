@@ -44,6 +44,12 @@ Input: "sose_u1477_a.Rdata", "demo.Rdata", and "A_INCOME.txt"
 
 Output: "sce_inc.Rdata"
 
+
+#### 10_SCE_Income_Check.R
+Aim: Check the income data
+
+
+
 ### Swedish
 
 
