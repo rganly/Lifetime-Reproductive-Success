@@ -1,3 +1,5 @@
+# The main body of this script was written by Andrea Ganna
+
 library(tidyverse)
 library(ggplot2)
 library(viridis)
