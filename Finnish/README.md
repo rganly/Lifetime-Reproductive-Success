@@ -97,7 +97,7 @@ Output: "sce_inc.Rdata"
 
 
 ## 11.  
-12_Endpoint_ICD.R  
+ 
 Aim:    
 Input: ""   
 
@@ -109,10 +109,13 @@ Input: ""
 Output: ""  
 
 
-## 13.  
-12_Endpoint_ICD.R  
+## 13. Regression analysis
+13_Regression_1_pop.R  
 Aim:    
 Input: ""   
+Output: ""  
+
+
 
 
 
