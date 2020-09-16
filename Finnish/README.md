@@ -34,6 +34,16 @@ Output: ""
 
 ## 4. Spouses of index person and index person's siblings
 04_Spouse.R
+Aim:    
+Input: ""   
+Output: ""  
+
+
+## 5. Pedigree
+05_Pedigree.R
+Aim:    
+Input: ""   
+Output: ""  
 
 
 
