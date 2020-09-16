@@ -15,8 +15,7 @@ r_dir <- "/home/aoxing/DSGE_LRS/input/r_files/"
 #   LRS (N of children or grandchildren)   #
 ############################################
 
-## Read in data 
-
+## Read in data
 # Index person (born 1956-1982)  
 index <- data.frame(get(load(paste0(r_dir, "tove_lev_index.Rdata"))))    
 index <- index[index$AterPnr==0, c("LopNr","FodelseAr","FodelseLan","FodelseKommun","Kon")]    # 2,892,333, after drop individuals emigrated from Sweden
@@ -40,7 +39,6 @@ length(unique(grandchild[,c("LopNrBarnBarn")]))                  # 591,843 grand
 
 #-----------------------------------------------------------------------------------------
 ## n_child and n_grandchild for each indexperson
-
 # n_child
 index_lrs <- data.frame(table(child[,"LopNr"]))              # n_child for indexperson with children
 colnames(index_lrs) <- c("LopNr","n_child")                     # 2,202,668 indexperson with children
