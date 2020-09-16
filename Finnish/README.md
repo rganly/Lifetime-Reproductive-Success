@@ -2,7 +2,7 @@
 
 
 ## 0. atlas server and files info
-000_Tips_using_atlas.sh
+000_Tips_using_atlas.sh  
 Aim: Tips to use atlas server  
 
 00_Files_info.R  
