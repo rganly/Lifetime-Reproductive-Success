@@ -1,13 +1,5 @@
 ## 0. This script is to check files (number of files and number of rows/columns of each file) of release 1, 2, 3, and 4, and convert all files to Rdata format.
-#  ( only copy files from release 3 & 4 to "/home/aoxing/DSGE_LRS/input/r_files/")
-
-#  ## Ask interactive nodes 
-#  interactive -A sens2019018 -n 3 --qos=interact -t 12:00:00
-#  salloc -A sens2019018 -p core -n 3 -t 12:00:00
-#  jobinfo -u aoxing
-
-# module load R_packages/3.6.0
-
+#  (only copy files from release 3 & 4 to "/home/aoxing/DSGE_LRS/input/r_files/", since release 1 & 2 are incomplete and have been re-extracted in release 3 & 4 )
 
 setwd("/home/aoxing/DSGE_LRS/out/registry_edit/")
 in_dir <- "/home/aoxing/DSGE_LRS/input/"
