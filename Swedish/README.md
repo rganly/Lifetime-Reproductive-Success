@@ -20,18 +20,33 @@ Input: "tove_lev_index.Rdata", "tove_lev_koppl_index_barn.Rdata", "tove_lev_kopp
 Output: "indexW.Rdata", "indexW_delivery.Rdata", "index_lrs_summary", "index_lrs_count_summary"  
 
 
-## 2. Sibling
+## 2. Siblings of index person   
 02_Sibling.R
 Aim: calculate LRS (N of children and N of grandchildren) and age of having the first/last child for each sibling of index person   
 Input: ""   
 Output: ""  
 
 
-## 3. Child, grandchild, and sibchild. 
-03_Child_grandchild_sibchild.R
+## 3. Child, grandchild, and sibchild of index person  
+03_Child_grandchild_sibchild.R  
 Aim:    
 Input: ""   
 Output: ""  
+
+
+## 4. Spouses of index person and index person's siblings  
+04_Spouse.R
+Aim:    
+Input: ""   
+Output: ""  
+
+
+## 5. Pedigree   
+05_Pedigree.R  
+Aim:    
+Input: ""   
+Output: ""  
+
 
 
 ## 10. SCE and income
