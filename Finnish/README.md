@@ -1,8 +1,11 @@
 # Finnish registers
 
 
-## 0. Files info
-### 00_Files_info.R
+0. bianca server and files info  
+000_Tips_using_bianca.sh
+Aim: Tips to use bianca server  
+
+00_Files_info.R  
 Aim: convert all registry data to .Rdata format and comment on each file  
 Input: all original files  
 Output: "Data_comments_FIN.csv" (See "Data_comments_FIN.xlsx", which was adapted from "Data_comments_FIN.csv")  
