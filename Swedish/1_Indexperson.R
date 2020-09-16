@@ -129,7 +129,7 @@ nrow(index_delivery)     # 2,202,668
 index_delivery$afc <- as.numeric(index_delivery$bf_year) - as.numeric(index_delivery$FodelseAr)
 index_delivery$alc <- as.numeric(index_delivery$bl_year) - as.numeric(index_delivery$FodelseAr)
 
-lrs_all <- merge(lrs_all, index_delivery, by="LopNr", all.x=T)
+lrs_all <- merge(lrs_all, index_delivery[,c("LopNr","afc","alc")], by="LopNr", all.x=T)
 # lrs_all <- lrs_all[,c("LopNr", "FodelseAr", "Kon", "n_child", "n_gchild", "childless","afc","alc")]
 # save(lrs_all, file=paste0(r_dir, "indexW_LRS.Rdata"))                             
 
