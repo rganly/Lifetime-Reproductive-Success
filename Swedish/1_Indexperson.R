@@ -1,10 +1,13 @@
 ## This script is to calculate LRS (N of children and N of grandchildren) and age of having the first/last child for each index person.
 
 
+# Input: all original files from release 1, 2, 3 & 4 
+# Output: "Data_comments_SWE.csv"
+# Comments: See "Data_comments_SWE.xlsx", which was adapted from "Data_comments_SWE.csv"
+
+
+setwd("/home/aoxing/DSGE_LRS/out/registry_edit/")
 r_dir <- "/home/aoxing/DSGE_LRS/input/r_files/"
-setwd(r_dir)
-
-
 
 
 
@@ -12,7 +15,7 @@ setwd(r_dir)
 #   LRS (N of children or grandchildren)   #
 ############################################
 
-## 1.1.1 Read in data 
+## Read in data 
 
 # Index person (born 1956-1982)  
 index <- get(load(paste0(r_dir, "tove_lev_index.Rdata")))    
@@ -35,7 +38,7 @@ length(unique(grandchild[,c("LopNrBarnBarn")]))                  # 591,843 grand
 
 
 #-----------------------------------------------------------------------------------------
-## 1.1.2 n_child and n_grandchild for each indexperson
+## n_child and n_grandchild for each indexperson
 
 # n_child
 index_lrs <- as.data.frame(table(child[,"LopNr"]))              # n_child for indexperson with children
@@ -77,25 +80,19 @@ colnames(lrs_count_summary) <- c("b_year","n_male","n_female",paste("n_", rep(ko
 
 
 for (year_n in 1:length(years)){
-	lrs_summary[year_n,"b_year"] <- lrs_count_summary[year_n,"b_year"] <- years[year_n]
-	
+	lrs_summary[year_n,"b_year"] <- lrs_count_summary[year_n,"b_year"] <- years[year_n]	
 	for (kon_n in 1:length(kons)){	
 		lrs_yearn_konn <- lrs_all[lrs_all[,"FodelseAr"]==years[year_n] & lrs_all[,"Kon"]==kon_n, c("Kon","n_child","n_gchild")]
-		lrs_summary[year_n, paste("n_",kons[kon_n],sep="")] <- lrs_count_summary[year_n, paste("n_",kons[kon_n],sep="")] <- nrow(lrs_yearn_konn)	
-		
+		lrs_summary[year_n, paste("n_",kons[kon_n],sep="")] <- lrs_count_summary[year_n, paste("n_",kons[kon_n],sep="")] <- nrow(lrs_yearn_konn)		
 		for (pop in c("child","gchild")){	
 			lrs_summary[year_n, paste(kons[kon_n],"n",pop,sep="_")] <- round(mean(lrs_yearn_konn[, paste0("n_",pop)]), 3)  
 			lrs_summary[year_n, paste(kons[kon_n],"n",pop,"max",sep="_")] <- max(lrs_yearn_konn[, paste0("n_",pop)])
-		}
-		
+		}	
 		for (n in 0:4){	
 			lrs_count_summary[year_n, paste0("n_",kons[kon_n],"_",n,"child")] <- nrow(lrs_yearn_konn[lrs_yearn_konn[,"n_child"]==n, ])
-
-		}
-			
+		}		
 		print(paste(year_n, kon_n, sep="_"))
-	}
-	
+	}	
 }
 
 write.table(lrs_summary, "index_lrs_summary", append=F, quote=F, sep=" ", row.names=F, col.names=T)
@@ -104,13 +101,11 @@ write.table(lrs_count_summary, "index_lrs_count_summary", append=F, quote=F, sep
 
 
 
-
-
 ############################################
 #     Age of having first/last child       #
 ############################################
 
-## 1.2.1 age at first/last delivery  
+## age at first/last delivery  
 child_bas <- child[order(child[,"LopNr"],child[,"BarnFodelseAr"]), c("LopNr","LopNrBarn","BarnFodelseAr")]  
 
 
@@ -128,15 +123,12 @@ child_l <- do.call("rbind", child_l_lst)
 child_fl <- merge(child_f, child_l, all=T, by="LopNr") 
 colnames(child_fl) <- c("LopNr","child_f_LopNr","bf_year","child_l_LopNr","bl_year")
 
-
 index_bas <- lrs_all[lrs_all[,"n_child"]!=0, c("LopNr","FodelseAr","Kon")]
 index_delivery <- merge(index_bas, child_fl, by="LopNr")
 nrow(index_delivery)     # 2,202,668
 
-
 index_delivery$afc <- as.numeric(index_delivery$bf_year) - as.numeric(index_delivery$FodelseAr)
 index_delivery$alc <- as.numeric(index_delivery$bl_year) - as.numeric(index_delivery$FodelseAr)
-
 
 index_delivery <- index_delivery[index_delivery$afc > 10 & index_delivery$alc > 10, ]     # remove age_at first/last child younger than 10
 save(index_delivery, file=paste0(r_dir, "index_delivery.Rdata"))  
@@ -144,28 +136,22 @@ save(index_delivery, file=paste0(r_dir, "index_delivery.Rdata"))
 
 
 #-----------------------------------------------------------------------------------------
-## 1.2.2 distribution of age at first/last delivery
-
+## distribution of age at first/last delivery
 # count of age at first/last delivery for each gender
 
 k <- 1
-
 for (ac in c("afc","alc")){
-
 	for (kon_n in 1:length(kons)){	
 		summary(index_delivery[index_delivery[,"Kon"]==kon_n, ac])	
 		age <- as.data.frame(table(ind_del[index_delivery[,"Kon"]==kon_n, ac]))
-		colnames(age) <- c("age", paste("count",ac,kons[kon_n],sep="_"))
-		
+		colnames(age) <- c("age", paste("count",ac,kons[kon_n],sep="_"))		
 		if (k == 1){
 			age_total <- age
 		} else {
 			age_total <- merge(age_total, age, by="age", all=T)	
-		}	
-		
+		}			
 		k <- k+1					
-	}	
-	
+	}		
 }
 
 age_total[is.na(age_total)] <- 0
@@ -183,18 +169,13 @@ colnames(del_sum) <- c("b_year","male_n","female_n","male_afc","female_afc","mal
 for (year_n in 1:length(years)){
 	del_sum[year_n,"b_year"] <- years[year_n]
 	del_yearn <- index_delivery[index_delivery[,"FodelseAr"]==years[year_n], c("Kon","afc","alc")]
-	
 	for (kon_n in 1:length(kons)){	
 		del_sum[year_n,paste(kons[kon_n],"_n",sep="")] <- nrow(del_yearn[del_yearn[,"Kon"]==kon_n, ])
-		
 		for (ac in c("afc","alc")){			
 			del_sum[year_n, paste(kons[kon_n],ac,sep="_")] <- round(mean(del_yearn[del_yearn$Kon==kon_n,ac],na.rm=T), 3)       	
-			print(paste(year_n, kon_n, ac, sep="_"))
-			
-		}
-		
+			print(paste(year_n, kon_n, ac, sep="_"))		
+		}	
 	}
-	
 }
 
 write.table(del_sum, "index_age_at_having_child_summary", append=F, quote=F, sep=" ", row.names=F, col.names=T)
