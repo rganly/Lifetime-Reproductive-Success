@@ -1,4 +1,8 @@
 # An atlas of lifetime reproductive success across diseases
+We propose to explore the lifetime reproductive success across multiple diseases using Scandinavian health registries. These registries have been collecting health information from the 70’s and comprise a generation of individuals which have been covered by registries for the majority of their reproductive lifespan.
+
+By combining health registries with registries containing family relationships we can quantify, for each disease, the lifetime reproductive success by comparing the number of children in diseased individuals with those in the general population. 
+
 
 
 ## Finnish
