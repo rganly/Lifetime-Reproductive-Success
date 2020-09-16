@@ -1,9 +1,9 @@
 ## This script is to calculate LRS (N of children and N of grandchildren) and age of having the first/last child for each index person.
 
 
-# Input: all original files from release 1, 2, 3 & 4 
-# Output: "Data_comments_SWE.csv"
-# Comments: See "Data_comments_SWE.xlsx", which was adapted from "Data_comments_SWE.csv"
+# Input: "tove_lev_index.Rdata", "tove_lev_koppl_index_barn.Rdata", "tove_lev_koppl_index_barnbarn.Rdata"
+# Output: "indexW.Rdata", "indexW_delivery.Rdata", "index_lrs_summary", "index_lrs_count_summary"
+# Comments: 
 
 
 setwd("/home/aoxing/DSGE_LRS/out/registry_edit/")
@@ -18,19 +18,20 @@ r_dir <- "/home/aoxing/DSGE_LRS/input/r_files/"
 ## Read in data 
 
 # Index person (born 1956-1982)  
-index <- get(load(paste0(r_dir, "tove_lev_index.Rdata")))    
+index <- data.frame(get(load(paste0(r_dir, "tove_lev_index.Rdata"))))    
 index <- index[index$AterPnr==0, c("LopNr","FodelseAr","FodelseLan","FodelseKommun","Kon")]    # 2,892,333, after drop individuals emigrated from Sweden
 table(index$Kon)                                                 # 1,488,254 males and 1,404,079 females 
+save(index, file=paste0(r_dir, "indexW.Rdata"))
 
 
 # Children of index person
-child <- as.data.frame(get(load(paste0(r_dir, "tove_lev_koppl_index_barn.Rdata"))))     
+child <- data.frame(get(load(paste0(r_dir, "tove_lev_koppl_index_barn.Rdata"))))     
 length(unique(child[,"LopNr"]))                                  # 2,202,668 indexperson with children
 length(unique(child[,"LopNrBarn"]))                              # 2,900,503 children
 
 
 # Grandchildren of index person
-grandchild <- as.data.frame(get(load(paste0(r_dir, "tove_lev_koppl_index_barnbarn.Rdata"))))  
+grandchild <- data.frame(get(load(paste0(r_dir, "tove_lev_koppl_index_barnbarn.Rdata"))))  
 length(unique(grandchild[,c("LopNr")]))                          # 476,252 indexperson with grandchildren
 length(unique(grandchild[,c("LopNrBarn")]))                      # 450,005 children
 length(unique(grandchild[,c("LopNrBarnBarn")]))                  # 591,843 grandchildren
@@ -41,7 +42,7 @@ length(unique(grandchild[,c("LopNrBarnBarn")]))                  # 591,843 grand
 ## n_child and n_grandchild for each indexperson
 
 # n_child
-index_lrs <- as.data.frame(table(child[,"LopNr"]))              # n_child for indexperson with children
+index_lrs <- data.frame(table(child[,"LopNr"]))              # n_child for indexperson with children
 colnames(index_lrs) <- c("LopNr","n_child")                     # 2,202,668 indexperson with children
 nrow(index) - nrow(index_lrs)                                   #   689,665 indexperson without children
 mean(index_lrs[,"n_child"])                                     # 2.217 for indexperson with children
@@ -49,7 +50,7 @@ table(index_lrs[,"n_child"])                                    # from 1 to 27
 
 
 # n_grandchild
-index_glrs <- as.data.frame(table(unique(grandchild[,c("LopNr","LopNrBarnBarn")])["LopNr"]))    # 476,252 indexperson with grandchildren
+index_glrs <- data.frame(table(unique(grandchild[,c("LopNr","LopNrBarnBarn")])["LopNr"]))    # 476,252 indexperson with grandchildren
 colnames(index_glrs) <- c("LopNr","n_gchild")
 nrow(index) - nrow(index_glrs)                                  # 2,416,081 indexperson without grandchildren
 mean(index_glrs[,"n_gchild"])                                   # 2.608 for indexperson with grandchildren
@@ -65,7 +66,7 @@ lrs_all[is.na(lrs_all)] <- 0
 
 summary(lrs_all[lrs_all[,"Kon"]==1, c("n_child","n_gchild")])   # male, mean(n_child/n_grandchild) = 1.573/0.3298, max(n_child/n_grandchild) = 27/31
 summary(lrs_all[lrs_all[,"Kon"]==2, c("n_child","n_gchild")])   # female, mean(n_child/n_grandchild) = 1.81/0.5344, max(n_child/n_grandchild) = 19/34
-save(lrs_all, file=paste0(r_dir, "index_lrs_all.Rdata"))                             
+lrs_all[, "childless"] <- ifelse(lrs_all$n_child!=0,0,1)        # 1 for childless 
 
 
 # distribution of n_child and n_grandchild by gender and birth_year of index person
@@ -130,8 +131,12 @@ nrow(index_delivery)     # 2,202,668
 index_delivery$afc <- as.numeric(index_delivery$bf_year) - as.numeric(index_delivery$FodelseAr)
 index_delivery$alc <- as.numeric(index_delivery$bl_year) - as.numeric(index_delivery$FodelseAr)
 
+lrs_all <- merge(lrs_all, index_delivery, by="LopNr", all.x=T)
+# lrs_all <- lrs_all[,c("LopNr", "FodelseAr", "Kon", "n_child", "n_gchild", "childless","afc","alc")]
+# save(lrs_all, file=paste0(r_dir, "indexW_LRS.Rdata"))                             
+
+save(index_delivery, file=paste0(r_dir, "indexW_delivery.Rdata"))  
 index_delivery <- index_delivery[index_delivery$afc > 10 & index_delivery$alc > 10, ]     # remove age_at first/last child younger than 10
-save(index_delivery, file=paste0(r_dir, "index_delivery.Rdata"))  
 
 
 
