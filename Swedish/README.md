@@ -1,5 +1,8 @@
 # Swedish registers
 
+## Tips to use bianca super computer
+### 000_Tips_using_bianca.sh  
+
 
 ## 0. Files info
 ### 00_Files_info.R
