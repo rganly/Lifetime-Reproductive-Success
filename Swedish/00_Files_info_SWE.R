@@ -155,17 +155,4 @@ for (release_n in 3:4){
 
 
 
-    
-
-## download files from bianca
-#  cp  /home/aoxing/lrs/output/SWE_REGISTRY_INFO_r4.csv  /proj/sens2019018/nobackup/wharf/aoxing/aoxing-sens2019018   # from bianca termianl copy files from bianca to wharf, since only wharf has internet connection due to the security reason
-#  ssh -A aoxing@rackham.uppmax.uu.se                                            # login rackham in another window
-#  sftp -q aoxing-sens2019018@bianca-sftp.uppmax.uu.se:aoxing-sens2019018        # login the sftp prompt of bianca, need password of bianca
-#  get SWE_REGISTRY_INFO_r4.csv                                                  # download in the sftp prompt
-#  scp aoxing@rackham.uppmax.uu.se:/domus/h1/aoxing/SWE_REGISTRY_INFO_r4.csv  /Users/aoxliu/Documents/LRS/Data/SWE/release4 
-
-
-
-
-
 
