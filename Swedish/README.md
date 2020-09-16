@@ -1,10 +1,11 @@
 # Swedish registers
 
-## Tips to use bianca super computer
-### 000_Tips_using_bianca.sh  
-
 
 ## 0. Files info
+### 000_Tips_using_bianca.sh
+Aim: Tips to use bianca super computer  
+
+
 ### 00_Files_info.R
 Aim: convert all registry data to .Rdata format and comment on each file  
 Input: all original files from release 1, 2, 3 & 4  
