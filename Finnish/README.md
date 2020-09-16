@@ -1,9 +1,9 @@
 # Finnish registers
 
 
-0. bianca server and files info  
-000_Tips_using_bianca.sh
-Aim: Tips to use bianca server  
+## 0. bianca server and files info
+000_Tips_using_atlas.sh
+Aim: Tips to use atlas server  
 
 00_Files_info.R  
 Aim: convert all registry data to .Rdata format and comment on each file  
