@@ -11,13 +11,18 @@ Input: all original files
 Output: "Data_comments_FIN.csv" (See "Data_comments_FIN.xlsx", which was adapted from "Data_comments_FIN.csv")  
 
 
-
 ## 1. Index person
 01_Indexperson.R  
 Aim:  
 Input:  
 Output:  
 
+
+## 3. Child, grandchild, and sibchild. 
+03_Child_grandchild_sibchild.R
+Aim:    
+Input: ""   
+Output: ""  
 
 
 ## 10. SCE and income
@@ -26,12 +31,10 @@ Aim: Format the aggregate-level SCE info (N and income (Eur) for each occupation
 Input: "Income_1990_1993.xlsx" and "Income_1995_2017.xlsx" prepared by Statistics Finland  
 Output: "AVG_INCOME.txt" and "A_INCOME.txt"  
 
-
 10_SCE_Income_Aggregate_Plot.R  
 Aim: Plot average income and sample size with statistical years for the full population and for each SCE code, to check whether the definition of SCE code keep consistent across statistical years  
 Input: "AVG_INCOME.txt"  
 Output: "Average_income_Code**_FINLAND.tiff" and "Sample_size_Code**_FINLAND.tiff"  
-
 
 10_SCE_Income_Individual.R  
 Aim: create an individual-level yearly income data  
