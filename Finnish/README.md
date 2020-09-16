@@ -65,7 +65,15 @@ Input: ""
 Output: ""  
 
 
-## 8.
+## 8. Malformation registers
+08_Malformation.R
+Aim:    
+Input: ""   
+Output: ""  
+
+
+## 9. Death registers
+09_Death.R
 Aim:    
 Input: ""   
 Output: ""  
