@@ -1,9 +1,9 @@
 # Swedish registers
 
 
-## 0. Files info
+## 0. bianca server and files info
 000_Tips_using_bianca.sh  
-Aim: Tips to use bianca super computer  
+Aim: Tips to use bianca server 
 
 
 00_Files_info.R  
@@ -22,7 +22,7 @@ Output:
 
 
 ## 10. SCE and income
-### 10_SCE_Income_Check.R
+10_SCE_Income_Check.R  
 Aim: Check the income data  
 Input:  
 Output:  
