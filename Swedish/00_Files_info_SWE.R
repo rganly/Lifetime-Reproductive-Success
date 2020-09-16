@@ -1,48 +1,16 @@
-## 0. This script is to check files (number of files and number of rows/columns of each file) of release 1, 2, 3, and 4, and convert all files to Rdata format.
-#  (only copy files from release 3 & 4 to "/home/aoxing/DSGE_LRS/input/r_files/", since release 1 & 2 are incomplete and have been re-extracted in release 3 & 4 )
+## This script is to convert all registry data to .Rdata format and comment on each file
+
+# Input: all original files from release 1, 2, 3 & 4 
+# Output: "Data_comments_FIN.csv"
+# Comments: See "Data_comments_FIN.xlsx", which was adapted from "Data_comments_FIN.csv"
+           # release 1 & 2 are incomplete and have been re-extracted in release 3 & 4
+
 
 setwd("/home/aoxing/DSGE_LRS/out/registry_edit/")
 in_dir <- "/home/aoxing/DSGE_LRS/input/"
 r_dir <- paste0(in_dir, "r_files/")
 
 library(haven)
-
-
-
-
-#############################
-#  Upload or download files #
-#############################
-
-## upload files to bianca
-#  scp lrs_r3.zip  aoxing@rackham.uppmax.uu.se:/home/aoxing/lrs/input            # from mac terminal copy file from local to rackham
-#  ssh -A aoxing@rackham.uppmax.uu.se                                            # login rackham
-#  sftp -q aoxing-sens2019018@bianca-sftp.uppmax.uu.se:aoxing-sens2019018        # login the sftp prompt of bianca
-#  put lrs_r3.zip                                                                # upload in the sftp prompt
-#  cp /proj/sens2019018/nobackup/wharf/aoxing/aoxing-sens2019018/lrs_r3.zip   /proj/sens2019018/SCB_data/release3   # from bianca terminal copy files to the target directory
-
-
-
-## download files from bianca
-#  cp /proj/sens2019018/socialstyrelsen/Variabellista_27035_2018.xlsx  /proj/sens2019018/nobackup/wharf/aoxing/aoxing-sens2019018   # from bianca termianl copy files from bianca to wharf, since only wharf has internet connection due to the security reason
-#  ssh -A aoxing@rackham.uppmax.uu.se                                            # login rackham in another window
-#  sftp -q aoxing-sens2019018@bianca-sftp.uppmax.uu.se:aoxing-sens2019018        # login the sftp prompt of bianca
-#  get Variabellista_27035_2018.xlsx                                             # download in the sftp prompt
-#  scp aoxing@rackham.uppmax.uu.se:/domus/h1/aoxing/Variabellista_27035_2018.xlsx  /Users/aoxliu/Documents/LRS/Data/SWE/release4 
-
-
-
-## Uncompress files in bianca
-#  cd /proj/sens2019018/SCB_data/release3
-#  jar xvf  lrs_r3.zip                                # Tove uploaded this file to the cluster 
-#  module load p7zip
-#  7z e  Tove_Lev_LISA_1977_2017.exe && 7z e  Tove_Lev_Ovriga_tabeller.exe && 7z e  Tove_Lev_RTB_1977_2017.exe                    
-#  cp /proj/sens2019018/SCB_data_lev2/Tove_Lev_Index_Part__Sysk_Part_1977_1997.exe  . &&  7z e  Tove_Lev_Index_Part__Sysk_Part_1977_1997.exe   # password: tNCDVZ8M39Ar, this data was not provided previously due to the mistake of SCB 
-
-#  cd /proj/sens2019018/SCB_data/release4
-#  cp /proj/sens2019018/socialstyrelsen/Utdata.7z   /proj/sens2019018/SCB_data/release4
-#  7z e  Utdata.7z   # password: }*/L:F}pBDU~
-
 
 
 
@@ -78,8 +46,6 @@ system("ls /proj/sens2019018/SCB_data/release4")
 ##########################################
 
 ## 0.2.1 transfer all files of release 3/4 from sas7bdat to Rdata (release 1 & 2 have been transfered by Andrea)
-
-
 for (release_n in 3:4){
 	in_dir <- paste0("/proj/sens2019018/SCB_data/release",release_n)
 	wfile <- list.files(in_dir, pattern="*.sas7bdat")
@@ -97,7 +63,7 @@ for (release_n in 3:4){
 
 # check whether there are siblings without children (full list of sibling) (yes)
 sib <- get(load(paste0(r_dir, "tove_lev_koppl_index_syskon.Rdata")))   
-nrow(sib)                            # 6,023,984
+nrow(sib)                           # 6,023,984
 
 sibchild <- get(load(paste0(r_dir, "tove_lev_koppl_index_sysbarn.Rdata")))    
 length(unique(sibchild$LopNr))      # 2,356,638
@@ -107,7 +73,7 @@ length(unique(sibchild$LopNr))      # 2,356,638
 index <- get(load(paste0(r_dir, "tove_lev_index.Rdata")))     
 
 
-# parents of sibling's children, parents of indexperson (yes)
+# Did we get parents of sibling's children, parents of indexperson (yes)
 index_parent <- get(load(paste0(r_dir, "tove_lev_koppl_sysbarn_foraldr.Rdata")))     
 child_parent <- get(load(paste0(r_dir, "tove_lev_koppl_barn_foraldrar.Rdata"))) 
 sibchild_parent <- get(load(paste0(r_dir, "tove_lev_koppl_sysbarn_foraldr.Rdata"))) 
