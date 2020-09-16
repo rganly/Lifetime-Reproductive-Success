@@ -1,15 +1,8 @@
-## 1. This script is to calculate LRS (N of children and N of grandchildren) and age of having the first/last child for each index person.
-
-#  ## Ask interactive nodes 
-#  jobinfo -u aoxing 
-#  interactive -A sens2019018 -n 1 --qos=interact -t 12:00:00
-#  salloc -A sens2019018 -p core -n 1 -t 12:00:00
+## This script is to calculate LRS (N of children and N of grandchildren) and age of having the first/last child for each index person.
 
 
-setwd("/home/aoxing/DSGE_LRS/out/registry_edit/")
-#setwd("/home/aoxing/DSGE_LRS/output/registry_edit/")   # mkdir: cannot create directory ‘output’: Transport endpoint is not connected
 r_dir <- "/home/aoxing/DSGE_LRS/input/r_files/"
-
+setwd(r_dir)
 
 
 
