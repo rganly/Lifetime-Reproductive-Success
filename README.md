@@ -1,4 +1,4 @@
-# An atlas of lifetime reproductive success across diseases using national wide registers from Finland and Sweden
+# An atlas of lifetime reproductive success across diseases
 
 
 ## Finnish
