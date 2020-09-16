@@ -11,15 +11,17 @@ Output: "Data_comments_SWE.csv" (See "Data_comments_SWE.xlsx", which was adapted
 
 ## 1. Index person
 ### 01_Indexperson.R
-Aim: 
-Input: 
-Output:
+Aim:  
+Input:  
+Output:  
 
 
 
 ## 10. SCE and income
 ### 10_SCE_Income_Check.R
-Aim: Check the income data
+Aim: Check the income data  
+Input:  
+Output:  
 
 
 
