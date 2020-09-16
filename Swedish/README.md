@@ -3,9 +3,9 @@
 
 ## 0. Files info
 ### 00_Files_info.R
-#### Aim: convert all registry data to .Rdata format and comment on each file
-#### Input: all original files from release 1, 2, 3 & 4 
-#### Output: "Data_comments_SWE.csv" (See "Data_comments_SWE.xlsx", which was adapted from "Data_comments_SWE.csv")
+####Aim: convert all registry data to .Rdata format and comment on each file
+####Input: all original files from release 1, 2, 3 & 4 
+####Output: "Data_comments_SWE.csv" (See "Data_comments_SWE.xlsx", which was adapted from "Data_comments_SWE.csv")
 
 
 
