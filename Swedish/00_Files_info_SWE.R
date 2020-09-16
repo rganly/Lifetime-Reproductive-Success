@@ -3,7 +3,6 @@
 # Input: all original files from release 1, 2, 3 & 4 
 # Output: "Data_comments_FIN.csv"
 # Comments: See "Data_comments_FIN.xlsx", which was adapted from "Data_comments_FIN.csv"
-           # release 1 & 2 are incomplete and have been re-extracted in release 3 & 4
 
 
 setwd("/home/aoxing/DSGE_LRS/out/registry_edit/")
@@ -17,25 +16,17 @@ library(haven)
 #############################
 #   Comment on each files   #
 #############################
-
-## 0.1 list all datasets for population and SCE registry (from release 1, 2, 3) and health/death/MBR registry (release 4) 
-
-## 0.1.1 release 1
+## release 1 & 2 are incomplete and have been re-extracted in release 3 & 4
+## release 1
 system("ls /proj/sens2019018/SCB_data/release1/r_files/")
 
-
-#-----------------------------------------------------------------------------------------
-## 0.1.2 release 2
+## release 2
 system("ls /proj/sens2019018/SCB_data/release2/r_files/")
 
-
-#-----------------------------------------------------------------------------------------
-## 0.1.3 release 3 
+## release 3 
 system("ls /proj/sens2019018/SCB_data/release3")
 
-
-#-----------------------------------------------------------------------------------------
-## 0.1.4 release 4
+## release 4
 system("ls /proj/sens2019018/SCB_data/release4")
 
 
@@ -45,7 +36,7 @@ system("ls /proj/sens2019018/SCB_data/release4")
 #  Convert and check for release 3 & 4   #  
 ##########################################
 
-## 0.2.1 transfer all files of release 3/4 from sas7bdat to Rdata (release 1 & 2 have been transfered by Andrea)
+## transfer all files of release 3/4 from sas7bdat to Rdata (release 1 & 2 have been transfered by Andrea)
 for (release_n in 3:4){
 	in_dir <- paste0("/proj/sens2019018/SCB_data/release",release_n)
 	wfile <- list.files(in_dir, pattern="*.sas7bdat")
@@ -59,8 +50,7 @@ for (release_n in 3:4){
 
 
 
-## 0.2.2 check whether the updated release 3 solving the problems of release 2
-
+## check whether the updated release 3 solving the problems of release 2
 # check whether there are siblings without children (full list of sibling) (yes)
 sib <- get(load(paste0(r_dir, "tove_lev_koppl_index_syskon.Rdata")))   
 nrow(sib)                           # 6,023,984
@@ -105,15 +95,12 @@ for (release_n in 3:4){
 			
 			if (is.numeric(d[,i])==T){
 				info[i, c("Min","Max")] <- c(min(d[d[,i]!="",i]), max(d[d[,i]!="",i]))
-			}
-			
+			}			
 			info[i, "DataType"] <- ifelse(as.numeric(info[i, "NumberOfLevels"])<20, paste(unique(d[, i]),collapse = ","), paste(head(unique(d[, i]),5),collapse = ","))		
 		}
 		
 		rm(d)  # save memory
-		
-		write.table(info, paste0("Data_comments_SWE_r",release_n,".csv"), append=T, quote=F, sep=" ", row.names=F, col.names=F)
-		
+		write.table(info, paste0("Data_comments_SWE_r",release_n,".csv"), append=T, quote=F, sep=" ", row.names=F, col.names=F)		
 		print(paste0("Done for file: ", k))
 	}
 }
