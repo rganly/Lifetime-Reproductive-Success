@@ -17,18 +17,10 @@ library(haven)
 #   Comment on each files   #
 #############################
 ## release 1 & 2 are incomplete and have been re-extracted in release 3 & 4
-## release 1
 system("ls /proj/sens2019018/SCB_data/release1/r_files/")
-
-## release 2
 system("ls /proj/sens2019018/SCB_data/release2/r_files/")
-
-## release 3 
 system("ls /proj/sens2019018/SCB_data/release3")
-
-## release 4
 system("ls /proj/sens2019018/SCB_data/release4")
-
 
 
 
