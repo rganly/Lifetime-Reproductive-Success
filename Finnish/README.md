@@ -1,7 +1,7 @@
 # Finnish registers
 
 
-## 0. atlas server and files info
+## 0. atlas server and files info  
 000_Tips_using_atlas.sh  
 Aim: Tips to use atlas server  
 
@@ -18,7 +18,7 @@ Input:
 Output:  
 
 
-## 2. Siblings of index person. 
+## 2. Siblings of index person   
 02_Sibling.R
 Aim: calculate LRS (N of children and N of grandchildren) and age of having the first/last child for each sibling of index person   
 Input: ""   
@@ -32,14 +32,14 @@ Input: ""
 Output: ""  
 
 
-## 4. Spouses of index person and index person's siblings
+## 4. Spouses of index person and index person's siblings  
 04_Spouse.R
 Aim:    
 Input: ""   
 Output: ""  
 
 
-## 5. Pedigree
+## 5. Pedigree   
 05_Pedigree.R
 Aim:    
 Input: ""   
