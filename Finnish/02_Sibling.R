@@ -77,18 +77,15 @@ kons <- c("male","female")
 
 
 for (year_n in 1:n_year){
-
 	sib_lrs_summary[year_n,"birth_year"] <- years[year_n]
-	sib_lrs_yearn <- sib_lrs_all[sib_lrs_all[,"b_year"]==years[year_n], c("SUKUPUOLI","n_child")]
-	
+	sib_lrs_yearn <- sib_lrs_all[sib_lrs_all[,"b_year"]==years[year_n], c("SUKUPUOLI","n_child")]	
 	for (kon_n in 1:length(kons)){
 		sib_lrs_kon <- sib_lrs_yearn[sib_lrs_yearn$SUKUPUOLI == kon_n, ]
 		sib_lrs_summary[year_n,paste0("n_",kons[kon_n])] <- nrow(sib_lrs_kon)
 		sib_lrs_summary[year_n,paste0(kons[kon_n],"_n_child")] <- ifelse(nrow(sib_lrs_kon)>0, round(mean(sib_lrs_kon$n_child), 3), NA)  	
 		sib_lrs_summary[year_n,paste0(kons[kon_n],"_n_child_max")] <- ifelse(nrow(sib_lrs_kon)>0, max(sib_lrs_kon$n_child), NA)
 		print(paste(year_n, kon_n, sep="_"))
-	}
-	
+	}	
 }    
 
 write.table(sib_lrs_summary, "sib_lrs_summary", append=F, quote=F, sep=" ", row.names=F, col.names=T)
@@ -134,12 +131,10 @@ nrow(sib_del)     # 1,597,974
 ## 2.2.2 distribution of age at first/last delivery
 
 for (kon_n in 1:2){
-
 	for (ac in c("afc","alc")){
 		print(paste(kon_n,ac,sep="_"))
 		print(table(sib_del[sib_del$SUKUPUOLI==kon_n, ac]))  
 	}
-	
 }
 
 # age_first(last)_delivery is 9-73(14-73) for male and 13-53(14-56) for female
