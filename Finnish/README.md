@@ -19,7 +19,7 @@ Output:
 
 
 ## 2. Siblings of index person   
-02_Sibling.R
+02_Sibling.R  
 Aim: calculate LRS (N of children and N of grandchildren) and age of having the first/last child for each sibling of index person   
 Input: ""   
 Output: ""  
@@ -58,7 +58,7 @@ Aim:
 Input: ""   
 Output: ""  
 
-06_Cancer_2.R. 
+06_Cancer_2.R   
 Aim:    
 Input: ""   
 Output: ""  
