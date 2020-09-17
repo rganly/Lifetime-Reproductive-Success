@@ -72,22 +72,18 @@ pops <- c("child","sibchild")
 
 
 for (pop in c("child","sibchild")){
-
 	# read in list of child or sibchild
 	c <- get(load(paste0(r_dir, pop, ".Rdata")))
 	c_lst <- unique(c$SUKULAISEN_TNRO)   
 	length(c_lst)    # 2,060,722 / 2,392,471
-	
 		
 	# extract parents for child or for sibchild
 	tlj_c <- tlj_uniq[tlj_uniq$KANTAHENKILON_TNRO %in% c_lst, c("KANTAHENKILON_TNRO", "SUKUL_SUHDE", "SUKULAISEN_TNRO")]
 	nrow(tlj_c)      # 4,011,826 / 4,694,040
-	
 	tlj_c_a <- tlj_c[tlj_c$SUKUL_SUHDE == "3a", ]
 	tlj_c_i <- tlj_c[tlj_c$SUKUL_SUHDE == "3i", ]
 	tlj_c_ai <- merge(tlj_c_a, tlj_c_i, all=T ,by="KANTAHENKILON_TNRO")
 	nrow(tlj_c_ai)   # 2,060,929 / 2,392,691
-	
 	
 	# list of index person or of sibling
 	if (pop=="child"){
@@ -96,16 +92,13 @@ for (pop in c("child","sibchild")){
 		popp_lst <- sib_lst
 	}
 	
-	
 	# both parents are indexperson for pop=="child" or are sibling for pop=="sibchild"
 	tlj_c_b <- tlj_c_ai[(tlj_c_ai$SUKULAISEN_TNRO.x %in% popp_lst) & (tlj_c_ai$SUKULAISEN_TNRO.y %in% popp_lst), ]
 	nrow(tlj_c_b)    # 1,530,974 / 1,295,555
-	
+
 	b_lst <- unique(c(tlj_c_b$SUKULAISEN_TNRO.x, tlj_c_b$SUKULAISEN_TNRO.y))
 	length(b_lst)    # 1,326,920 / 1,116,904
 	length(setdiff(b_lst, popp_lst))   # 0
-	
-	
 	
 	# only one parent are indexperson for pop=="child" or are sibling for pop=="sibchild"
 	tlj_c_o <- tlj_c_ai[tlj_c_ai$KANTAHENKILON_TNRO %in% setdiff(tlj_c_ai$KANTAHENKILON_TNRO, tlj_c_b$KANTAHENKILON_TNRO), ]
@@ -114,17 +107,13 @@ for (pop in c("child","sibchild")){
 	o_lst <- setdiff(unique(c(tlj_c_o$SUKULAISEN_TNRO.x, tlj_c_o$SUKULAISEN_TNRO.y)), popp_lst)
 	length(o_lst)    # 207,527 / 489,280
 	
-	
-	
 	# spouse with shared child for index person or sibling
 	sp_c_lst <- unique(c(b_lst, o_lst))
-
 	if (pop=="child"){
 		print(paste0(length(sp_c_lst)," spouse have common child with index person."))
 	}else{
 		print(paste0(length(sp_c_lst)," spouse have common child with sibling."))
 	}
-	
 }
 
 
@@ -139,7 +128,6 @@ for (pop in c("child","sibchild")){
 ###############################################################
 
 length(setdiff(unique(avio$PUOLISON_TNRO), sp_c_lst))     # 489,762 in marriage registry, but don't have common child with any index person)
-
 length(intersect(unique(avio$PUOLISON_TNRO), sp_c_lst))   # 1,001,471 spouse have common child with index person are in marrigae registry
 
 
