@@ -2,7 +2,7 @@
 
 
 # Input: "tove_lev_index.Rdata", "tove_lev_koppl_index_barn.Rdata", "tove_lev_koppl_index_barnbarn.Rdata"
-# Output: "indexW.Rdata", "indexW_delivery.Rdata", "child_grandchild_uniq.Rdata",
+# Output: "indexW.Rdata", "indexW_delivery.Rdata"
         # "index_lrs_summary", "index_lrs_count_summary", "index_age_at_having_child_count", "index_age_at_having_child_summary"
 # Comments: 
 
@@ -36,11 +36,6 @@ nrow(grandchild)        # 1,241,918
 length(unique(grandchild[,c("LopNr")]))                          # 476,252 indexperson with grandchildren
 length(unique(grandchild[,c("LopNrBarn")]))                      # 450,005 children
 length(unique(grandchild[,c("LopNrBarnBarn")]))                  # 591,843 grandchildren
-
-child_grandchild <- grandchild[!duplicated(grandchild[ ,c("LopNr","LopNrBarn")]),c("LopNrBarnBarn","BarnBarnFodelseAr","BarnBarnFodelseLan","BarnBarnFodelseKommun","BarnBarnKon")]
-nrow(child_grandchild)  # 706,525
-save(child_grandchild, file=paste0(r_dir, "child_grandchild_uniq.Rdata")) 
-
 
 
 
