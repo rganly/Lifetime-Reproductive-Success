@@ -1,8 +1,8 @@
-## This script is to calculate LRS (N of children) and age of having the first/last child for each sibling.
+## This script is to calculate LRS (N of children), childless, and age of having the first/last child for each sibling.
 
 
 # Input: "tove_lev_koppl_index_syskon.Rdata", "tove_lev_koppl_index_sysbarn.Rdata"
-# Output: "sib_uniq.Rdata", "sib_sibchild_uniq.Rdata", "Sib_indexW.Rdata", "sib_lrs_summary"
+# Output: "sib_uniq.Rdata", "sib_sibchild_uniq.Rdata", "Sib_delivery.Rdata", "sib_lrs_summary"
 # Comments: 
 
 
