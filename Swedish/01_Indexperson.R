@@ -2,7 +2,7 @@
 
 
 # Input: "tove_lev_index.Rdata", "tove_lev_koppl_index_barn.Rdata", "tove_lev_koppl_index_barnbarn.Rdata"
-# Output: "indexW.Rdata", "indexW_delivery.Rdata", "index_lrs_summary", "index_lrs_count_summary"
+# Output: "indexW.Rdata", "indexW_delivery.Rdata", "index_lrs_summary", "index_lrs_count_summary", "index_age_at_having_child_count", "index_age_at_having_child_summary"
 # Comments: 
 
 
@@ -100,8 +100,8 @@ index_delivery$afc <- as.numeric(index_delivery$bf_year) - as.numeric(index_deli
 index_delivery$alc <- as.numeric(index_delivery$bl_year) - as.numeric(index_delivery$FodelseAr)
 
 lrs_all <- merge(lrs_all, index_delivery[,c("LopNr","afc","alc")], by="LopNr", all.x=T)
-# lrs_all <- lrs_all[,c("LopNr", "FodelseAr", "Kon", "n_child", "n_gchild", "childless","afc","alc")]
-# save(lrs_all, file=paste0(r_dir, "indexW_LRS.Rdata"))                             
+lrs_all <- lrs_all[,c("LopNr", "FodelseAr", "Kon", "n_child", "n_gchild", "childless","afc","alc")]
+save(lrs_all, file=paste0(r_dir, "indexW_LRS.Rdata"))                             
 
 save(index_delivery, file=paste0(r_dir, "indexW_delivery.Rdata"))  
 index_delivery <- index_delivery[index_delivery$afc > 10 & index_delivery$alc > 10, ]     # remove age_at first/last child younger than 10
@@ -113,7 +113,7 @@ index_delivery <- index_delivery[index_delivery$afc > 10 & index_delivery$alc > 
 #      Distribution of LRS                 #
 ############################################
 
-# distribution of n_child and n_grandchild by gender and birth_year of index person
+# n_child and n_grandchild by gender and birth_year
 years <- sort(unique(lrs_all[,"FodelseAr"]))
 kons <- c("male","female")
 
@@ -150,7 +150,7 @@ for (ac in c("afc","alc")){
 		summary(index_delivery[index_delivery[,"Kon"]==kon_n, ac])	
 		age <- as.data.frame(table(ind_del[index_delivery[,"Kon"]==kon_n, ac]))
 		colnames(age) <- c("age", paste("count",ac,kons[kon_n],sep="_"))		
-		if (k == 1){
+		if (k==1){
 			age_total <- age
 		} else {
 			age_total <- merge(age_total, age, by="age", all=T)	
