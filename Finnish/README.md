@@ -11,26 +11,25 @@ Input: all original files
 Output: "Data_comments_FIN.csv" (See "Data_comments_FIN.xlsx", which was adapted from "Data_comments_FIN.csv")  
 
 
-## 1. Index person  
-01_Indexperson.R  
+## 1. Index person and their LRS  
+01_Indexperson_LRS.R  
 Aim:  
 Input:  
 Output:  
 
 
-## 2. Siblings of index person   
-02_Sibling.R  
+## 2. Siblings and their LRS  
+02_Sibling_LRS.R  
 Aim: calculate LRS (N of children and N of grandchildren) and age of having the first/last child for each sibling of index person   
 Input: ""   
 Output: ""  
 
 
-## 3. Spouses of index person and index person's siblings  
+## 3. Spouses and children/grandchildren of index person and siblings  
 03_Spouse.R
 Aim:    
 Input: ""   
 Output: ""  
-
 
 03_Child_grandchild_sibchild.R  
 Aim:    
