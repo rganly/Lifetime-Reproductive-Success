@@ -11,37 +11,38 @@ Input: all original files
 Output: "Data_comments_FIN.csv" (See "Data_comments_FIN.xlsx", which was adapted from "Data_comments_FIN.csv")  
 
 
-## 1. Demographic info for each population
-01_Demo.R  
-Aim:  
-Input:  
-Output:  
-
-01_Child_grandchild_sibchild.R  
-Aim:    
-Input: ""   
-Output: ""  
-
-
-## 2. Index person  
-02_Indexperson.R  
+## 1. Index person  
+01_Indexperson.R  
 Aim:  
 Input:  
 Output:  
 
 
-## 3. Siblings of index person   
-03_Sibling.R
+## 2. Siblings of index person   
+02_Sibling.R
 Aim: calculate LRS (N of children and N of grandchildren) and age of having the first/last child for each sibling of index person   
 Input: ""   
 Output: ""  
 
 
-## 4. Spouses of index person and index person's siblings  
-04_Spouse.R
+## 3. Spouses of index person and index person's siblings  
+03_Spouse.R
 Aim:    
 Input: ""   
 Output: ""  
+
+
+03_Child_grandchild_sibchild.R  
+Aim:    
+Input: ""   
+Output: ""  
+
+
+## 4. Demographic info for each population
+04_Demo.R  
+Aim:  
+Input:  
+Output:  
 
 
 ## 5. Pedigree   
