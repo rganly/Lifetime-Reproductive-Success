@@ -1,4 +1,4 @@
-## This script is to calculate LRS (N of children and N of grandchildren) and age of having the first/last child for each index person.
+## This script is to calculate LRS (N of children and N of grandchildren), childless, and age of having the first/last child for each index person.
 
 
 # Input: "tove_lev_index.Rdata", "tove_lev_koppl_index_barn.Rdata", "tove_lev_koppl_index_barnbarn.Rdata"
