@@ -24,14 +24,14 @@ Output: ""
 
 
 ## 2. Index person  
-01_Indexperson.R  
+02_Indexperson.R  
 Aim:  
 Input:  
 Output:  
 
 
 ## 3. Siblings of index person   
-02_Sibling.R
+03_Sibling.R
 Aim: calculate LRS (N of children and N of grandchildren) and age of having the first/last child for each sibling of index person   
 Input: ""   
 Output: ""  
