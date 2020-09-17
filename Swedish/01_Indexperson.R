@@ -2,7 +2,8 @@
 
 
 # Input: "tove_lev_index.Rdata", "tove_lev_koppl_index_barn.Rdata", "tove_lev_koppl_index_barnbarn.Rdata"
-# Output: "indexW.Rdata", "indexW_delivery.Rdata", "index_lrs_summary", "index_lrs_count_summary", "index_age_at_having_child_count", "index_age_at_having_child_summary"
+# Output: "indexW.Rdata", "indexW_delivery.Rdata", "child_grandchild_uniq.Rdata",
+        # "index_lrs_summary", "index_lrs_count_summary", "index_age_at_having_child_count", "index_age_at_having_child_summary"
 # Comments: 
 
 
