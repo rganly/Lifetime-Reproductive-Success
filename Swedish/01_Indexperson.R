@@ -31,9 +31,15 @@ length(unique(child[,"LopNrBarn"]))                              # 2,900,503 chi
 
 # Grandchildren of index person
 grandchild <- data.frame(get(load(paste0(r_dir, "tove_lev_koppl_index_barnbarn.Rdata"))))  
+nrow(grandchild)        # 1,241,918
 length(unique(grandchild[,c("LopNr")]))                          # 476,252 indexperson with grandchildren
 length(unique(grandchild[,c("LopNrBarn")]))                      # 450,005 children
 length(unique(grandchild[,c("LopNrBarnBarn")]))                  # 591,843 grandchildren
+
+child_grandchild <- grandchild[!duplicated(grandchild[ ,c("LopNr","LopNrBarn")]),c("LopNrBarnBarn","BarnBarnFodelseAr","BarnBarnFodelseLan","BarnBarnFodelseKommun","BarnBarnKon")]
+nrow(child_grandchild)  # 706,525
+save(child_grandchild, file=paste0(r_dir, "child_grandchild_uniq.Rdata")) 
+
 
 
 
