@@ -5,7 +5,6 @@
 000_Tips_using_bianca.sh  
 Aim: Tips to use bianca server 
 
-
 00_Files_info.R  
 Aim: convert all registry data to .Rdata format and comment on each file  
 Input: all original files from release 1, 2, 3 & 4  
@@ -39,11 +38,11 @@ Input: ""
 Output: ""  
 
 
-## 4. Spouses of index person and index person's siblings  
-04_Spouse.R
-Aim:    
-Input: ""   
-Output: ""  
+## 4. Demographic info for each population
+04_Demo.R  
+Aim:  
+Input:  
+Output:  
 
 
 ## 5. Pedigree   
@@ -51,7 +50,6 @@ Output: ""
 Aim:    
 Input: ""   
 Output: ""  
-
 
 
 ## 10. SCE and income
