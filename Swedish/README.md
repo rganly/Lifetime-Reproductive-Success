@@ -22,9 +22,9 @@ Output: "indexW.Rdata", "indexW_delivery.Rdata", "index_lrs_summary", "index_lrs
 
 ## 2. Siblings of index person   
 02_Sibling.R
-Aim: calculate LRS (N of children and N of grandchildren) and age of having the first/last child for each sibling of index person   
-Input: ""   
-Output: ""  
+Aim: calculate LRS (N of children), childless, and age of having the first/last child for each sibling
+Input: "tove_lev_koppl_index_syskon.Rdata", "tove_lev_koppl_index_sysbarn.Rdata"     
+Output: "sib_uniq.Rdata", "sib_sibchild_uniq.Rdata", "Sib_delivery.Rdata", "sib_lrs_summary"  
 
 
 ## 3. Child, grandchild, and sibchild of index person  
