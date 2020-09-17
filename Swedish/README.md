@@ -27,7 +27,12 @@ Input: "tove_lev_koppl_index_syskon.Rdata", "tove_lev_koppl_index_sysbarn.Rdata"
 Output: "sib_uniq.Rdata", "sib_sibchild_uniq.Rdata", "Sib_delivery.Rdata", "sib_lrs_summary"  
 
 
-## 3. Child, grandchild, and sibchild of index person  
+## 3. Spouses of index person and index person's siblings  
+03_Spouse.R
+Aim:    
+Input: ""   
+Output: ""  
+
 03_Child_grandchild_sibchild.R  
 Aim:    
 Input: ""   
