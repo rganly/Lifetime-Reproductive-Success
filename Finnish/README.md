@@ -1,7 +1,7 @@
 # Finnish registers
 
 
-## 0. Atlas server and files info  
+## 0. Atlas server and file info  
 000_Tips_using_atlas.sh  
 Aim: Tips to use Atlas server  
 
