@@ -20,10 +20,9 @@ r_dir <- "/home/aoxing/DSGE_LRS/input/r_files/"
 sib <- get(load(paste0(r_dir, "tove_lev_koppl_index_syskon.Rdata")))       
 nrow(sib)     # 6,023,984
 sib <- sib[, c("LopNrSyskon","SyskonFodelseAr","SyskonFodelseLan","SyskonFodelseKommun","SyskonKon")] 
-dup <- duplicated(sib[,c("LopNrSyskon")])
-sib_uniq <- sib[!dup, ]
+sib_uniq <- sib[!duplicated(sib[,c("LopNrSyskon")]), ]
 nrow(sib_uniq)                        # 3,397,292
-table(sib$SyskonTyp)                  # sbling_type, XXX HalvhelsyskonFar(paternal half-sib, mother missing), XXX HalvhelsyskonMor(maternal half-sib, father missing), XXX HalvsyskonFar(paternal half-sib), XXX HalvsyskonMor(maternal half-sib), XXX Helsyskon(full-sib)                                     
+table(sib$SyskonTyp)                  # sbling_type
 table(sib_uniq$SyskonKon)             # 1,186,320 with 1 and 1,120,904 with 2
 save(sib_uniq, file=paste0(r_dir, "sib_uniq.Rdata"))    
 
@@ -36,18 +35,16 @@ length(unique(sibchild$LopNrSyskon))                  # 2,493,352 sibling with c
 length(unique(sibchild$LopNrSyskonBarn))              # 3,658,399 sibling's children 
 
 sibchild_bas <- sibchild[ ,c("LopNrSyskon","LopNrSyskonBarn","SyskonBarnFodelseAr","SyskonBarnFodelseLan","SyskonBarnFodelseKommun","SyskonBarnKon")]
-dup <- duplicated(sibchild_bas[ ,c("LopNrSyskon","LopNrSyskonBarn")])
-sib_sibchild_uniq <- sibchild_bas[!dup, ]
+sib_sibchild_uniq <- sibchild_bas[!duplicated(sibchild_bas[ ,c("LopNrSyskon","LopNrSyskonBarn")]), ]
 nrow(sib_sibchild_uniq)                               # 5,540,829
 save(sib_sibchild_uniq, file=paste0(r_dir, "sib_sibchild_uniq.Rdata")) 
+
 
 
 
 ###########################
 #   LRS (N of children)   #
 ###########################
-
-# n_child for each sibling 
 
 # count from the data
 sib_lrs <- as.data.frame(table(sib_sibchild_uniq$LopNrSyskon))    
