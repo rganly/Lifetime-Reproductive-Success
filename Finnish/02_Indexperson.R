@@ -1,5 +1,5 @@
 
-## 1. This script is to calculate LRS (N of children and N of grandchildren) and age of having the first/last child for each index person.
+## This script is to calculate LRS (N of children and N of grandchildren) and age of having the first/last child for each index person.
 
 
 setwd("/homes/aliu/DSGE_LRS/output/registry_edit/")
@@ -12,7 +12,7 @@ r_dir <- paste0(in_dir, "r_files/")
 #   LRS (N of children or grandchildren)   #
 ############################################
 
-## 1.1.1 Read in data 
+## Read in data 
 
 # Index person (born 1956-1982)  
 index <- get(load(paste0(r_dir,"index.Rdata")))                 # 2,365,707 indexperson
@@ -33,7 +33,7 @@ length(unique(grandchild$SUKULAISEN_TNRO))                      # 482,777 grandc
 
 
 #--------------------------------------------
-## 1.1.2 n_child and n_grandchild for each indexperson
+## n_child and n_grandchild for each indexperson
 
 # n_child
 index_lrs <- as.data.frame(table(child$KANTAHENKILON_TNRO))     # n_child for indexperson with children
@@ -78,25 +78,19 @@ colnames(lrs_count_summary) <- c("b_year","n_male","n_female", paste("n_", rep(k
 
 
 for (year_n in 1:length(years)){
-
 	lrs_summary[year_n,"b_year"] <- lrs_count_summary[year_n,"b_year"] <- years[year_n]
 	lrs_yearn <- lrs_all[lrs_all[,"b_year"]==unique(lrs_all[,"b_year"])[year_n], c("SUKUPUOLI","n_child","n_gchild")]
-	
 	for (kon_n in 1:length(kons)){
 		lrs_summary[year_n, paste("n_",kons[kon_n],sep="")] <- lrs_count_summary[year_n, paste("n_",kons[kon_n],sep="")] <- nrow(lrs_yearn[lrs_yearn[,"SUKUPUOLI"]==kon_n,])	
-		
 		for (pop in c("child","gchild")){
 			lrs_summary[year_n, paste(kons[kon_n],"n",pop,sep="_")] <- round(mean(lrs_yearn[lrs_yearn[,"SUKUPUOLI"]==kon_n, paste0("n_",pop)]), 3)  
 			lrs_summary[year_n, paste(kons[kon_n],"n",pop,"max",sep="_")] <- max(lrs_yearn[lrs_yearn[,"SUKUPUOLI"]==kon_n, paste0("n_",pop)])
 		}	
-		
 		for (n in 0:4){
 			lrs_count_summary[year_n, paste0("n_",kons[kon_n],"_",n,"child")] <- nrow(lrs_yearn[lrs_yearn[,"n_child"]==n,])
 		}
-			
 		print(paste(year_n, kon_n, sep="_"))
 	}
-	
 }
 
 write.table(lrs_summary, "index_lrs_summary", append=F, quote=F, sep=" ", row.names=F, col.names=T)
@@ -109,7 +103,7 @@ write.table(lrs_count_summary,"index_lrs_count_summary",append=F,quote=F,sep=" "
 #  Age of having first/last child  #
 ####################################
 
-## 1.2.1 age at first/last delivery  
+## age at first/last delivery  
 child$b_year <- substr(child$SUKULAISEN_SYNTYMAPV,1,4)      # birth_year
 child_bas <- child[order(child$KANTAHENKILON_TNRO,child$SUKULAISEN_SYNTYMAPV), c("KANTAHENKILON_TNRO","SUKULAISEN_TNRO","b_year")]     # order by id and child's birth_year 
 
@@ -151,19 +145,15 @@ kons <- c("male","female")
 
 k <- 1
 for (ac in c("afc","alc")){
-
 	for (kon_n in 1:length(kons)){
 		summary(ind_del[ind_del[,"SUKUPUOLI"]==kon_n, ac])	
 		age <- as.data.frame(table(ind_del[ind_del[,"SUKUPUOLI"]==kon_n, ac]))
-		colnames(age) <- c("age", paste("count",ac,kons[kon_n],sep="_"))
-		
-		
+		colnames(age) <- c("age", paste("count",ac,kons[kon_n],sep="_"))		
 		if (k == 1){
 			age_total <- age
 		}else{
 			age_total <- merge(age_total, age, by="age", all=T)	
 		}	
-		
 		k <- k+1					
 	}	
 }
@@ -182,18 +172,14 @@ kons <- c("male","female")
 
 for (year_n in 1:n_year){
 	del_sum[year_n,"b_year"] <- years[year_n]
-	del_yearn <- ind_del[ind_del[,"b_year"]==years[year_n],c("SUKUPUOLI","afc","alc")]
-	
+	del_yearn <- ind_del[ind_del[,"b_year"]==years[year_n],c("SUKUPUOLI","afc","alc")]	
 	for (kon_n in 1:length(kons)){
-		del_sum[year_n,paste(kons[kon_n],"_n",sep="")] <- nrow(del_yearn[del_yearn[,"SUKUPUOLI"]==kon_n,])
-		
+		del_sum[year_n,paste(kons[kon_n],"_n",sep="")] <- nrow(del_yearn[del_yearn[,"SUKUPUOLI"]==kon_n,])		
 		for (ac in c("afc","alc")){	
 			del_sum[year_n, paste(kons[kon_n],ac,sep="_")] <- round(mean(del_yearn[del_yearn$SUKUPUOLI==kon_n,ac],na.rm=T), 3)       	
 			print(paste(year_n, kon_n, ac, sep="_"))
-		}
-		
-	}
-	
+		}	
+	}	
 }
 
 write.table(del_sum, "index_age_at_having_child_summary", append=F, quote=F, sep=" ", row.names=F, col.names=T)
