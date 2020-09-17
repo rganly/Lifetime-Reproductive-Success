@@ -57,7 +57,7 @@ summary(sib_lrs$n_child)                                # mean=2.222, max=23, fo
 sib_lrs_all <- merge(sib_uniq, sib_lrs, by="LopNrSyskon", all=T)   
 nrow(sib_lrs_all)        # 3,397,292
 sib_lrs_all[is.na(sib_lrs_all)] <- 0 
-summary(sib_lrs_all$n_child)   # mean=XXX, max=23, for all siblings    
+summary(sib_lrs_all$n_child)   # mean=1.631, max=23, for all siblings    
 sib_lrs_all[, "childless"] <- ifelse(sib_lrs_all$n_child!=0,0,1)        # 1 for childless 
 
 
