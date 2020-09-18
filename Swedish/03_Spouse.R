@@ -1,7 +1,7 @@
 ## This script is to check/combine yearly spouse registry from 1977 to 2017
 
 
-# Input: "tove_lev_koppl_sys_part_*.Rdata", "tove_lev_koppl_sys_part_*.Rdata"
+# Input: "tove_lev_koppl_sys_part_{1977..2017}.Rdata", "tove_lev_koppl_sys_part_{1977..2017}.Rdata"
 # Output: "index_spouse_1977_2017.RData", "sib_spouse_1977_2017.RData"
 # Comments: 
 
