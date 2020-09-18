@@ -49,7 +49,7 @@ Output:
 
 ## 4. Demographic info for everyone in the population register
 04_Pedigree.R  
-Aim: pedigree (id, father, mother, sex, and birth_date) 
+Aim: pedigree (id, father, mother, sex, and birth_date)  
 Input: ""   
 Output: ""   
 
