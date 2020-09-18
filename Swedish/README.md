@@ -35,31 +35,42 @@ Input: ""
 Output: ""  
 
 
-## 3. Pedigree and demographic info for everyone in the population register
-03_Pedigree.R  
-Aim: pedigree (id, father, mother, sex, and birth_date) 
-Input: ""   
-Output: ""   
-
-03_Demo.R  
-Aim: Demographic info for every one appear in the population register    
-Input:  
-Output:  
-
-
-
-## 4. Socioeconomic status (income and education)
-04_SCE_Income_Check.R  
+## 3. Socioeconomic status (income and education)
+03_SCE_Income_Check.R  
 Aim: Check the income data  
 Input:  
 Output:  
 
-04_SCE_Education.R  
+03_SCE_Education.R  
 Aim:  
 Input:  
 Output:  
 
 
+## 4. Demographic info for everyone in the population register
+04_Pedigree.R  
+Aim: pedigree (id, father, mother, sex, and birth_date) 
+Input: ""   
+Output: ""   
+
+04_Demo.R  
+Aim: Demographic info for every one appear in the population register    
+Input:  
+Output:  
+
+
+## 5. Health registers
+05
+Aim:   
+Input: ""   
+Output: ""   
+
+
+## 6. Association analysis
+06
+Aim:   
+Input: ""   
+Output: ""   
 
 
 
