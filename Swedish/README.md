@@ -27,10 +27,10 @@ Output: "sib_uniq.Rdata", "sib_sibchild_uniq.Rdata", "Sib_delivery.Rdata", "sib_
 
 
 ## 3. Spouses and children/grandchildren of index person and siblings  
-03_Spouse.R
-Aim:    
-Input: ""   
-Output: ""  
+03_Spouse.R  
+Aim: check/combine yearly spouse registry from 1977 to 2017   
+Input: "tove_lev_koppl_sys_part_*.Rdata", "tove_lev_koppl_sys_part_*.Rdata"    
+Output: "index_spouse_1977_2017.RData", "sib_spouse_1977_2017.RData"    
 
 03_Child_grandchild_sibchild.R  
 Aim:    
