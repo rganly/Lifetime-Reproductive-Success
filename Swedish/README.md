@@ -66,14 +66,17 @@ Input: ""
 Output: ""   
 
 
-## 6. Association analysis
-06
+## 6. ICD codes and Endpoints  
+06_Endpoint_ICD.R  
+Aim:    
+Input: ""   
+Output: ""  
+
+
+## 7. Regression analysis
+07
 Aim:   
 Input: ""   
 Output: ""   
-
-
-
-
 
 
