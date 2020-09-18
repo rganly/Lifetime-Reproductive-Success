@@ -3,6 +3,7 @@ We propose to explore the lifetime reproductive success across multiple diseases
 
 By combining health registries with registries containing family relationships we can quantify, for each disease, the lifetime reproductive success by comparing the number of children in diseased individuals with those in the general population. 
 
+![alt text](https://github.com/dsgelab/Lifetime-Reproductive-Success/blob/[branch]/image.jpg?raw=true)
 
 
 ## Finnish Registers
