@@ -2,7 +2,7 @@
 
 
 ## 0. bianca server and files info
-000_Tips_using_bianca.sh  
+00_Tips_using_bianca.sh  
 Aim: Tips to use bianca server 
 
 00_Files_info.R  
