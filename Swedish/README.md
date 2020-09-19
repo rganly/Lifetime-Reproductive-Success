@@ -15,7 +15,7 @@ Output: "Data_comments_SWE.csv" (See "Data_comments_SWE.xlsx", which was adapted
 01_Indexperson_LRS.R  
 Aim: calculate LRS (N of children and N of grandchildren), childless, and age of having the first/last child for each index person   
 Input: "tove_lev_index.Rdata", "tove_lev_koppl_index_barn.Rdata", "tove_lev_koppl_index_barnbarn.Rdata"   
-Output: "indexW.Rdata", "indexW_delivery.Rdata", "index_lrs_summary", "index_lrs_count_summary", "index_age_at_having_child_count", "index_age_at_having_child_summary"  
+Output: "indexW.Rdata", "indexW_delivery.Rdata", "indexW_LRS.Rdata", "indexW_lrs_summary", "indexW_lrs_count_summary", "indexW_age_at_having_child_count", "indexW_age_at_having_child_summary"  
 
 01_Sibling_LRS.R  
 Aim: calculate LRS (N of children), childless, and age of having the first/last child for each sibling   
