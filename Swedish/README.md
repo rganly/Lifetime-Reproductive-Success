@@ -29,11 +29,6 @@ Aim: check/combine yearly spouse registry from 1977 to 2017
 Input: "tove_lev_koppl_sys_part_{1977..2017}.Rdata", "tove_lev_koppl_sys_part_{1977..2017}.Rdata"    
 Output: "index_spouse_1977_2017.RData", "sib_spouse_1977_2017.RData"    
 
-02_Child_grandchild_sibchild.R  
-Aim:    
-Input: ""   
-Output: ""  
-
 
 ## 3. Socioeconomic status (income and education)
 03_SCE_Income.R  
