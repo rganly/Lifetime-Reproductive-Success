@@ -2,7 +2,7 @@
 
 
 # Input: "tove_lev_koppl_sys_part_{1977..2017}.Rdata", "tove_lev_koppl_sys_part_{1977..2017}.Rdata"
-# Output: "index_spouse_1977_2017.RData", "sib_spouse_1977_2017.RData", Spouse_1977_2017.RData
+# Output: "index_spouse_1977_2017.Rdata", "sib_spouse_1977_2017.Rdata", Spouse_1977_2017.Rdata
 # Comments: 
 
 
@@ -57,7 +57,7 @@ save(sib_spouse, file=paste0(r_dir,"sib_spouse_1977_2017.Rdata"))
 colnames(sib_spouse) <- colnames(index_spouse)
 spouse <- union(index_spouse, sib_spouse)
 nrow(spouse)  # 51,744,405
-save(spouse, file=paste0(r_dir,"Spouse_1977_2017.RData"))  
+save(spouse, file=paste0(r_dir,"Spouse_1977_2017.Rdata"))  
 
 
 
