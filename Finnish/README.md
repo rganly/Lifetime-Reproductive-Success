@@ -23,16 +23,11 @@ Input:
 Output:    
 
 
-## 2. Spouses and children/grandchildren of Indexperson/Siblings 
+## 2. Spouses
 02_Spouse.R  
 Aim: check/combine yearly spouse registry from 1977 to 2017   
 Input: "tove_lev_koppl_sys_part_{1977..2017}.Rdata", "tove_lev_koppl_sys_part_{1977..2017}.Rdata"    
 Output: "index_spouse_1977_2017.RData", "sib_spouse_1977_2017.RData"    
-
-02_Child_grandchild_sibchild.R  
-Aim:    
-Input: ""   
-Output: ""  
 
 
 ## 3. Socioeconomic status (income and education)
