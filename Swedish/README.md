@@ -36,7 +36,7 @@ Output: ""
 
 
 ## 3. Socioeconomic status (income and education)
-03_SCE_Income_Check.R  
+03_SCE_Income.R  
 Aim: Check the income data  
 Input:  
 Output:  
