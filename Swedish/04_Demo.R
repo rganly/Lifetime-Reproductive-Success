@@ -141,3 +141,132 @@ nrow(parent_sib)  # 7,277,823
 save(parent_sib, file=paste0(r_dir,"DEMO_parent_sib.Rdata"))
 
 
+## Spouses of index person and siblings -------------------------------
+spouse <- data.frame(get(load(paste0(r_dir,"Spouse_1977_2017.Rdata"))))
+nrow(spouse)  # 37,767,025
+spouse <- spouse[!duplicated(spouse$LopNrSamh),c("LopNrSamh","FodelseLanSamh","FodelseKommunSamh","KonSamh")]
+nrow(spouse)  # 3,332,240
+spouse[,c("AterPnr","FodelseAr","FodelseLandNamn")] <- NA
+spouse <- spouse[,c("LopNrSamh", "AterPnr", "FodelseAr", "FodelseLandNamn", "FodelseLanSamh", "FodelseKommunSamh", "KonSamh")]
+colnames(spouse) <- colnames(index)
+save(spouse, file=paste0(r_dir,"DEMO_spouse.Rdata"))
+
+
+
+
+############################################
+#      Combine and format demo             #
+############################################
+system("ls -alrt /home/aoxing/DSGE_LRS/input/r_files/DEMO*.Rdata")
+
+# Combine all sources
+demo_raw <- rbind(index,child_uniq,grandchild_uniq, sib,sibchild, parent_index,parent_child,parent_sib, spouse)
+nrow(demo_raw)  # 35,536,169
+length(unique(demo_raw$LopNr))   # 9,723,423
+demo_raw[demo_raw==""] <- NA
+save(demo_raw, file=paste0(r_dir,"demo_raw.Rdata"))
+
+
+# Extract the unique ones with as more non-NA as possible
+demo <- demo_raw %>% group_by(LopNr) %>% summarize(AterPnr=AterPnr[which(is.na(AterPnr)==F)[1]],
+                                                   FodelseAr=FodelseAr[which(is.na(FodelseAr)==F)[1]],
+                                                   FodelseLandNamn=FodelseLandNamn[which(is.na(FodelseLandNamn)==F)[1]], 
+                                                   FodelseLan=FodelseLan[which(is.na(FodelseLan)==F)[1]],
+                                                   FodelseKommun=FodelseKommun[which(is.na(FodelseKommun)==F)[1]],
+                                                   Kon=Kon[which(is.na(Kon)==F)[1]])                                  
+
+nrow(demo)  # 9,723,423 
+demo <- data.frame(demo)
+save(demo, file=paste0(r_dir,"demo.Rdata"))
+
+
+
+############################################
+#      Which population?                   #
+############################################
+
+demo[,"is_index"] <- as.numeric(demo[,"LopNr"] %in% index[,"LopNr"])
+demo[,"is_indexW"] <- as.numeric(demo[,"LopNr"] %in% indexW[,"LopNr"])
+demo[,"is_child"] <- as.numeric(demo[,"LopNr"] %in% child_uniq[,"LopNr"])
+demo[,"is_grandchild"] <- as.numeric(demo[,"LopNr"] %in% grandchild_uniq[,"LopNr"])
+demo[,"is_sib"] <- as.numeric(demo[,"LopNr"] %in% sib[,"LopNr"])
+demo[,"is_sibchild"] <- as.numeric(demo[,"LopNr"] %in% sibchild[,"LopNr"])
+demo[,"is_parent_index"] <- as.numeric(demo[,"LopNr"] %in% parent_index[,"LopNr"])
+demo[,"is_parent_child"] <- as.numeric(demo[,"LopNr"] %in% parent_child[,"LopNr"])
+demo[,"is_parent_sib"] <- as.numeric(demo[,"LopNr"] %in% parent_sib[,"LopNr"])
+demo[,"is_spouse_index"] <- as.numeric(demo[,"LopNr"] %in% spouse_index[,"LopNr"])
+demo[,"is_spouse_sib"] <- as.numeric(demo[,"LopNr"] %in% spouse_sib[,"LopNr"])
+
+
+
+############################################
+#      Add Death date                      #
+############################################
+
+death <- data.frame(get(load(paste0(r_dir,"tove_lev_doddatum.Rdata"))))
+nrow(death)  # 1,301,514
+colnames(death) <- c("LopNr","death_date")
+
+demo <- merge(demo, death, by="LopNr", all.x=T)
+nrow(demo)
+
+
+
+############################################
+#      Add Migration                       #
+############################################
+
+migra <- data.frame(get(load(paste0(r_dir,"tove_lev_migrationer.Rdata"))))
+nrow(migra)  # 2,066,867
+
+demo[,"immigration"] <- ifelse(demo$LopNr %in% migra[migra$Posttyp=="Inv","LopNr"], 1, 0)
+demo[,"emigration"] <- ifelse(demo$LopNr %in% migra[migra$Posttyp=="Utv","LopNr"], 1, 0)
+
+
+
+############################################
+#      Add father and mother               #
+############################################
+
+ped <- data.frame(get(load(paste0(r_dir, "ped_all.RData"))))[,c("LopNr","LopNrFar","LopNrMor")]
+nrow(ped)   # 6830320
+
+demo <- merge(demo, ped, by="LopNr", all.x=T)
+nrow(demo)
+
+
+
+############################################
+#      Add education                       #
+############################################
+
+edu_high <- get(load(paste0(r_dir, "edu_high.Rdata")))
+nrow(edu_high)
+head(edu_high)
+
+demo <- merge(demo, edu_high, by="LopNr", all.x=T)
+nrow(demo)
+
+
+
+############################################
+#      Add income                          #
+############################################
+
+
+# demo <- data.frame(get(load(paste0(r_dir, "demo.Rdata"))))
+
+demo <- demo[,c("LopNr","LopNrFar","LopNrMor","AterPnr","FodelseAr","FodelseLandNamn","FodelseLan","FodelseKommun","Kon","immigration","emigration","death_date",
+                "is_index","is_indexW","is_child","is_grandchild","is_sib","is_sibchild","is_parent_index","is_parent_child","is_parent_sib","is_spouse_index","is_spouse_sib",
+                "income_Age2535_max","income_Age2535_mean","income_Age5060_max","income_Age5060_mean","EduYears","ISCED97")]
+
+
+
+save(demo, file=paste0(r_dir,"Demographic.Rdata"))
+
+
+
+
+
+
+
