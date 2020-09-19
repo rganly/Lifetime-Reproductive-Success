@@ -23,7 +23,7 @@ Input: "tove_lev_koppl_index_syskon.Rdata", "tove_lev_koppl_index_sysbarn.Rdata"
 Output: "sib_uniq.Rdata", "sib_sibchild_uniq.Rdata", "Sib_delivery.Rdata", "sib_lrs_summary"  
 
 
-## 2. Spouses and children/grandchildren of Indexperson/Siblings 
+## 2. Spouses
 02_Spouse.R  
 Aim: check/combine yearly spouse registry from 1977 to 2017   
 Input: "tove_lev_koppl_sys_part_{1977..2017}.Rdata", "tove_lev_koppl_sys_part_{1977..2017}.Rdata"    
