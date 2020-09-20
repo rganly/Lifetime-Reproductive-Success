@@ -1,21 +1,18 @@
-## 10. Summarize education registry 
+## This script is to summarize education registry and extract the highest education level
 
 
-#  ## Ask interactive nodes 
-#  interactive -A sens2019018 -n 3 --qos=interact -t 12:00:00
-#  salloc -A sens2019018 -p core -n 3 -t 12:00:00
-#  jobinfo -u aoxing
-#  module load R_packages/3.6.0
+# Input: "tove_lev_hog_gymn_1989_1977.Rdata", "tove_lev_lisa_{1990..2017}.Rdata", "tove_lev_koppl_index_foraldrar.Rdata"
+# Output: "Education_1977_2017.Rdata", "edu_high.Rdata", "index_edu.Rdata"
+# Comments: 
 
 
 setwd("/home/aoxing/DSGE_LRS/out/registry_edit/")
-#setwd("/home/aoxing/DSGE_LRS/output/registry_edit/")   # mkdir: cannot create directory ‘output’: Transport endpoint is not connected
 r_dir <- "/home/aoxing/DSGE_LRS/input/r_files/"
-
 
 require(gridExtra)
 library(tidyverse)
 
+'%!in%' <- function(x,y)!('%in%'(x,y))
 
 
 
@@ -23,39 +20,29 @@ library(tidyverse)
 #   2 batches of education registry   #
 #######################################
 
-# 10.1.1 1977-1989
-
+# 1977-1989
 lisa_1977_1989 <- as.data.frame(get(load(paste0(r_dir, "tove_lev_hog_gymn_1989_1977.Rdata"))))
 dim(lisa_1977_1989)    # 1955027       5
 
 
-
-
-# 10.1.2 1990-2017
-
+# 1990-2017
+lisa_1990_2017 <- NULL
 for (i in 1990:2017){
 	d <- as.data.frame(get(load(paste0(r_dir, "tove_lev_lisa_", i, ".Rdata"))))
 	d[ ,"Ar"] <- i
 	colnames(d) <- tolower(colnames(d))
 	d <- d[ ,c("lopnr", "ar", "sun2000niva", "sun2000inr", "sun2000niva_old")]
-	print(paste0("Year ", i, " have ", nrow(d), " LISA records."))
-	
-	if(i==1990){lisa_1990_2017 <- d} else {lisa_1990_2017 <- rbind(lisa_1990_2017, d)}
-	
+	print(paste0("Year ", i, " have ", nrow(d), " LISA records."))	
+	lisa_1990_2017 <- rbind(lisa_1990_2017, d)
 }
-
 colnames(lisa_1990_2017) <- colnames(lisa_1977_1989)
 
 
-
-
-# 10.1.3 Combine: 1977-2017
-
+# Combine: 1977-2017
 edu <- rbind(lisa_1977_1989, lisa_1990_2017)
 edu[ ,"ISCED97"] <- sub(9, 0, substr(edu[,"SUN2000Niva"],1,1))
 nrow(edu)   #  
-
-save(edu, file=paste0(r_dir, "lisa_1977_2017.Rdata"))
+save(edu, file=paste0(r_dir, "Education_1977_2017.Rdata"))
 
 
 
@@ -64,18 +51,15 @@ save(edu, file=paste0(r_dir, "lisa_1977_2017.Rdata"))
 #     Hihgest education achieved      #
 #######################################
 
-# 10.2.1 higest education level for individuals with education info
-
+# higest education level for individuals with education info
 edu_e <- edu[,c("LopNr","ISCED97")]
-
 edu_e <- edu_e[order(edu_e$LopNr, edu_e$ISCED97), ]     # order by id and education level, "aggregate" could be faster
 edu_h <- by(edu_e, edu_e["LopNr"], tail, n=1)                           
 edu_high <- do.call("rbind", edu_h)                    
 nrow(edu_high)     # 7,834,277  
 
 
-# 10.2.2 add ISCED97 & EduYears
-
+# add ISCED97 & EduYears
 Edu_lst <- matrix(c(0,"Pre-primary education",1,
                     1,"Primary education or first stage of basic education",7,
                     2,"Lower secondary or second stage of basic education",10,
@@ -89,13 +73,10 @@ Edu_lst <- Edu_lst[,c("ISCED97","EduYears")]
 Edu_lst
 
 
-
 edu_high <- merge(edu_high, Edu_lst, by="ISCED97")
 nrow(edu_high)      # 7,834,277
 edu_high <- edu_high[ ,c("LopNr","ISCED97","EduYears")]
-save(edu_high, file=paste0(r_dir,"edu_high.Rdata"))
-
-
+save(edu_high, file=paste0(r_dir, "edu_high.Rdata"))
 
 
 
@@ -104,14 +85,16 @@ save(edu_high, file=paste0(r_dir,"edu_high.Rdata"))
 #   ISCED97 & EduYears for index person   #
 ###########################################
 
+# index person's parents
+index_ped <- as.data.frame(get(load(paste0(r_dir, "tove_lev_koppl_index_foraldrar.Rdata"))))   
+nrow(index_ped)                               # 2,893,654 indexperson, where 55,961 have father as NA, 16,083 have mother as NA
+index_ped <- index_ped[, c("LopNr", "LopNrFar", "LopNrMor")]
+
 
 index_edu <- merge(index_ped, edu_high, by="LopNr", all.x=T)
-dim(index_edu)
-
+nrow(index_edu)
 colnames(index_ped) <- c("LopNrMor", "LopNrFar", "LopNr", "FarEdu", "MorEdu", "ISCED97.Far", "EduYears.Far", "ISCED97.Mor", "EduYears.Mor")
-
 index_ped[is.na(index_ped)] <- NA   
-
 index_ped[,"ISCED97.Far"] <- ifelse(is.na(index_ped$ISCED97.Far), "-1", index_ped$ISCED97.Far)
 index_ped[,"ISCED97.Mor"] <- ifelse(is.na(index_ped$ISCED97.Mor), "-1", index_ped$ISCED97.Mor)
 
@@ -127,7 +110,6 @@ index_edu[,"EduYears.Far"] <- ifelse(is.na(index_edu$EduYears.Far), "-1", index_
 index_edu[,"EduYears.Mor"] <- ifelse(is.na(index_edu$EduYears.Mor), "-1", index_edu$EduYears.Mor)
 
 
-
 # Father and Mother
 cor(as.numeric(index_edu[index_edu$ISCED97.Far>0 & index_edu$ISCED97.Mor>0, "ISCED97.Far"]), as.numeric(index_edu[index_edu$ISCED97.Far>0 & index_edu$ISCED97.Mor>0, "ISCED97.Mor"]), use="pairwise.complete.obs")    # 0.4782035
 cor(as.numeric(index_edu[index_edu$ISCED97.Far>0 & index_edu$ISCED97.Mor>0, "EduYears.Far"]), as.numeric(index_edu[index_edu$ISCED97.Far>0 & index_edu$ISCED97.Mor>0, "EduYears.Mor"]), use="pairwise.complete.obs")  # 0.4770058
@@ -140,17 +122,10 @@ cor(as.numeric(index_edu[index_edu$ISCED97.Far>0 & index_edu$ISCED97>0, "EduYear
 cor(as.numeric(index_edu[index_edu$ISCED97.Mor>0 & index_edu$ISCED97>0, "ISCED97.Mor"]), as.numeric(index_edu[index_edu$ISCED97.Mor>0 & index_edu$ISCED97>0, "ISCED97"]), use="pairwise.complete.obs")    # 0.3220415
 cor(as.numeric(index_edu[index_edu$ISCED97.Mor>0 & index_edu$ISCED97>0, "EduYears.Mor"]), as.numeric(index_edu[index_edu$ISCED97.Mor>0 & index_edu$ISCED97>0, "EduYears"]), use="pairwise.complete.obs")  # 0.319645
 
-
-
 index_edu[,"ISCED97.Parent"] <- max(index_edu[,"ISCED97.Far"], index_edu[,"ISCED97.Mor"])
 index_edu[,"EduYears.Parent"] <- max(index_edu[,"EduYears.Far"], index_edu[,"EduYears.Mor"])
-
-ifelse(index_edu[,"EduYears.Far"],)
-
-
 index_edu$ISCED97.Parent <- ifelse(as.numeric(index_edu$ISCED97.Far) > as.numeric(index_edu$ISCED97.Mor), index_edu$ISCED97.Far, index_edu$ISCED97.Mor)
 index_edu$EduYears.Parent <- ifelse(as.numeric(index_edu$EduYears.Far) > as.numeric(index_edu$EduYears.Mor), index_edu$EduYears.Far, index_edu$EduYears.Mor)
-
 
 index_edu <- index_edu[,c("LopNr","LopNrMor","LopNrFar",
                           "ISCED97","ISCED97.Far","ISCED97.Mor","ISCED97.Parent",
@@ -165,15 +140,6 @@ save(index_edu, file=paste0(r_dir, "index_edu.Rdata"))
 ############################################################
 #    For which population we have education information    #
 ############################################################
-
-#----------------------------------------------
-# check whether we also have education level for parents
-
-# index person's parents
-
-index_ped <- as.data.frame(get(load(paste0(r_dir,"tove_lev_koppl_index_foraldrar.Rdata"))))   
-nrow(index_ped)                               # 2,893,654 indexperson, where 55,961 have father as NA, 16,083 have mother as NA
-index_ped <- index_ped[, c("LopNr", "LopNrFar", "LopNrMor")]
 
 parent <- unique(c(index_ped$LopNrFar, index_ped$LopNrMor))
 length(parent)  # 3007499
@@ -194,10 +160,6 @@ index_ped[,"LopNrMor"] <- ifelse(is.na(index_ped$LopNrMor), "999999999", index_p
 
 
 #----------------------------------------------
-
-
-
-
 index_edu <- merge(index_ped, edu_high, by="LopNr", all.x=T)
 dim(index_edu)
 
@@ -245,27 +207,6 @@ nrow(index_edu[index_edu$ISCED97.Far>0 & index_edu$ISCED97.Mor>0, ])   # 2,479,2
 nrow(index_edu[index_edu$ISCED97.Far>0 & index_edu$ISCED97.Mor>0, ])/nrow(index_edu)   # 0.8567897
 	
 
-
-
-
-##-------------------------------------------------------------------
-setwd("/Users/aoxliu/Downloads/Plots/")
-edu <- read.table("/Users/aoxliu/Downloads/Plots/SWE_Edu97_FREQ.txt", header=T)
-
-tiff("Plot_EducationLevel_parents.tiff", width = 9, height = 7, units = 'in', res = 300)
-	ggplot(edu, aes(y=ISCED97.Far, x=ISCED97.Mor, size=Freq)) +
-    geom_point(alpha=0.5) +
-    theme_bw() +
-    scale_size(range = c(1, 20), name="N of parent pairs") +
-    xlab("Mother") +
-    ylab("Father") +    
-    ggtitle("ISCED97 level of index person's parents") + 
-    theme(axis.title = element_text(face="bold", size=14)) + 
-    theme(plot.title = element_text(hjust = 0.5, face="bold", size=16)) +
-    theme(axis.text = element_text(face="bold", size=12)) + 
-    geom_abline(intercept = 0, slope = 1, color = "#51A0D5", linetype="dashed", size=0.5)    
-dev.off()    
-    
 
 
 
