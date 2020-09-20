@@ -53,10 +53,10 @@ Aim: pedigree (id, father, mother, sex, and birth_date)
 Input: ""   
 Output: ""   
 
-04_Demo.R  
-Aim: Demographic info for every one appear in the population register    
-Input:  
-Output:  
+04_Demographic.R  
+Aim: generate one file which includes demographic and SCE (income and education) info for everyone appear in the population registry   
+Input: "tove_lev_index.Rdata", "indexW.Rdata", "tove_lev_koppl_index_barn.Rdata", "tove_lev_koppl_index_barnbarn.Rdata", "sib_uniq.Rdata", "sib_sibchild_uniq.Rdata", "tove_lev_koppl_index_foraldrar.Rdata", "tove_lev_koppl_barn_foraldrar.Rdata", "tove_lev_koppl_sysbarn_foraldr.Rdata", "Spouse_1977_2017.Rdata", "tove_lev_doddatum.Rdata", "tove_lev_migrationer.Rdata", "ped_all.RData", "edu_high.Rdata", "Income_Age2535_Age5060.Rdata"    
+Output: "demo.Rdata", "Demographic.Rdata", "DEMO_index.Rdata", "DEMO_child.Rdata", "DEMO_grandchild.Rdata", "DEMO_sib.Rdata", "DEMO_sibchild.Rdata", "DEMO_parent_index.Rdata", "DEMO_parent_child.Rdata", "DEMO_parent_sib.Rdata", "DEMO_spouse.Rdata"     
 
 
 ## 5. Health registers
