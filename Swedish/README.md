@@ -49,9 +49,11 @@ Output:
 
 ## 4. Demographic info for everyone in the population register
 04_Pedigree.R  
-Aim: pedigree (id, father, mother, sex, and birth_date)  
-Input: ""   
-Output: ""   
+Aim: create full pedigree, including parents (id, father, mother, gender, birth_year) for children, grandchildren, sibling's children, indexperson, and sibling   
+Input: "tove_lev_koppl_barn_foraldrar.Rdata", "tove_lev_koppl_index_barn.Rdata", "tove_lev_koppl_index_barnbarn.Rdata", "tove_lev_koppl_sysbarn_foraldr.Rdata", "tove_lev_koppl_index_sysbarn.Rdata", "tove_lev_koppl_index_foraldrar.Rdata", "tove_lev_index.Rdata", "sib_uniq.Rdata","tove_lev_koppl_index_syskon.Rdata"      
+Output: "Pedigree.Rdata"   
+Comments: "Pedigree.Rdata" only covers samples with parent info, and therefore doesn't include all samples in the population registry  
+
 
 04_Demographic.R  
 Aim: generate one file which includes demographic and SCE (income and education) info for everyone appear in the population registry   
