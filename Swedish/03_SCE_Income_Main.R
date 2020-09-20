@@ -2,7 +2,7 @@
 
 
 # Input: "tove_lev_dispink_{1977..2017}.Rdata", "demo.Rdata", "CPI_2017.csv"
-# Output: Income_1977_2017.Rdata", "lisa_expM_QCED_b2535_b5060.Rdata", "lisa_expM.Rdata"
+# Output: "Income_1977_2017.Rdata", "lisa_expM.Rdata", "lisa_expM_QCED_b2535_b5060.Rdata"
 # Comments: 
 
 
@@ -65,6 +65,13 @@ lisa_expM <- inner_join(lisa_exp, demo, by=c("lopnr"="LopNr"))
 nrow(lisa_expM)        # 240,016,177 rows
 length(unique(lisa_expM$lopnr))    # 8,044,228 individuals
 save(lisa_expM, file=paste0(r_dir, "lisa_expM.Rdata"))  
+
+
+# Check median, min, max of income
+min(lisa_expM$dispink[lisa_expM$ar==2017],na.rm=T)    # -629536
+max(lisa_expM$dispink[lisa_expM$ar==2017],na.rm=T)    # 11561476
+median(lisa_expM$dispink[lisa_expM$ar==2017],na.rm=T) # 2359
+mean(lisa_expM$dispink[lisa_expM$ar==2017],na.rm=T)   # 2788.928
 
 
 # Exclude data before 1990 and normalize to 2017 income
