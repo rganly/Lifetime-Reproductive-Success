@@ -2,7 +2,7 @@
 
 
 # Input: "tove_lev_dispink_{1977..2017}.Rdata", "demo.Rdata", "CPI_2017.csv"
-# Output: "Income_1977_2017.Rdata", "lisa_expM.Rdata", "lisa_expM_QCED_b2535_b5060.Rdata"
+# Output: "Income_1977_2017.Rdata", "lisa_expM.Rdata", "Income_Age2535_Age5060.Rdata"
 # Comments: 
 
 
@@ -114,7 +114,7 @@ nrow(lisa_expM_QCED_b2535_b5060)   # 4,302,780
 lisa_expM_QCED_b2535_b5060[,"N_year_2535"] <- ifelse(lisa_expM_QCED_b2535_b5060[,"N_year_2535"]==NA, 0, lisa_expM_QCED_b2535_b5060[,"N_year_2535"])
 lisa_expM_QCED_b2535_b5060[,"N_year_5060"] <- ifelse(lisa_expM_QCED_b2535_b5060[,"N_year_5060"]==NA, 0, lisa_expM_QCED_b2535_b5060[,"N_year_5060"])
 summary(lisa_expM_QCED_b2535_b5060)
-save(lisa_expM_QCED_b2535_b5060, file=paste0(r_dir, "lisa_expM_QCED_b2535_b5060.Rdata"))
+save(lisa_expM_QCED_b2535_b5060, file=paste0(r_dir, "Income_Age2535_Age5060.Rdata"))
 
 
 # relationship between max and mean
