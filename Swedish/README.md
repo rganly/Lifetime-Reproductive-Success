@@ -41,7 +41,12 @@ Aim: check raw income data and max/mean income at age 25-35 and age 50-60
 Input: "lisa_expM.Rdata", "Income_Age2535_Age5060.Rdata", "indexW.Rdata"  
 Output: "SCE_Income_Raw.pdf", "SCE_Income_Normalization.pdf", "SCE_Income_Age2535_5060.pdf", "stats_by_year.csv"     
 
-03_SCE_Education.R  
+03_SCE_Education_Main.R  
+Aim:  
+Input:  
+Output:  
+
+03_SCE_Education_Plot.R  
 Aim:  
 Input:  
 Output:  
