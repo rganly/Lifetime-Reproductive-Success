@@ -34,12 +34,12 @@ Output: "index_spouse_1977_2017.Rdata", "sib_spouse_1977_2017.Rdata", Spouse_197
 03_SCE_Income_Main.R   
 Aim: summarize income data and extract max/mean income at age 25-35 and age 50-60   
 Input: "tove_lev_dispink_{1977..2017}.Rdata", "demo.Rdata", "CPI_2017.csv"  
-Output: "Income_1977_2017.Rdata", "lisa_expM_QCED_b2535_b5060.Rdata", "lisa_expM.Rdata"  
+Output: "Income_1977_2017.Rdata", "lisa_expM.Rdata", "lisa_expM_QCED_b2535_b5060.Rdata" 
 
 03_SCE_Income_Plot.R  
-Aim: Check the income data  
-Input:  
-Output:  
+Aim: check raw income data and max/mean income at age 25-35 and age 50-60
+Input: "lisa_expM.Rdata", "lisa_expM_QCED_b2535_b5060.Rdata", "indexW.Rdata"  
+Output: "SCE_Income_Raw.pdf", "SCE_Income_Normalization.pdf", "SCE_Income_Age2535_5060.pdf", "stats_by_year.csv"     
 
 03_SCE_Education.R  
 Aim:  
