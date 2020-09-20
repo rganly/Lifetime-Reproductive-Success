@@ -1,8 +1,10 @@
 ## This script is to count N of children & grandchildren & sib_children for each birth year 
 
 
-# Input: "indexW.Rdata", "tove_lev_koppl_index_barn.Rdata", "child_grandchild_uniq.Rdata", 
-# Output: 
+# Input: "tove_lev_index.Rdata", "indexW.Rdata", "tove_lev_koppl_index_barn.Rdata", "tove_lev_koppl_index_barnbarn.Rdata", "sib_uniq.Rdata", "sib_sibchild_uniq.Rdata", 
+       # "tove_lev_koppl_index_foraldrar.Rdata", "tove_lev_koppl_barn_foraldrar.Rdata", "tove_lev_koppl_sysbarn_foraldr.Rdata", "Spouse_1977_2017.Rdata",   
+       #  "tove_lev_doddatum.Rdata", "tove_lev_migrationer.Rdata", "ped_all.RData", "edu_high.Rdata", "Income_Age2535_Age5060.Rdata"
+# Output: "demo.Rdata", "Demographic.Rdata", "DEMO_index.Rdata", "DEMO_child.Rdata", "DEMO_grandchild.Rdata", "DEMO_sib.Rdata", "DEMO_sibchild.Rdata", "DEMO_parent_index.Rdata", "DEMO_parent_child.Rdata", "DEMO_parent_sib.Rdata", "DEMO_spouse.Rdata"
 # Comments: 
 
 
@@ -43,7 +45,6 @@ save(child_uniq, file=paste0(r_dir,"DEMO_child.Rdata"))
 grandchild <- data.frame(get(load(paste0(r_dir, "tove_lev_koppl_index_barnbarn.Rdata"))))  
 nrow(grandchild)        # 1,241,918
 grandchild_uniq <- grandchild[!duplicated(grandchild[ ,"LopNrBarnBarn"]),c("LopNrBarnBarn","BarnBarnFodelseAr","BarnBarnFodelseLan","BarnBarnFodelseKommun","BarnBarnKon")]
-save(grandchild_uniq, file=paste0(r_dir, "grandchild_uniq.Rdata")) 
 
 grandchild_uniq[,c("AterPnr","FodelseLandNamn")] <- NA
 grandchild_uniq <- grandchild_uniq[,c("LopNrBarnBarn","AterPnr","BarnBarnFodelseAr","FodelseLandNamn","BarnBarnFodelseLan","BarnBarnFodelseKommun","BarnBarnKon" )]
@@ -164,7 +165,6 @@ demo_raw <- rbind(index,child_uniq,grandchild_uniq, sib,sibchild, parent_index,p
 nrow(demo_raw)  # 35,536,169
 length(unique(demo_raw$LopNr))   # 9,723,423
 demo_raw[demo_raw==""] <- NA
-save(demo_raw, file=paste0(r_dir,"demo_raw.Rdata"))
 
 
 # Extract the unique ones with as more non-NA as possible
@@ -194,8 +194,7 @@ demo[,"is_sibchild"] <- as.numeric(demo[,"LopNr"] %in% sibchild[,"LopNr"])
 demo[,"is_parent_index"] <- as.numeric(demo[,"LopNr"] %in% parent_index[,"LopNr"])
 demo[,"is_parent_child"] <- as.numeric(demo[,"LopNr"] %in% parent_child[,"LopNr"])
 demo[,"is_parent_sib"] <- as.numeric(demo[,"LopNr"] %in% parent_sib[,"LopNr"])
-demo[,"is_spouse_index"] <- as.numeric(demo[,"LopNr"] %in% spouse_index[,"LopNr"])
-demo[,"is_spouse_sib"] <- as.numeric(demo[,"LopNr"] %in% spouse_sib[,"LopNr"])
+demo[,"is_spouse"] <- as.numeric(demo[,"LopNr"] %in% spouse[,"LopNr"])
 
 
 
@@ -253,20 +252,19 @@ nrow(demo)
 #      Add income                          #
 ############################################
 
+income <- data.frame(get(load(paste0(r_dir, "Income_Age2535_Age5060.Rdata"))))
+income <- income[,c("lopnr","income_Age2535_max","income_Age2535_mean","income_Age5060_max","income_Age5060_mean")] 
 
-# demo <- data.frame(get(load(paste0(r_dir, "demo.Rdata"))))
+demo <- merge(demo, income, by.x="LopNr", by.y="lopnr", all.x=T)
+nrow(demo)
+
 
 demo <- demo[,c("LopNr","LopNrFar","LopNrMor","AterPnr","FodelseAr","FodelseLandNamn","FodelseLan","FodelseKommun","Kon","immigration","emigration","death_date",
-                "is_index","is_indexW","is_child","is_grandchild","is_sib","is_sibchild","is_parent_index","is_parent_child","is_parent_sib","is_spouse_index","is_spouse_sib",
-                "income_Age2535_max","income_Age2535_mean","income_Age5060_max","income_Age5060_mean","EduYears","ISCED97")]
-
+                "EduYears","ISCED97","income_Age2535_max","income_Age2535_mean","income_Age5060_max","income_Age5060_mean",
+                "is_index","is_indexW","is_child","is_grandchild","is_sib","is_sibchild","is_parent_index","is_parent_child","is_parent_sib","is_spouse")]
 
 
 save(demo, file=paste0(r_dir,"Demographic.Rdata"))
-
-
-
-
 
 
 
