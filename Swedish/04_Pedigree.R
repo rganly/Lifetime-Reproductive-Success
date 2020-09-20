@@ -3,7 +3,7 @@
 
 # Input: "tove_lev_koppl_barn_foraldrar.Rdata", "tove_lev_koppl_index_barn.Rdata", "tove_lev_koppl_index_barnbarn.Rdata", "tove_lev_koppl_sysbarn_foraldr.Rdata", "tove_lev_koppl_index_sysbarn.Rdata", "tove_lev_koppl_index_foraldrar.Rdata", "tove_lev_index.Rdata", "sib_uniq.Rdata","tove_lev_koppl_index_syskon.Rdata"
 # Output: "Pedigree.Rdata"
-# Comments: This file is for building family tree and doesn't cover all samples in the population registry
+# Comments: "Pedigree.Rdata" only covers samples with parent info, and therefore doesn't include all samples in the population registry  
 
 
 setwd("/home/aoxing/DSGE_LRS/out/registry_edit/")
