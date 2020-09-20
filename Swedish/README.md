@@ -36,7 +36,7 @@ Aim: summarize income data and extract max/mean income at age 25-35 and age 50-6
 Input: "tove_lev_dispink_{1977..2017}.Rdata", "demo.Rdata", "CPI_2017.csv"  
 Output: "Income_1977_2017.Rdata", "lisa_expM_QCED_b2535_b5060.Rdata", "lisa_expM.Rdata"  
 
-03_SCE_Income_plot.R  
+03_SCE_Income_Plot.R  
 Aim: Check the income data  
 Input:  
 Output:  
