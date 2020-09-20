@@ -42,9 +42,9 @@ Input: "lisa_expM.Rdata", "Income_Age2535_Age5060.Rdata", "indexW.Rdata"
 Output: "SCE_Income_Raw.pdf", "SCE_Income_Normalization.pdf", "SCE_Income_Age2535_5060.pdf", "stats_by_year.csv"     
 
 03_SCE_Education_Main.R  
-Aim:  
-Input:  
-Output:  
+Aim: summarize education registry and extract the highest education level    
+Input: "tove_lev_hog_gymn_1989_1977.Rdata", "tove_lev_lisa_{1990..2017}.Rdata", "tove_lev_koppl_index_foraldrar.Rdata"     
+Output: "Education_1977_2017.Rdata", "edu_high.Rdata", "index_edu.Rdata"     
 
 03_SCE_Education_Plot.R  
 Aim:  
