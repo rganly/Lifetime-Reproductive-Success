@@ -1,4 +1,4 @@
-## This script is to count N of children & grandchildren & sib_children for each birth year 
+## This script is generate one file which includes demographic and SCE (income and education) for everyone appear in the population registry
 
 
 # Input: "tove_lev_index.Rdata", "indexW.Rdata", "tove_lev_koppl_index_barn.Rdata", "tove_lev_koppl_index_barnbarn.Rdata", "sib_uniq.Rdata", "sib_sibchild_uniq.Rdata", 
