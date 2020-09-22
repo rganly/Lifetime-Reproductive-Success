@@ -74,12 +74,12 @@ Output: ""
 
 
 ## 6. ICD codes and Endpoints  
-06_Endpoint_ICD_Main.R 
+06_Endpoint_ICD_Main.R  
 Aim:    
 Input: ""   
 Output: ""  
 
-06_Endpoint_ICD_Plot.R 
+06_Endpoint_ICD_Plot.R  
 Aim:    
 Input: ""   
 Output: ""  
