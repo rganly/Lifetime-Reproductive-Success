@@ -1,8 +1,17 @@
 ## This script is to convert ICD codes from HILMO and DEATH registers to endpoints 
 
-# Input: "HILMO_UPDATED_SWE.lst", "ut_par_sv_27035_2018_COMPLETE.Rdata", "ut_par_ov_27035_2018.Rdata", "ut_dors_indexpers_27035_2018.Rdata", "ut_dors_b_bbarn_27035_2018.Rdata" 
-# Output: "huff_all.lst", "ICD_ASK_Count.tsv","SWE_ENDPOINT_Prevalence.tsv",  "HILMO_long_COMPLETE.Rdata", "DEATH_long.Rdata", "ry_long_COMPLETE.Rdata", "ry_first_COMPLETE.Rdata", "ry_first_index_COMPLETE.Rdata", "ry_first_indexW_COMPLETE.Rdata"
+# Input: "HILMO_UPDATED_SWE.lst", "ut_par_sv_27035_2018_COMPLETE.Rdata", "ut_par_ov_27035_2018.Rdata", "ut_dors_indexpers_27035_2018.Rdata", "ut_dors_b_bbarn_27035_2018.Rdata", "tove_lev_index.Rdata", "indexW_LRS.Rdata" 
+# Output: "huff_all.lst", "ICD_ASK_Count.tsv","SWE_ENDPOINT_Prevalence.tsv",  "HILMO_long_COMPLETE.Rdata", "DEATH_long.Rdata", "rl_COMPLETE.Rdata", "rl_index_COMPLETE.Rdata", "rl_indexW_COMPLETE.Rdata", "ry_long_COMPLETE.Rdata", "ry_long_index_COMPLETE.Rdata", "ry_long_indexW_COMPLETE.Rdata", "ry_first_COMPLETE.Rdata", "ry_first_index_COMPLETE.Rdata", "ry_first_indexW_COMPLETE.Rdata"
 # Comments:  
+
+
+save(rl_index, file=paste0(r_dir, "rl_index_COMPLETE.Rdata"))
+save(ry_long_index, file=paste0(r_dir, "ry_long_index_COMPLETE.Rdata")) 
+save(ry_first_index, file=paste0(r_dir, "ry_first_index_COMPLETE.Rdata")) 
+
+save(rl_indexW, file=paste0(r_dir, "rl_indexW_COMPLETE.Rdata"))
+save(ry_long_indexW, file=paste0(r_dir, "ry_long_indexW_COMPLETE.Rdata")) 
+save(ry_first_indexW, file=paste0(r_dir, "ry_first_indexW_COMPLETE.Rdata")) 
 
 
 setwd("/home/aoxing/DSGE_LRS/out/registry_edit/")
@@ -158,7 +167,7 @@ save(DEATH_long, file=paste0(r_dir, "DEATH_long.Rdata"))
 # Longitudinal ICD codes
 rl <- rbind(HILMO_long, DEATH_long)
 nrow(rl)      # 52,298,366
-save(rl, file=paste0(r_dir, "ICD_Long_COMPLETE.Rdata"))
+save(rl, file=paste0(r_dir, "rl_COMPLETE.Rdata"))
 rm(HILMO_long)
 rm(DEATH_long)
 
