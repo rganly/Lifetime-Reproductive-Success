@@ -13,7 +13,6 @@ library(tidyverse)
 
 
 
-
 ################################################
 #               Functions                      #
 ################################################
@@ -59,8 +58,6 @@ qc_icd <- function(dat){
 
 
 
-
-
 ################################################
 #    ICD codes and corresponding endpoints     #
 ################################################
@@ -81,7 +78,6 @@ huff <- data.frame(huff)
 nrow(huff)   # 7,631
 table(huff$ICD_VER,nchar(huff$ICD_CODE))
 write.table(huff, "huff_all.lst", append=F, quote=F, sep=" ", row.names=F, col.names=T)
-
 
 
 
@@ -122,8 +118,6 @@ rm(o_hilmo)
 
 
 
-
-
 ################################################
 #               Extract  DEATH                 #
 ################################################
@@ -152,8 +146,6 @@ for (k in 1:length(dh_v)){
 DEATH_long <- DEATH_long[,c("LopNr", "EVENT_DATE", "ICD_CODE", "PALA", "ICD_VER", "EVENT_FILE", "EVENT_VAR") ]
 DEATH_long <- qc_icd(DEATH_long)
 save(DEATH_long, file=paste0(r_dir, "DEATH_long.Rdata"))
-
-
 
 
 
@@ -189,8 +181,6 @@ huff[,"ICD_VER_F"] <- ifelse(huff[,"ICD_VER"]=="9D"|huff[,"ICD_VER"]=="9H", 9, h
 ep_lst <- inner_join(huff, rl_fa, by=c("ICD_VER_F"="ICD_VER", "ICD_CODE"="ICD_CODE_FORMAT"))
 table(ep_lst$ICD_VER_F)
 write.table(ep_lst, "ICD_ASK_COUNT.tsv", append=F, quote=F, sep="\t", row.names=F, col.names=T)
-
-
 
 
 
@@ -234,8 +224,6 @@ save(ry_first_indexW, file=paste0(r_dir, "ry_first_indexW_COMPLETE.Rdata"))
 
 
 
-
-
 ################################################
 #         Prevalence of ENDPOINTS              #
 ################################################
@@ -261,8 +249,6 @@ ep_preval <- ep_preval[order(-ep_preval$Prevalence_IndexW),]
 nrow(ep_preval)  # 1,959
 sum(ep_preval$Prevalence_IndexW>=ep_preval$Prevalence_Index)  # 1,867
 write.table(ep_preval, "SWE_ENDPOINT_Prevalence.tsv", append=F, quote=F, sep="\t", row.names=F, col.names=T)
-
-
 
 
 
