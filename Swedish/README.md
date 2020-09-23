@@ -72,7 +72,7 @@ Input: "HILMO_UPDATED_SWE.lst", "ut_par_sv_27035_2018_COMPLETE.Rdata", "ut_par_o
 Output: "huff_all.lst", "ICD_ASK_Count.tsv","SWE_ENDPOINT_Prevalence.tsv",  "HILMO_long_COMPLETE.Rdata", "DEATH_long.Rdata", "rl_COMPLETE.Rdata", "rl_index_COMPLETE.Rdata", "rl_indexW_COMPLETE.Rdata", "ry_long_COMPLETE.Rdata", "ry_long_index_COMPLETE.Rdata", "ry_long_indexW_COMPLETE.Rdata", "ry_first_COMPLETE.Rdata", "ry_first_index_COMPLETE.Rdata", "ry_first_indexW_COMPLETE.Rdata"       
 
 05_Endpoint_ICD_Check.R  
-Aim:    
+Aim: check ICD codes from HILMO and DEATH registers: whether what we got are what we asked & whether we got all we asked?     
 Input: ""   
 Output: ""  
 
