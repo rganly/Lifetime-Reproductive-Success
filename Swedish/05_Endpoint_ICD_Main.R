@@ -5,15 +5,6 @@
 # Comments:  
 
 
-save(rl_index, file=paste0(r_dir, "rl_index_COMPLETE.Rdata"))
-save(ry_long_index, file=paste0(r_dir, "ry_long_index_COMPLETE.Rdata")) 
-save(ry_first_index, file=paste0(r_dir, "ry_first_index_COMPLETE.Rdata")) 
-
-save(rl_indexW, file=paste0(r_dir, "rl_indexW_COMPLETE.Rdata"))
-save(ry_long_indexW, file=paste0(r_dir, "ry_long_indexW_COMPLETE.Rdata")) 
-save(ry_first_indexW, file=paste0(r_dir, "ry_first_indexW_COMPLETE.Rdata")) 
-
-
 setwd("/home/aoxing/DSGE_LRS/out/registry_edit/")
 in_dir <- "/home/aoxing/DSGE_LRS/input/"
 r_dir <- "/home/aoxing/DSGE_LRS/input/r_files/"
