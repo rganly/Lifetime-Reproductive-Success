@@ -66,20 +66,13 @@ Input: "tove_lev_index.Rdata", "indexW.Rdata", "tove_lev_koppl_index_barn.Rdata"
 Output: "demo.Rdata", "Demographic.Rdata", "DEMO_index.Rdata", "DEMO_child.Rdata", "DEMO_grandchild.Rdata", "DEMO_sib.Rdata", "DEMO_sibchild.Rdata", "DEMO_parent_index.Rdata", "DEMO_parent_child.Rdata", "DEMO_parent_sib.Rdata", "DEMO_spouse.Rdata"     
 
 
-## 5. Health registers
-05
-Aim:   
-Input: ""   
-Output: ""   
-
-
-## 6. ICD codes and Endpoints  
-06_Endpoint_ICD_Main.R  
+## 5. ICD codes and Endpoints  
+05_Endpoint_ICD_Main.R  
 Aim:    
 Input: ""   
 Output: ""  
 
-06_Endpoint_ICD_Plot.R  
+05_Endpoint_ICD_Plot.R  
 Aim:    
 Input: ""   
 Output: ""  
