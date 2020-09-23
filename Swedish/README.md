@@ -59,7 +59,6 @@ Input: "tove_lev_koppl_barn_foraldrar.Rdata", "tove_lev_koppl_index_barn.Rdata",
 Output: "Pedigree.Rdata"   
 Comments: "Pedigree.Rdata" only covers samples with parent info, and therefore doesn't include all samples in the population registry  
 
-
 04_Demographic.R  
 Aim: generate one file which includes demographic and SCE (income and education) info for everyone appear in the population registry   
 Input: "tove_lev_index.Rdata", "indexW.Rdata", "tove_lev_koppl_index_barn.Rdata", "tove_lev_koppl_index_barnbarn.Rdata", "sib_uniq.Rdata", "sib_sibchild_uniq.Rdata", "tove_lev_koppl_index_foraldrar.Rdata", "tove_lev_koppl_barn_foraldrar.Rdata", "tove_lev_koppl_sysbarn_foraldr.Rdata", "Spouse_1977_2017.Rdata", "tove_lev_doddatum.Rdata", "tove_lev_migrationer.Rdata", "Pedigree.Rdata", "edu_high.Rdata", "Income_Age2535_Age5060.Rdata"    
@@ -69,9 +68,8 @@ Output: "demo.Rdata", "Demographic.Rdata", "DEMO_index.Rdata", "DEMO_child.Rdata
 ## 5. ICD codes and Endpoints  
 05_Endpoint_ICD_Main.R  
 Aim: convert ICD codes from HILMO and DEATH registers to endpoints    
-Input: "HILMO_UPDATED_SWE.lst", "ut_par_sv_27035_2018_COMPLETE.Rdata", "ut_par_ov_27035_2018.Rdata", "ut_dors_indexpers_27035_2018.Rdata", "ut_dors_b_bbarn_27035_2018.Rdata"     
-Output: "huff_all.lst", "ICD_ASK_Count.tsv","SWE_ENDPOINT_Prevalence.tsv",  "HILMO_long_COMPLETE.Rdata", "DEATH_long.Rdata", "ry_long_COMPLETE.Rdata", "ry_first_COMPLETE.Rdata", "ry_first_index_COMPLETE.Rdata", "ry_first_indexW_COMPLETE.Rdata"     
-
+Input: "HILMO_UPDATED_SWE.lst", "ut_par_sv_27035_2018_COMPLETE.Rdata", "ut_par_ov_27035_2018.Rdata", "ut_dors_indexpers_27035_2018.Rdata", "ut_dors_b_bbarn_27035_2018.Rdata", "tove_lev_index.Rdata", "indexW_LRS.Rdata"       
+Output: "huff_all.lst", "ICD_ASK_Count.tsv","SWE_ENDPOINT_Prevalence.tsv",  "HILMO_long_COMPLETE.Rdata", "DEATH_long.Rdata", "rl_COMPLETE.Rdata", "rl_index_COMPLETE.Rdata", "rl_indexW_COMPLETE.Rdata", "ry_long_COMPLETE.Rdata", "ry_long_index_COMPLETE.Rdata", "ry_long_indexW_COMPLETE.Rdata", "ry_first_COMPLETE.Rdata", "ry_first_index_COMPLETE.Rdata", "ry_first_indexW_COMPLETE.Rdata"       
 
 05_Endpoint_ICD_Plot.R  
 Aim:    
