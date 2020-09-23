@@ -12,7 +12,6 @@ r_dir <- "/home/aoxing/DSGE_LRS/input/r_files/"
 library(tidyverse)
 
 
-
 ################################################
 #               Functions                      #
 ################################################
@@ -26,6 +25,9 @@ read_hilmo <- function(file_name, file_type){
 	dat <- dat[dat[,"hdia"]!="", c("LopNr","hdia","AR","INDATUMA")]
 	dat[,"INDATUMA"] <- gsub(" |\\-", "", dat[,"INDATUMA"])
 	dat[,"EVENT_DATE"] <- as.numeric(as.character(ifelse(nchar(dat[,"INDATUMA"])<8, paste0(dat[,"AR"],"1232"), dat[,"INDATUMA"]) ))  # date with less than 8 digit, use year1232 as date
+	dat[,"EVENT_DATE"] <- ifelse(substr(dat[,"EVENT_DATE"],1,4) %!in% 1956:2018, paste0(dat[,"AR"],"1232"), dat[,"EVENT_DATE"])
+	dat[,"EVENT_DATE"] <- ifelse(substr(dat[,"EVENT_DATE"],5,6) %!in% c(paste0(0,1:9),10:12), paste0(dat[,"AR"],"1232"), dat[,"EVENT_DATE"])
+	dat[,"EVENT_DATE"] <- ifelse(substr(dat[,"EVENT_DATE"],7,8) %!in% c(paste0(0,1:9),10:32), paste0(dat[,"AR"],"1232"), dat[,"EVENT_DATE"])   # 32 for edited date	
 	dat[,"PALA"] <- file_type
 	dat[,"ICD_CODE"] <- gsub("\xc5L|\\\x99|\\,", "", dat[,"hdia"])
 	dat <- dat[,c("LopNr", "EVENT_DATE", "ICD_CODE", "PALA")]
@@ -81,7 +83,6 @@ write.table(huff, "huff_all.lst", append=F, quote=F, sep=" ", row.names=F, col.n
 
 
 
-
 ################################################
 #         Extract Longtitudinal HILMO          #
 ################################################
@@ -93,7 +94,7 @@ i_hilmo_9  <- extract_i_hilmo(19870000, 19971300, "9")   # 1997 use both ICD9 an
 i_hilmo_10 <- extract_i_hilmo(19970000, 20181300, "10")  # 1997 use both ICD9 and ICD10
 i_hilmo <- rbind(i_hilmo_8, i_hilmo_9, i_hilmo_10)
 i_hilmo <- i_hilmo[,c("LopNr", "EVENT_DATE", "ICD_VER", "ICD_CODE", "PALA")]
-# save(i_hilmo, file=paste0(r_dir, "i_hilmo_COMPLETE.Rdata"))
+save(i_hilmo, file=paste0(r_dir, "i_hilmo_COMPLETE.Rdata"))
 rm(i_hilmo_8, i_hilmo_9, i_hilmo_10)
 
 
@@ -101,17 +102,17 @@ rm(i_hilmo_8, i_hilmo_9, i_hilmo_10)
 o_hilmo <- read_hilmo("ut_par_ov_27035_2018.Rdata", "outpatient")
 o_hilmo[,"ICD_VER"] <- "10"
 o_hilmo <- o_hilmo[,c("LopNr", "EVENT_DATE", "ICD_VER", "ICD_CODE", "PALA")]
-# save(o_hilmo, file=paste0(r_dir, "o_hilmo.Rdata"))
+save(o_hilmo, file=paste0(r_dir, "o_hilmo.Rdata"))
 
 
 # Combine Inpatient and Outpatient 
 HILMO_long <- rbind(o_hilmo, i_hilmo)
-nrow(HILMO_long)     # 50,855,953  
+nrow(HILMO_long)     # 50,855,985
 HILMO_long[,"EVENT_FILE"] <- "HILMO"
 HILMO_long[,"EVENT_VAR"] <- "hdia"
 HILMO_long <- HILMO_long[,c("LopNr", "EVENT_DATE", "ICD_CODE", "PALA", "ICD_VER", "EVENT_FILE", "EVENT_VAR")] 
 HILMO_long <- qc_icd(HILMO_long)
-nrow(HILMO_long)     # 50，855，952
+nrow(HILMO_long)     # 50,855,984
 save(HILMO_long, file=paste0(r_dir, "HILMO_long_COMPLETE.Rdata"))
 rm(i_hilmo)
 rm(o_hilmo)
@@ -145,6 +146,7 @@ for (k in 1:length(dh_v)){
 
 DEATH_long <- DEATH_long[,c("LopNr", "EVENT_DATE", "ICD_CODE", "PALA", "ICD_VER", "EVENT_FILE", "EVENT_VAR") ]
 DEATH_long <- qc_icd(DEATH_long)
+nrow(DEATH_long)  # 1,442,382
 save(DEATH_long, file=paste0(r_dir, "DEATH_long.Rdata"))
 
 
@@ -155,16 +157,19 @@ save(DEATH_long, file=paste0(r_dir, "DEATH_long.Rdata"))
 
 # Longitudinal ICD codes
 rl <- rbind(HILMO_long, DEATH_long)
-nrow(rl)      # 52,298,334
+nrow(rl)      # 52,298,366
+save(rl, file=paste0(r_dir, "ICD_Long_COMPLETE.Rdata"))
+rm(HILMO_long)
+rm(DEATH_long)
 
 
 # Count of ICD codes (& morpho) by ICD version
-rl_f <- as.data.frame(table(rl$ICD_CODE, rl$ICD_VER, useNA="always"))
+rl_f <- data.frame(table(rl$ICD_CODE, rl$ICD_VER, useNA="always"))
 colnames(rl_f) <- c("ICD_CODE","ICD_VER","count")
 nrow(rl_f)    # 103,956
 rl_f <- rl_f[rl_f$count>0, ]
 rl_f <- rl_f[order(-rl_f$count), ]
-nrow(rl_f)    # 18,496   
+nrow(rl_f)    # 18,680   
 rl_f[ ,"ICD_CODE"]<- as.character(rl_f[ ,"ICD_CODE"])
 
 
@@ -181,6 +186,7 @@ huff[,"ICD_VER_F"] <- ifelse(huff[,"ICD_VER"]=="9D"|huff[,"ICD_VER"]=="9H", 9, h
 ep_lst <- inner_join(huff, rl_fa, by=c("ICD_VER_F"="ICD_VER", "ICD_CODE"="ICD_CODE_FORMAT"))
 table(ep_lst$ICD_VER_F)
 write.table(ep_lst, "ICD_ASK_COUNT.tsv", append=F, quote=F, sep="\t", row.names=F, col.names=T)
+ep_lst <- ep_lst[,c("ENDPOINT","ICD_VER_F","ICD_CODE_ORIGINAL","ICD_CODE")]
 
 
 
@@ -188,26 +194,42 @@ write.table(ep_lst, "ICD_ASK_COUNT.tsv", append=F, quote=F, sep="\t", row.names=
 #    Convert from ICD codes to ENDPOINTS      #
 ################################################
 
-# Longitudinal endpoint and ICD codes (asked) 
-ry_long <- inner_join(rl, ep_lst, by=c("ICD_VER"="ICD_VER_F", "ICD_CODE"="ICD_CODE_ORIGINAL"))
-nrow(ry_long)  # 67,166,049 
-colnames(ry_long) <- c("LopNr","EVENT_DATE","ICD_CODE","PALA","ICD_VER","EVENT_FILE","EVENT_VAR","ENDPOINT","ICD_CODE_FORMAT","ICD_VER_FORMAT") 
+# Longitudinal endpoints
+ry_long <- inner_join(rl, ep_lst, by=c("ICD_VER"="ICD_VER_F", "ICD_CODE"="ICD_CODE_ORIGINAL")) %>% distinct()
+nrow(ry_long)   # 63,476,087 
+colnames(ry_long) <- c("LopNr","EVENT_DATE","ICD_CODE","PALA","ICD_VER","EVENT_FILE","EVENT_VAR","ENDPOINT","ICD_CODE_FORMAT") 
+ry_long <- ry_long[ , c("LopNr","EVENT_DATE","ENDPOINT","ICD_VER","ICD_CODE","ICD_CODE_FORMAT","PALA","EVENT_FILE","EVENT_VAR")]
+table(ry_long$ICD_VER, ry_long$EVENT_FILE)
 save(ry_long, file=paste0(r_dir, "ry_long_COMPLETE.Rdata"))      
-rm(rl)
 
 
 # First endpoint event
 ry_first <- ry_long %>% select(LopNr, ENDPOINT, EVENT_DATE) %>% distinct() %>% group_by(LopNr, ENDPOINT) %>% summarize(EVENT_F_DATE=min(EVENT_DATE), EVENT_N=length(EVENT_DATE)) 
-nrow(ry_first)  # 28,148,337
+nrow(ry_first)  # 28,148,350
 ry_first <- data.frame(ry_first)
 save(ry_first, file=paste0(r_dir, "ry_first_COMPLETE.Rdata"))      
 
- 
-# Extract first endpoint event for index person   
+
+
+#############################################################
+#    Extract ICD/ENDPOINT/FIRST_EVENT for index person      #
+#############################################################
+
+# Extract ICD/ENDPOINT/FIRST_EVENT for index person   
 index <- get(load(paste0(r_dir, "tove_lev_index.Rdata")))      
 length(index$LopNr)  # 2,893,654
+
+rl_index <- rl %>% filter(LopNr %in% index$LopNr) 
+nrow(rl_index)    # 29,225,702
+save(rl_index, file=paste0(r_dir, "rl_index_COMPLETE.Rdata"))
+
+ry_long_index <- ry_long %>% filter(LopNr %in% index$LopNr)  
+nrow(ry_long_index)  # 35,180,809
+length(unique((ry_long_index[, "LopNr"])))   # 2,368,488
+save(ry_long_index, file=paste0(r_dir, "ry_long_index_COMPLETE.Rdata")) 
+
 ry_first_index <- ry_first %>% filter(LopNr %in% index$LopNr)  
-nrow(ry_first_index) # 15,080,284
+nrow(ry_first_index)  # 15,080,285
 length(unique((ry_first_index[, "LopNr"])))      # 2,368,488
 length(unique((ry_first_index[, "ENDPOINT"])))   # 1,959
 save(ry_first_index, file=paste0(r_dir, "ry_first_index_COMPLETE.Rdata")) 
@@ -216,8 +238,18 @@ save(ry_first_index, file=paste0(r_dir, "ry_first_index_COMPLETE.Rdata"))
 # Extract first endpoint event for QCed index person   
 indexW <- get(load(paste0(r_dir, "indexW_LRS.Rdata")))
 length(indexW$LopNr)      # 2,555,541
+
+rl_indexW <- rl %>% filter(LopNr %in% indexW$LopNr)  
+nrow(rl_indexW)  # 27,482,109
+save(rl_indexW, file=paste0(r_dir, "rl_indexW_COMPLETE.Rdata"))
+
+ry_long_indexW <- ry_long %>% filter(LopNr %in% indexW$LopNr)  
+nrow(ry_long_indexW)  # 33,194,200
+length(unique((ry_long_indexW[, "LopNr"])))   # 2,191,135
+save(ry_long_indexW, file=paste0(r_dir, "ry_long_indexW_COMPLETE.Rdata")) 
+
 ry_first_indexW <- ry_first %>% filter(LopNr %in% indexW$LopNr)  
-nrow(ry_first_indexW)     # 14,177,074
+nrow(ry_first_indexW)     # 14,177,075
 length(unique((ry_first_indexW[, "LopNr"])))     # 2,191,135
 length(unique((ry_first_indexW[, "ENDPOINT"])))  # 1,959
 save(ry_first_indexW, file=paste0(r_dir, "ry_first_indexW_COMPLETE.Rdata")) 
