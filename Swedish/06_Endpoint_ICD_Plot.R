@@ -38,6 +38,7 @@ plot_preval <- function(dat, x_var, y_var, x_name, y_name, extra_name){
 ##########################
 #       Data             #
 ##########################
+
 ep_f_FIN <- read.table("/Users/aoxliu/Documents/Project1_Lifetime_Reproductive_Success/Data/FIN/endpointW_f_COMPLETE.lst", sep="\t", header=T)
 ep_f_FIN$Prevalence_FIN_indexWN <- as.numeric(as.character(ep_f_FIN$COUNT_INDEX_CASES))/1810220
 nrow(ep_f_FIN)
