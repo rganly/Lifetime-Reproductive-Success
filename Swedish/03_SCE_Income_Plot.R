@@ -1,11 +1,5 @@
 ## This script is to check raw income data and max/mean income at age 25-35 and age 50-60
 
-
-# Input: "lisa_expM.Rdata", "Income_Age2535_Age5060.Rdata", "indexW.Rdata"
-# Output: "SCE_Income_Raw.pdf", "SCE_Income_Normalization.pdf", "SCE_Income_Age2535_5060.pdf", "stats_by_year.csv"
-# Comments: 
-
-
 setwd("/home/aoxing/DSGE_LRS/out/registry_edit/")
 r_dir <- "/home/aoxing/DSGE_LRS/input/r_files/"
 
