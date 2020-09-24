@@ -45,8 +45,7 @@ Input: "tove_lev_hog_gymn_1989_1977.Rdata", "tove_lev_lisa_{1990..2017}.Rdata", 
 Output: "Education_1977_2017.Rdata", "edu_high.Rdata", "index_edu.Rdata"     
 
 03_SCE_Education_Plot.R  
-Aim:    
-     
+Aim: plot correlation between education levels of parents       
 
 
 ## 4. Demographic info for everyone in the population register
