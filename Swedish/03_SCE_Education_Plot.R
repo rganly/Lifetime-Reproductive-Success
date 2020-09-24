@@ -1,4 +1,4 @@
-## This script is plot .
+## This script is to plot correlation between education levels of parents
 
 
 setwd("/home/aoxing/DSGE_LRS/out/registry_edit/")
@@ -10,14 +10,8 @@ library(tidyverse)
 '%!in%' <- function(x,y)!('%in%'(x,y))
 
 
-
-
-##-------------------------------------------------------------------
-setwd("/Users/aoxliu/Downloads/Plots/")
-edu <- read.table("/Users/aoxliu/Downloads/Plots/SWE_Edu97_FREQ.txt", header=T)
-
 tiff("Plot_EducationLevel_parents.tiff", width = 9, height = 7, units = 'in', res = 300)
-	ggplot(edu, aes(y=ISCED97.Far, x=ISCED97.Mor, size=Freq)) +
+    ggplot(edu, aes(y=ISCED97.Far, x=ISCED97.Mor, size=Freq)) +
     geom_point(alpha=0.5) +
     theme_bw() +
     scale_size(range = c(1, 20), name="N of parent pairs") +
