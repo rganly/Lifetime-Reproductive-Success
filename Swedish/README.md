@@ -38,8 +38,6 @@ Output: "Income_1977_2017.Rdata", "lisa_expM.Rdata", "Income_Age2535_Age5060.Rda
 
 03_SCE_Income_Plot.R  
 Aim: check raw income data and max/mean income at age 25-35 and age 50-60  
-Input: "lisa_expM.Rdata", "Income_Age2535_Age5060.Rdata", "indexW.Rdata"  
-Output: "SCE_Income_Raw.pdf", "SCE_Income_Normalization.pdf", "SCE_Income_Age2535_5060.pdf", "stats_by_year.csv"     
 
 03_SCE_Education_Main.R  
 Aim: summarize education registry and extract the highest education level    
@@ -48,8 +46,7 @@ Output: "Education_1977_2017.Rdata", "edu_high.Rdata", "index_edu.Rdata"
 
 03_SCE_Education_Plot.R  
 Aim:    
-Input:     
-Output:        
+     
 
 
 ## 4. Demographic info for everyone in the population register
@@ -73,13 +70,10 @@ Output: "huff_all.lst", "ICD_ASK_Count.tsv","SWE_ENDPOINT_Prevalence.tsv",  "HIL
 
 05_Endpoint_ICD_Check.R  
 Aim: check ICD codes from HILMO and DEATH registers: whether what we got are what we asked & whether we got all we asked?     
-Input: ""   
-Output: ""  
 
 05_Endpoint_ICD_Plot.R  
-Aim:    
-Input: ""   
-Output: ""  
+Aim: plot prevalence of endpoints from two datasets   
+
 
 
 ## 6. Regression analysis
