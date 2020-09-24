@@ -1,11 +1,6 @@
 ## This script is plot .
 
 
-# Input: 
-# Output: 
-# Comments: 
-
-
 setwd("/home/aoxing/DSGE_LRS/out/registry_edit/")
 r_dir <- "/home/aoxing/DSGE_LRS/input/r_files/"
 
