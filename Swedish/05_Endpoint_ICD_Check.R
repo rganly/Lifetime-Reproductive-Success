@@ -1,8 +1,4 @@
-## This script is to check ICD codes from HILMO and DEATH registers in two perspectives: one is whether what we get are we asked, the other is whether we got all we asked?
-
-# Input: "huff_all.lst", "HILMO_long_COMPLETE.Rdata", "DEATH_long.Rdata"
-# Output: 
-# Comments:  
+## This script is to check ICD codes from HILMO and DEATH registers in two perspectives: whether what we got are what we asked, and whether we got all we asked?
 
 
 setwd("/home/aoxing/DSGE_LRS/out/registry_edit/")
@@ -19,7 +15,7 @@ library(tidyverse)
 
 '%!in%' <- function(x,y)!('%in%'(x,y))
 
-# Count of 3/4/5-digit ICD codes for each version
+# Count of 3/4/5-digit ICD codes for each version and whether they are what we asked (endpoint list)
 icd_freq <- function(dat, name, ICD9_type){
 	f <- data.frame(table(dat[,"ICD_CODE"], dat[,"ICD_VER"], useNA="always"))
 	f <- f[f[,"Freq"]>0, ]
@@ -51,107 +47,51 @@ icd_freq <- function(dat, name, ICD9_type){
 
 
 
-
 ################################################
 #    Check inpatient/outpatient ICD codes      #
 ################################################
 
-# All ICD codes for endpoints
+## All ICD codes for endpoints
 huff <- read.table("huff_all.lst", header=T)
 nrow(huff)  # 7,631
 
+# count of 3/4/5-digit ICD codes for endpoints
 table(huff$ICD_VER, nchar(huff$ICD_CODE)) 
-#        3    4    5
-#  10  785 1799   13
-#  8   209  371  706
-#  9D  241 1633    0
-#  9H  241 1633    0
 
 
-
-# whether the codes we got are those we asked?
+## count of icd code in registry
 HILMO_long <- data.frame(get(load(paste0(r_dir, "HILMO_long_COMPLETE.Rdata"))))
 nrow(HILMO_long)  # 50,855,984
 HILMO_freq <- icd_freq(HILMO_long, "HILMO", "9H")  # 11,095 ICD codes in total
 
 table(HILMO_freq$ICD_VER, HILMO_freq$ICD_p3_yn) 
-#     FALSE TRUE
-#  10  1427 2322
-#  8   1707  344
-#  9   2612  287
-
 table(HILMO_freq$ICD_VER, HILMO_freq$ICD_p4_yn)    
-#     FALSE TRUE
-#  10   911 2838
-#  8   1286  765
-#  9    217 2682
-
 table(HILMO_freq$ICD_VER, HILMO_freq$ICD_p5_yn)   # ICD9 doesn't have 5-digit codes
-#     FALSE TRUE
-#  10  3728   21
-#  8   1399  652
-#  9   2899    0
 
 
-
-# check whether what we get are we asked
+## check whether what we got are we asked
 table(HILMO_freq$ICD_p345_yn)
-#   0    1    2    3 
-# 507 6479 1707    6 
-
 HILMO_EXTRA_ICD <- HILMO_freq[HILMO_freq$ICD_p345_yn==0,]
-
 table(HILMO_EXTRA_ICD$ICD_VER)
-# 10   8   9 
-#137 370   0 
 
 sum(HILMO_EXTRA_ICD$count_HILMO)  # 6,506
 max(HILMO_EXTRA_ICD$count_HILMO)  # 701
  
- 
 
-# check whether we got all we asked
+## check whether we got all we asked
 huff_H <- huff[huff$ICD_VER %in% c("8","9H","10"),]
 huff_H[,"ICD_VER"] <- ifelse(huff_H[,"ICD_VER"]=="9H", 9, huff_H[,"ICD_VER"])
 table(huff_H[,"ICD_VER"] )
-#  10    8    9 
-#2597 1286 1874 
 
-ICD_EPYES_3 <- huff_H[nchar(huff_H$ICD_CODE)==3 & (paste0(huff_H$ICD_VER,"_",huff_H$ICD_CODE) %in% paste0(HILMO_freq$ICD_VER,"_",HILMO_freq$ICD_p3)),]
-table(ICD_EPYES_3$ICD_VER)  
-#  10   8   9 
-# 764 197 232 
+# endpoint ICD codes we got in registry
+table(huff_H[nchar(huff_H$ICD_CODE)==3 & (paste0(huff_H$ICD_VER,"_",huff_H$ICD_CODE) %in% paste0(HILMO_freq$ICD_VER,"_",HILMO_freq$ICD_p3)), "ICD_VER"])
+table(huff_H[nchar(huff_H$ICD_CODE)==4 & (paste0(huff_H$ICD_VER,"_",huff_H$ICD_CODE) %in% paste0(HILMO_freq$ICD_VER,"_",HILMO_freq$ICD_p4)), "ICD_VER"])
+table(huff_H[nchar(huff_H$ICD_CODE)==5 & (paste0(huff_H$ICD_VER,"_",huff_H$ICD_CODE) %in% paste0(HILMO_freq$ICD_VER,"_",HILMO_freq$ICD_p5)), "ICD_VER"])
 
-ICD_EPYES_4 <- huff_H[nchar(huff_H$ICD_CODE)==4 & (paste0(huff_H$ICD_VER,"_",huff_H$ICD_CODE) %in% paste0(HILMO_freq$ICD_VER,"_",HILMO_freq$ICD_p4)),]
-table(ICD_EPYES_4$ICD_VER) 
-#   10    8    9 
-# 1701  350 1612 
-
-ICD_EPYES_5 <- huff_H[nchar(huff_H$ICD_CODE)==5 & (paste0(huff_H$ICD_VER,"_",huff_H$ICD_CODE) %in% paste0(HILMO_freq$ICD_VER,"_",HILMO_freq$ICD_p5)),]
-table(ICD_EPYES_5$ICD_VER) 
-#  10   8 
-#   8 679 
-
-sum(nrow(ICD_EPYES_3), nrow(ICD_EPYES_4), nrow(ICD_EPYES_5))  # 5,543 codes we asked are there
-
-
-
-ICD_EPNO_3 <- huff_H[nchar(huff_H$ICD_CODE)==3 & (paste0(huff_H$ICD_VER,"_",huff_H$ICD_CODE) %!in% paste0(HILMO_freq$ICD_VER,"_",HILMO_freq$ICD_p3)),]
-table(ICD_EPNO_3$ICD_VER)  
-# 10  8  9 
-# 21 12  9 
-
-ICD_EPNO_4 <- huff_H[nchar(huff_H$ICD_CODE)==4 & (paste0(huff_H$ICD_VER,"_",huff_H$ICD_CODE) %!in% paste0(HILMO_freq$ICD_VER,"_",HILMO_freq$ICD_p4)),]
-table(ICD_EPNO_4$ICD_VER) 
-# 10  8  9 
-# 98 21 21 
-
-ICD_EPNO_5 <- huff_H[nchar(huff_H$ICD_CODE)==5 & (paste0(huff_H$ICD_VER,"_",huff_H$ICD_CODE) %!in% paste0(HILMO_freq$ICD_VER,"_",HILMO_freq$ICD_p5)),]
-table(ICD_EPNO_5$ICD_VER) 
-# 10  8
-# 5 27
-
-sum(nrow(ICD_EPNO_3), nrow(ICD_EPNO_4), nrow(ICD_EPNO_5))  # 214 codes we asked are not there
+# endpoint ICD codes we missed in registry
+table(huff_H[nchar(huff_H$ICD_CODE)==3 & (paste0(huff_H$ICD_VER,"_",huff_H$ICD_CODE) %!in% paste0(HILMO_freq$ICD_VER,"_",HILMO_freq$ICD_p3)),"ICD_VER"])
+table(huff_H[nchar(huff_H$ICD_CODE)==4 & (paste0(huff_H$ICD_VER,"_",huff_H$ICD_CODE) %!in% paste0(HILMO_freq$ICD_VER,"_",HILMO_freq$ICD_p4)),"ICD_VER"])
+table(huff_H[nchar(huff_H$ICD_CODE)==5 & (paste0(huff_H$ICD_VER,"_",huff_H$ICD_CODE) %!in% paste0(HILMO_freq$ICD_VER,"_",HILMO_freq$ICD_p5)),"ICD_VER"])
  
 
 
@@ -160,9 +100,40 @@ sum(nrow(ICD_EPNO_3), nrow(ICD_EPNO_4), nrow(ICD_EPNO_5))  # 214 codes we asked 
 #           Check  DEATH ICD codes             #
 ################################################
 
+## count of icd code in registry
+DEATH_long <- data.frame(get(load(paste0(r_dir, "DEATH_long.Rdata"))))
+nrow(DEATH_long)  # 1,442,382
+DEATH_freq <- icd_freq(DEATH_long, "DEATH", "9D")  # 11,095 ICD codes in total
+
+table(DEATH_freq$ICD_VER, DEATH_freq$ICD_p3_yn) 
+table(DEATH_freq$ICD_VER, DEATH_freq$ICD_p4_yn)    
+table(DEATH_freq$ICD_VER, DEATH_freq$ICD_p5_yn)   # ICD9 doesn't have 5-digit codes, then check for the 5th digit of ICD10
+data.frame(table(substr(DEATH_freq[nchar(DEATH_freq$ICD_CODE)==5 & DEATH_freq$ICD_VER==10,"ICD_CODE"],5,5)))  # most of the 5th digit of death ICD10 are end up with 0 or 9
 
 
+## check whether what we got are we asked
+table(DEATH_freq$ICD_p345_yn)
+DEATH_EXTRA_ICD <- DEATH_freq[DEATH_freq$ICD_p345_yn==0,]
+table(DEATH_EXTRA_ICD$ICD_VER)
+
+sum(DEATH_EXTRA_ICD$count_DEATH)  # 774,555
+max(DEATH_EXTRA_ICD$count_DEATH)  # 24,119
 
 
+## check whether we got all we asked
+huff_D <- huff[huff$ICD_VER %in% c("8","9D","10"),]
+huff_D[,"ICD_VER"] <- ifelse(huff_D[,"ICD_VER"]=="9D", 9, huff_D[,"ICD_VER"])
+table(huff_D[,"ICD_VER"] )
 
+# endpoint ICD codes we got in registry
+table(huff_D[nchar(huff_D$ICD_CODE)==3 & (paste0(huff_D$ICD_VER,"_",huff_D$ICD_CODE) %in% paste0(DEATH_freq$ICD_VER,"_",DEATH_freq$ICD_p3)), "ICD_VER"])
+table(huff_D[nchar(huff_D$ICD_CODE)==4 & (paste0(huff_D$ICD_VER,"_",huff_D$ICD_CODE) %in% paste0(DEATH_freq$ICD_VER,"_",DEATH_freq$ICD_p4)), "ICD_VER"])
+table(huff_D[nchar(huff_D$ICD_CODE)==5 & (paste0(huff_D$ICD_VER,"_",huff_D$ICD_CODE) %in% paste0(DEATH_freq$ICD_VER,"_",DEATH_freq$ICD_p5)), "ICD_VER"])
+
+# endpoint ICD codes we missed in registry
+table(huff_D[nchar(huff_D$ICD_CODE)==3 & (paste0(huff_D$ICD_VER,"_",huff_D$ICD_CODE) %!in% paste0(DEATH_freq$ICD_VER,"_",DEATH_freq$ICD_p3)),"ICD_VER"])
+table(huff_D[nchar(huff_D$ICD_CODE)==4 & (paste0(huff_D$ICD_VER,"_",huff_D$ICD_CODE) %!in% paste0(DEATH_freq$ICD_VER,"_",DEATH_freq$ICD_p4)),"ICD_VER"])
+table(huff_D[nchar(huff_D$ICD_CODE)==5 & (paste0(huff_D$ICD_VER,"_",huff_D$ICD_CODE) %!in% paste0(DEATH_freq$ICD_VER,"_",DEATH_freq$ICD_p5)),"ICD_VER"])
+
+ 
 
