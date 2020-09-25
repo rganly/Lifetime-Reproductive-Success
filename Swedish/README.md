@@ -76,9 +76,6 @@ Aim: plot prevalence of endpoints from two datasets
 
 
 ## 6. Regression analysis
-07
-Aim:   
-Input: ""   
-Output: ""   
+regression analysis
 
 
