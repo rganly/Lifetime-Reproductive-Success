@@ -263,7 +263,8 @@ demo <- demo[,c("LopNr","LopNrFar","LopNrMor","AterPnr","FodelseAr","FodelseLand
                 "EduYears","ISCED97","income_Age2535_max","income_Age2535_mean","income_Age5060_max","income_Age5060_mean",
                 "is_index","is_indexW","is_child","is_grandchild","is_sib","is_sibchild","is_parent_index","is_parent_child","is_parent_sib","is_spouse")]
 
-
+demo <- demo %>% distinct()
+nrow(demo)  # 9,723,423
 save(demo, file=paste0(r_dir,"Demographic.Rdata"))
 
 
