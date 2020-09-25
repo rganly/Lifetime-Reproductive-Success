@@ -258,7 +258,6 @@ income <- income[,c("lopnr","income_Age2535_max","income_Age2535_mean","income_A
 demo <- merge(demo, income, by.x="LopNr", by.y="lopnr", all.x=T)
 nrow(demo)
 
-
 demo <- demo[,c("LopNr","LopNrFar","LopNrMor","AterPnr","FodelseAr","FodelseLandNamn","FodelseLan","FodelseKommun","Kon","immigration","emigration","death_date",
                 "EduYears","ISCED97","income_Age2535_max","income_Age2535_mean","income_Age5060_max","income_Age5060_mean",
                 "is_index","is_indexW","is_child","is_grandchild","is_sib","is_sibchild","is_parent_index","is_parent_child","is_parent_sib","is_spouse")]
