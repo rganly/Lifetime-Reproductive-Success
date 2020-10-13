@@ -64,7 +64,18 @@ Input:
 Output:  
 
 
-## 5. Health registers
+## 5. ICD codes and Endpoints  
+05_Endpoint_ICD_Main.R  
+Aim: convert ICD codes from HILMO and DEATH registers to endpoints    
+Input: "HILMO_UPDATED_SWE.lst", "ut_par_sv_27035_2018_COMPLETE.Rdata", "ut_par_ov_27035_2018.Rdata", "ut_dors_indexpers_27035_2018.Rdata", "ut_dors_b_bbarn_27035_2018.Rdata", "tove_lev_index.Rdata", "indexW_LRS.Rdata"       
+Output: "huff_all.lst", "ICD_ASK_Count.tsv","SWE_ENDPOINT_Prevalence.tsv",  "HILMO_long_COMPLETE.Rdata", "DEATH_long.Rdata", "rl_COMPLETE.Rdata", "rl_index_COMPLETE.Rdata", "rl_indexW_COMPLETE.Rdata", "ry_long_COMPLETE.Rdata", "ry_long_index_COMPLETE.Rdata", "ry_long_indexW_COMPLETE.Rdata", "ry_first_COMPLETE.Rdata", "ry_first_index_COMPLETE.Rdata", "ry_first_indexW_COMPLETE.Rdata"       
+
+05_Endpoint_ICD_Check.R  
+Aim: check ICD codes from HILMO and DEATH registers: whether what we got are what we asked & whether we got all we asked?     
+
+05_Endpoint_ICD_Plot.R  
+Aim: plot prevalence of endpoints from two datasets   
+
 05_Cancer_1.R   
 Aim:    
 Input: ""   
@@ -91,26 +102,6 @@ Input: ""
 Output: ""  
 
 
-## 6. ICD codes and Endpoints  
-06_Endpoint_ICD.R  
-Aim:    
-Input: ""   
-Output: ""  
-
-
-## 7. Regression analysis
-07_Regression_1_pop.R  
-Aim:    
-Input: ""   
-Output: ""  
-
-07_Regression_2_sib.R  
-Aim:    
-Input: ""   
-Output: ""  
-
-07_Regression_SummaryPlot.R  
-Aim:    
-Input: ""   
-Output: ""  
-
+## 6. Regression analysis
+06_Regression_Main.R  
+Aim: regression analysis    
