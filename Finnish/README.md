@@ -68,23 +68,15 @@ Aim: check ICD codes from HILMO and DEATH registers: whether what we got are wha
 Aim: plot prevalence of endpoints from two datasets   
 
 05_Cancer_1.R   
-Aim:    
 
 05_Cancer_2.R   
-Aim:    
 
-05_Medical_birth.R  
-Aim:    
+05_Medical_birth.R     
 
 05_Malformation.R  
-Aim:    
-Input: ""   
-Output: ""  
 
 05_Death.R  
-Aim:    
-Input: ""   
-Output: ""  
+
 
 
 ## 6. Regression analysis
