@@ -56,16 +56,9 @@ Aim: Demographic info for every one appear in the population register
 
 
 ## 5. ICD codes and Endpoints  
-05_Endpoint_ICD_Main.R  
-Aim: convert ICD codes from HILMO and DEATH registers to endpoints    
-Input: "HILMO_UPDATED_SWE.lst", "ut_par_sv_27035_2018_COMPLETE.Rdata", "ut_par_ov_27035_2018.Rdata", "ut_dors_indexpers_27035_2018.Rdata", "ut_dors_b_bbarn_27035_2018.Rdata", "tove_lev_index.Rdata", "indexW_LRS.Rdata"       
-Output: "huff_all.lst", "ICD_ASK_Count.tsv","SWE_ENDPOINT_Prevalence.tsv",  "HILMO_long_COMPLETE.Rdata", "DEATH_long.Rdata", "rl_COMPLETE.Rdata", "rl_index_COMPLETE.Rdata", "rl_indexW_COMPLETE.Rdata", "ry_long_COMPLETE.Rdata", "ry_long_index_COMPLETE.Rdata", "ry_long_indexW_COMPLETE.Rdata", "ry_first_COMPLETE.Rdata", "ry_first_index_COMPLETE.Rdata", "ry_first_indexW_COMPLETE.Rdata"       
-
-05_Endpoint_ICD_Check.R  
-Aim: check ICD codes from HILMO and DEATH registers: whether what we got are what we asked & whether we got all we asked?     
-
-05_Endpoint_ICD_Plot.R  
-Aim: plot prevalence of endpoints from two datasets   
+Aim: Convert from ICD codes to endpoints using HILMO, CANCER, and DEATH registry
+Input: "thl2019_804_poisto_6986_COMPLETE", "thl2019_804_poisto_8793_COMPLETE", "thl2019_804_hilmo_9495_COMPLETE", "THL2019_804_hilmo_COMPLETE", "kuolemansyyt_u1477_a.Rdata", "fcr.Rdata", and "HILMO_UPDATED_FIN.lst"
+Output: "HILMO_ICD_LONG_COMPLETE.Rdata", "CANCER_long.Rdata", "DEATH_long.Rdata",
 
 
 
