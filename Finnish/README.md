@@ -44,9 +44,6 @@ Input: "sose_u1477_a.Rdata", "demo.Rdata", and "A_INCOME.txt"
 Output: "sce_inc.Rdata"  
 
 03_SCE_Education.R  
-Aim:  
-Input:  
-Output:  
 
 
 ## 4. Demographic info for everyone in the population register
