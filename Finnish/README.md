@@ -14,13 +14,10 @@ Output: "Data_comments_FIN.csv" (See "Data_comments_FIN.xlsx", which was adapted
 ## 1. Indexperson/Siblings and their LRS
 01_Indexperson_LRS.R  
 Aim: calculate LRS (N of children and N of grandchildren), childless, and age of having the first/last child for each index person   
-Input:    
-Output:  
 
 01_Sibling_LRS.R  
 Aim: calculate LRS (N of children), childless, and age of having the first/last child for each sibling   
-Input:      
-Output:    
+  
 
 
 ## 2. Spouses
@@ -55,13 +52,10 @@ Output:
 ## 4. Demographic info for everyone in the population register
 04_Pedigree.R  
 Aim: pedigree (id, father, mother, sex, and birth_date) 
-Input: ""   
-Output: ""   
 
 04_Demo.R  
 Aim: Demographic info for every one appear in the population register    
-Input:  
-Output:  
+
 
 
 ## 5. ICD codes and Endpoints  
@@ -78,18 +72,12 @@ Aim: plot prevalence of endpoints from two datasets
 
 05_Cancer_1.R   
 Aim:    
-Input: ""   
-Output: ""  
 
 05_Cancer_2.R   
 Aim:    
-Input: ""   
-Output: ""  
 
 05_Medical_birth.R  
 Aim:    
-Input: ""   
-Output: ""  
 
 05_Malformation.R  
 Aim:    
