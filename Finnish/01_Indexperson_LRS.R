@@ -125,6 +125,7 @@ save(indexW_LRS, file=paste0(r_dir, "indexW_LRS.Rdata"))
 #      Distribution of LRS                 #
 ############################################
 
+# LRS-related phenotypes by birth year and sex
 Summary_LRS <- indexW_LRS %>% mutate(b_year=substr(SUKULAISEN_SYNTYMAPV,1,4)) %>% group_by(b_year,SUKUPUOLI) %>% 
                               summarize(birth_year=b_year[1], sex=SUKUPUOLI[1], N=sum(!is.na(n_child)),
                                   n_child_mean=mean(n_child,na.rm=T), n_child_Age4550_mean=mean(n_child_Age4550,na.rm=T), n_gchild_mean=mean(n_gchild,na.rm=T),
@@ -135,6 +136,7 @@ Summary_LRS <- indexW_LRS %>% mutate(b_year=substr(SUKULAISEN_SYNTYMAPV,1,4)) %>
 write.table(Summary_LRS, "Summary_LRS.txt", append=F, quote=F, sep=" ", row.names=F, col.names=T)
 
 
+# count of AFC and ALC
 Summary_afc <- indexW_LRS %>% mutate(b_year=substr(SUKULAISEN_SYNTYMAPV,1,4)) %>% group_by(afc) %>% 
                                    summarize(count_afc_male=sum(SUKUPUOLI==1), count_afc_female=sum(SUKUPUOLI==2)) %>% rename(Age=afc)
 
