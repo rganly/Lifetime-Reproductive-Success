@@ -31,8 +31,6 @@ length(unique(grandchild$SUKULAISEN_TNRO))                      # 482,777 grandc
 
 
 
-
-
 ############################################
 #         QC for index person              #
 ############################################
@@ -54,8 +52,6 @@ sum(indexW$SUKUPUOLI==1)/sum(indexW$SUKUPUOLI==2)   # 1.06412, sex ratio become 
 
 
 
-
-
 ############################################
 #   LRS (N of children or grandchildren)   #
 ############################################
@@ -72,7 +68,6 @@ mean(index_lrs[,"n_child"])       # 2.332206 for indexperson with children
 range(index_lrs[,"n_child"])      # from 1 to 19
 
 
-
 # n_child_Age4550 
 index_lrs4550 <- child %>% select(KANTAHENKILON_TNRO,SUKULAISEN_TNRO,SUKULAISEN_SYNTYMAPV) %>% 
                            inner_join(indexW[,c("KANTAHENKILON_TNRO","SUKULAISEN_SYNTYMAPV","SUKUPUOLI")], by="KANTAHENKILON_TNRO") %>% 
@@ -86,13 +81,11 @@ mean(index_lrs4550[,"n_child_Age4550"])       # 2.32883 for indexperson with chi
 range(index_lrs4550[,"n_child_Age4550"])      # from 1 to 19
 
 
-
 # n_grandchild
 index_glrs <- grandchild %>% filter(KANTAHENKILON_TNRO %in% indexW$KANTAHENKILON_TNRO) %>% group_by(KANTAHENKILON_TNRO) %>% count() %>% rename(n_gchild=n) %>% data.frame()  
 nrow(indexW) - nrow(index_glrs)     # 1,454,059 indexperson without grandchildren
 mean(index_glrs[,"n_gchild"])       # 2.908214 for indexperson with grandchildren 
 range(index_glrs[,"n_gchild"])      # from 1 to 89   ## the maximum is much higher than Swedish
-
 
 
 # combine
@@ -109,8 +102,6 @@ range(lrs_all[!is.na(lrs_all$n_child_Age4550),"SUKULAISEN_SYNTYMAPV"]) # should 
 
 summary(lrs_all[lrs_all[,"SUKUPUOLI"]==1, c("n_child","n_child_Age4550","n_gchild")])  #   male: mean(n_child/n_child_Age4550/n_grandchild)=1.636/1.7/0.4476
 summary(lrs_all[lrs_all[,"SUKUPUOLI"]==2, c("n_child","n_child_Age4550","n_gchild")])  # female: mean(n_child/n_child_Age4550/n_grandchild)=1.886/1.92/0.6852
-
-
 
 
 
@@ -131,8 +122,6 @@ save(indexW_LRS, file=paste0(r_dir, "indexW_LRS.Rdata"))
 
 
 
-
-
 ############################################
 #      Distribution of LRS                 #
 ############################################
@@ -147,7 +136,6 @@ Summary_LRS <- indexW_LRS %>% mutate(b_year=substr(SUKULAISEN_SYNTYMAPV,1,4)) %>
 write.table(Summary_LRS, "Summary_LRS.txt", append=F, quote=F, sep=" ", row.names=F, col.names=T)
 
 
-
 Summary_afc <- indexW_LRS %>% mutate(b_year=substr(SUKULAISEN_SYNTYMAPV,1,4)) %>% group_by(afc) %>% 
                                    summarize(count_afc_male=sum(SUKUPUOLI==1), count_afc_female=sum(SUKUPUOLI==2)) %>% rename(Age=afc)
 
@@ -156,7 +144,5 @@ Summary_AgeChild <- indexW_LRS %>% mutate(b_year=substr(SUKULAISEN_SYNTYMAPV,1,4
                                    full_join(Summary_afc, by="Age") %>% arrange(Age)
 
 write.table(Summary_AgeChild, "Summary_AgeChild.txt", append=F, quote=F, sep=" ", row.names=F, col.names=T)
-
-
 
 
