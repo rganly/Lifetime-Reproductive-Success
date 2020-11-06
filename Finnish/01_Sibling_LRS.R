@@ -1,10 +1,45 @@
-
-## 1. This script is to calculate LRS (N of children) and age of having the first/last child for each sibling.
-
+## This script is to calculate LRS (N of children) and age of having the first/last child for each sibling.
 
 setwd("/homes/aliu/DSGE_LRS/output/registry_edit/")
-in_dir <- "/homes/aliu/DSGE_LRS/input/"
-r_dir <- paste0(in_dir, "r_files/")
+r_dir <- "/homes/aliu/DSGE_LRS/input/r_files/"
+
+library(tidyverse)
+
+'%!in%' <- function(x,y)!('%in%'(x,y))
+
+
+############################################
+#             Read in data                 #
+############################################
+
+# QCed index person
+indexW <- get(load(paste0(r_dir, "indexW_LRS.Rdata"))) 
+nrow(indexW)
+
+
+# sib
+sib <- get(load(paste0(r_dir,"sib.Rdata")))
+nrow(sib)  # 8,066,956
+length(unique(sib$KANTAHENKILON_TNRO))    # 1,819,317 indexperson with sibling
+length(unique(sib$SUKULAISEN_TNRO))       # 2,307,224 siblings 
+length(unique(sib$VALIHENKILO1_TNRO))     # 1,600,825, VALIHENKILO1_TNRO is shared father/mother between indexperson-sibling 
+
+sib_uniq <- sib %>% filter(KANTAHENKILON_TNRO %in% indexW$KANTAHENKILON_TNRO) %>% select(-c("KANTAHENKILON_TNRO","SUKUL_SUHDE","VALIHENKILO1_TNRO","VALIHENKILO2_TNRO")) %>% distinct(SUKULAISEN_TNRO, .keep_all=T)
+nrow(sib_uniq)  # 2,144,679 
+save(sib_uniq, file=paste0(r_dir,"sib_uniq.Rdata"))    
+
+
+# sib's children
+sibchild <- get(load(paste0(r_dir,"sibchild.Rdata")))
+nrow(sibchild)   # 14,486,780
+length(unique(sibchild$KANTAHENKILON_TNRO))   # 1,521,419 index person have sibling's with children
+length(unique(sibchild$VALIHENKILO1_TNRO))    # 1,397,102 VALIHENKILO1_TNRO is shared father/mother between indexperson-sibling
+length(unique(sibchild$VALIHENKILO2_TNRO))    # 1,597,982 VALIHENKILO2_TNRO is sibling
+length(unique(sibchild$SUKULAISEN_TNRO))      # 2,392,471 sibling's children 
+
+sibchild_uniq <- sibchild %>% filter(KANTAHENKILON_TNRO %in% indexW$KANTAHENKILON_TNRO) %>% select(-c("KANTAHENKILON_TNRO","SUKUL_SUHDE","VALIHENKILO1_TNRO")) %>% distinct(VALIHENKILO2_TNRO, SUKULAISEN_TNRO, .keep_all=T)
+nrow(sibchild_uniq)  # 3,549,721
+save(sibchild_uniq, file=paste0(r_dir,"sibchild_uniq.Rdata"))      
 
 
 
@@ -12,84 +47,49 @@ r_dir <- paste0(in_dir, "r_files/")
 #   LRS (N of children)   #
 ###########################
 
-## 2.1.1 Read in data 
+# n_child for each sibling 
+sib_lrs <- sibchild_uniq %>% select(VALIHENKILO2_TNRO,SUKULAISEN_SYNTYMAPV) %>% 
+                  inner_join(sib_uniq[,c("SUKULAISEN_TNRO","SUKULAISEN_SYNTYMAPV")], by=c("VALIHENKILO2_TNRO"="SUKULAISEN_TNRO")) %>% 
+                  mutate(age_of_child=as.numeric(SUKULAISEN_SYNTYMAPV.x) - as.numeric(SUKULAISEN_SYNTYMAPV.y)) %>% rename(KANTAHENKILON_TNRO=VALIHENKILO2_TNRO) %>%
+                  filter(age_of_child>=100000) %>% 
+                  group_by(KANTAHENKILON_TNRO) %>% count() %>% rename(n_child=n) %>% data.frame()
 
-# sib
-sib <- get(load(paste0(r_dir,"sib.Rdata")))
+nrow(sib_lrs)  # 1,533,434                  
+summary(sib_lrs$n_child)  # mean=2.315, max=19, for sibling with children
 
-nrow(sib)        # 8,066,956
-length(unique(sib$KANTAHENKILON_TNRO))    # 1,819,317 indexperson with sibling
-length(unique(sib$SUKULAISEN_TNRO))       # 2,307,224 siblings 
-length(unique(sib$VALIHENKILO1_TNRO))     # 1,600,825, VALIHENKILO1_TNRO is shared father/mother between indexperson-sibling 
-unique(sib$VALIHENKILO2_TNRO)             # NULL
-
-sib <- within(sib, rm("KANTAHENKILON_TNRO","SUKUL_SUHDE","VALIHENKILO1_TNRO","VALIHENKILO2_TNRO"))
-dup <- duplicated(sib[,c("SUKULAISEN_TNRO")])
-sib_uniq <- sib[!dup, ]
-nrow(sib_uniq)              # 2,307,224
-table(sib_uniq$SUKUPUOLI)   # 1,186,320 with 1 and 1,120,904 with 2
-save(sib_uniq, file=paste0(r_dir,"sib_uniq.Rdata"))    # only keep useful variables for unique sib
+nrow(sib_uniq) - nrow(sib_lrs)  # 611,245 indexperson are childless
+mean(sib_lrs[,"n_child"])       # 2.314882 for indexperson with children
+range(sib_lrs[,"n_child"])      # from 1 to 19
 
 
-
-# sib's children
-sibchild <- get(load(paste0(r_dir,"sibchild.Rdata")))
-
-nrow(sibchild)          # 14,486,780
-length(unique(sibchild$KANTAHENKILON_TNRO))   # 1,521,419 index person have sibling's with children
-length(unique(sibchild$VALIHENKILO1_TNRO))    # 1,397,102 VALIHENKILO1_TNRO is shared father/mother between indexperson-sibling
-length(unique(sibchild$VALIHENKILO2_TNRO))    # 1,597,982 VALIHENKILO2_TNRO is sibling
-length(unique(sibchild$SUKULAISEN_TNRO))      # 2,392,471 sibling's children 
-
-sibchild_bas <- within(sibchild, rm("KANTAHENKILON_TNRO","SUKUL_SUHDE","VALIHENKILO1_TNRO"))
-dup <- duplicated(sibchild_bas[,c("VALIHENKILO2_TNRO","SUKULAISEN_TNRO")])
-sibchild_uniq <- sibchild_bas[!dup, ]
-nrow(sibchild_uniq)      # 3,687,737 sib-child pairs                        
-save(sibchild_uniq, file=paste0(r_dir,"sibchild_uniq.Rdata"))      # only keep useful variables for unique sib-sibchild pairs
+# n_child_Age4550 
+sib_lrs4550 <- sibchild_uniq %>% select(VALIHENKILO2_TNRO,SUKULAISEN_SYNTYMAPV) %>% 
+                  inner_join(sib_uniq[,c("SUKULAISEN_TNRO","SUKUPUOLI","SUKULAISEN_SYNTYMAPV")], by=c("VALIHENKILO2_TNRO"="SUKULAISEN_TNRO")) %>% 
+                  mutate(age_of_child=as.numeric(SUKULAISEN_SYNTYMAPV.x) - as.numeric(SUKULAISEN_SYNTYMAPV.y)) %>% rename(KANTAHENKILON_TNRO=VALIHENKILO2_TNRO) %>%
+                  filter(age_of_child>=100000) %>% 
+                  filter((age_of_child<=500000 & SUKUPUOLI==1)|(age_of_child<=450000 & SUKUPUOLI==2)) %>% 
+                  group_by(KANTAHENKILON_TNRO) %>% count() %>% rename(n_child_Age4550=n) %>% data.frame()
+     
+nrow(sib_uniq) - nrow(sib_lrs4550)  # 612,553 indexperson are childless
+mean(sib_lrs4550[,"n_child_Age4550"])  # 2.310996 for indexperson with children
+range(sib_lrs4550[,"n_child_Age4550"]) # from 1 to 19
 
 
+# combine
+lrs_all <- sib_lrs %>% full_join(sib_lrs4550, by="KANTAHENKILON_TNRO") %>%
+                           full_join(sib_uniq[,c("SUKULAISEN_TNRO","SUKUPUOLI","SUKULAISEN_SYNTYMAPV")], by=c("KANTAHENKILON_TNRO"="SUKULAISEN_TNRO")) %>% 
+                           mutate(n_child=ifelse(is.na(n_child),0,n_child)) %>%
+                           mutate(n_child_Age4550=ifelse((20200127-SUKULAISEN_SYNTYMAPV<=500000 & SUKUPUOLI==1)|(20200127-SUKULAISEN_SYNTYMAPV<=450000 & SUKUPUOLI==2), NA, ifelse(!is.na(n_child_Age4550),n_child_Age4550, 0))) %>% 
+                           mutate(childless=ifelse(n_child==0,1,0), childless_Age4550=ifelse(is.na(n_child_Age4550),NA,ifelse(n_child_Age4550==0,1,0))) %>%
+                           select(KANTAHENKILON_TNRO, SUKULAISEN_SYNTYMAPV, SUKUPUOLI, n_child, n_child_Age4550, childless, childless_Age4550)
+                                      
+range(lrs_all[is.na(lrs_all$n_child_Age4550),"SUKULAISEN_SYNTYMAPV"])  # should after 1970
+range(lrs_all[!is.na(lrs_all$n_child_Age4550),"SUKULAISEN_SYNTYMAPV"]) # should before 1975
 
-#--------------------------------------------
-## 2.1.2 n_child for each sibling 
+summary(lrs_all[lrs_all[,"SUKUPUOLI"]==1, c("n_child","n_child_Age4550","childless", "childless_Age4550")])  #   male: mean(n_child/n_child_Age4550/n_grandchild)=1.636/1.7/0.4476
+summary(lrs_all[lrs_all[,"SUKUPUOLI"]==2, c("n_child","n_child_Age4550","childless", "childless_Age4550")])  # female: mean(n_child/n_child_Age4550/n_grandchild)=1.886/1.92/0.6852
 
-sib_lrs <- as.data.frame(table(sibchild_uniq$VALIHENKILO2_TNRO))    
-colnames(sib_lrs) <- c("SUKULAISEN_TNRO","n_child") 
-nrow(sib_lrs)                                           # 1,597,982   
-summary(sib_lrs$n_child)                                # mean=2.308, max=19, for sibling with children
-
-
-# add those without children
-sib_lrs_all <- merge(sib_uniq, sib_lrs, by="SUKULAISEN_TNRO", all=T)    # add number of children for each sibling
-nrow(sib_lrs_all)        # 2,307,224
-sib_lrs_all[is.na(sib_lrs_all)] <- 0 
-summary(sib_lrs_all$n_child)      # mean=1.598, max=19, for all siblings 
-sib_lrs_all[,"b_year"] <- substr(sib_lrs_all$SUKULAISEN_SYNTYMAPV,1,4)
-save(sib_lrs_all, file=paste0(r_dir,"sib_lrs_all.Rdata"))
-
-
-# distribution 
-years <- sort(unique(sib_lrs_all[,"b_year"]))  # from 1932 to 2018
-n_year <- length(years)                                 # 87 years in total
-
-sib_lrs_summary <- matrix(NA,ncol=7,nrow=n_year)                     # summary of n_child for each birth_year for male and female separately for siblings
-colnames(sib_lrs_summary) <- c("birth_year","n_male","n_female","male_n_child","female_n_child","male_n_child_max","female_n_child_max")
-kons <- c("male","female")
-
-
-for (year_n in 1:n_year){
-	sib_lrs_summary[year_n,"birth_year"] <- years[year_n]
-	sib_lrs_yearn <- sib_lrs_all[sib_lrs_all[,"b_year"]==years[year_n], c("SUKUPUOLI","n_child")]	
-	for (kon_n in 1:length(kons)){
-		sib_lrs_kon <- sib_lrs_yearn[sib_lrs_yearn$SUKUPUOLI == kon_n, ]
-		sib_lrs_summary[year_n,paste0("n_",kons[kon_n])] <- nrow(sib_lrs_kon)
-		sib_lrs_summary[year_n,paste0(kons[kon_n],"_n_child")] <- ifelse(nrow(sib_lrs_kon)>0, round(mean(sib_lrs_kon$n_child), 3), NA)  	
-		sib_lrs_summary[year_n,paste0(kons[kon_n],"_n_child_max")] <- ifelse(nrow(sib_lrs_kon)>0, max(sib_lrs_kon$n_child), NA)
-		print(paste(year_n, kon_n, sep="_"))
-	}	
-}    
-
-write.table(sib_lrs_summary, "sib_lrs_summary", append=F, quote=F, sep=" ", row.names=F, col.names=T)
-
+# save(sibW_LRS, file=paste0(r_dir,"sibW_LRS.Rdata"))
 
 
 
@@ -97,50 +97,40 @@ write.table(sib_lrs_summary, "sib_lrs_summary", append=F, quote=F, sep=" ", row.
 #  Age of having first/last child  #
 ####################################
 
-## 2.2.1 age at first/last delivery  
-sibchild_uniq[,"b_year"] <- substr(sibchild_uniq$SUKULAISEN_SYNTYMAPV,1,4)
-sibchild_bas <- sibchild_uniq[order(sibchild_uniq$VALIHENKILO2_TNRO,sibchild_uniq$SUKULAISEN_SYNTYMAPV), c("VALIHENKILO2_TNRO", "SUKULAISEN_TNRO", "b_year")]     
-
-
-# first child 
-sibchild_f_lst <- by(sibchild_bas, sibchild_bas$VALIHENKILO2_TNRO, head, n=1)                                    
-sibchild_f <- do.call("rbind", sibchild_f_lst)    # Reduce is 10 time slower than do.call, do.call is 10 times slower than rebindlist
-
-
-# last child
-sibchild_l_lst <- by(sibchild_bas, sibchild_bas["VALIHENKILO2_TNRO"], tail, n=1)                
-sibchild_l <- do.call("rbind",sibchild_l_lst) 
-
-
-# combine
-sibchild_fl <- merge(sibchild_f, sibchild_l, by="VALIHENKILO2_TNRO")
-colnames(sibchild_fl) <- c("VALIHENKILO2_TNRO","child_f_TNRO","bf_year","child_l_TNRO","bl_year")
-
-sib_del <- merge(sib_lrs_all, sibchild_fl, by.x="SUKULAISEN_TNRO",by.y="VALIHENKILO2_TNRO")
-nrow(sib_del)     # 1,597,982
-
-sib_del$afc <- as.numeric(sib_del$bf_year) - as.numeric(sib_del$b_year)
-sib_del$alc <- as.numeric(sib_del$bl_year) - as.numeric(sib_del$b_year)
-
-sib_del <- sib_del[sib_del$afc >10 & sib_del$alc >10, ]  # remove age_at first/last child younger than 10   
-save(sib_del, file=paste0(r_dir,"sib_afc_alc.Rdata"))  
-nrow(sib_del)     # 1,597,974
-
-
-#-----------------------------------------------------------------------------------------
-## 2.2.2 distribution of age at first/last delivery
-
-for (kon_n in 1:2){
-	for (ac in c("afc","alc")){
-		print(paste(kon_n,ac,sep="_"))
-		print(table(sib_del[sib_del$SUKUPUOLI==kon_n, ac]))  
-	}
-}
-
-# age_first(last)_delivery is 9-73(14-73) for male and 13-53(14-56) for female
+sibW_LRS <- sibchild_uniq %>% mutate(b_year=substr(SUKULAISEN_SYNTYMAPV,1,4)) %>% select(c("VALIHENKILO2_TNRO","b_year")) %>% 	
+                              group_by(VALIHENKILO2_TNRO) %>% 
+                              summarize(bf_year=b_year[which(b_year==min(b_year,na.rm=T))[1]], bl_year=b_year[which(b_year==max(b_year,na.rm=T))[1]]) %>% 
+                              inner_join(lrs_all[,c("KANTAHENKILON_TNRO","SUKULAISEN_SYNTYMAPV")], by=c("VALIHENKILO2_TNRO"="KANTAHENKILON_TNRO")) %>%                            
+                              mutate(afc=as.numeric(as.character(bf_year))-as.numeric(substr(SUKULAISEN_SYNTYMAPV,1,4)), alc=as.numeric(as.character(bl_year))-as.numeric(substr(SUKULAISEN_SYNTYMAPV,1,4))) %>% 
+                              filter(afc>10 & alc>10) %>% select(VALIHENKILO2_TNRO, afc, alc) %>% 
+                              right_join(lrs_all, by=c("VALIHENKILO2_TNRO"="KANTAHENKILON_TNRO")) %>% rename(KANTAHENKILON_TNRO=VALIHENKILO2_TNRO) %>% 
+                              select(KANTAHENKILON_TNRO, SUKULAISEN_SYNTYMAPV, SUKUPUOLI, n_child, n_child_Age4550, childless, childless_Age4550, afc, alc)
 
 
 
+############################################
+#      Distribution of LRS                 #
+############################################
+
+# LRS-related phenotypes by birth year and sex
+Summary_LRS_sibW <- sibW_LRS %>% mutate(b_year=substr(SUKULAISEN_SYNTYMAPV,1,4)) %>% group_by(b_year,SUKUPUOLI) %>% 
+                                 summarize(birth_year=b_year[1], sex=SUKUPUOLI[1], N=sum(!is.na(n_child)),
+                                           n_child_mean=mean(n_child,na.rm=T), n_child_Age4550_mean=mean(n_child_Age4550,na.rm=T),
+                                           n_child_max=max(n_child), n_child_Age4550_max=max(n_child_Age4550,na.rm=T),
+                                           N_0child_Age4550=sum(n_child_Age4550==0), N_1child_Age4550=sum(n_child_Age4550==1),
+                                           N_2child_Age4550=sum(n_child_Age4550==2), N_3child_Age4550=sum(n_child_Age4550==3), N_4child_Age4550=sum(n_child_Age4550==4),
+                                           afc_mean=mean(afc,na.rm=T), alc_mean=mean(alc,na.rm=T)) 
+
+write.table(Summary_LRS_sibW, "Summary_LRS_sibW.txt", append=F, quote=F, sep=" ", row.names=F, col.names=T)
 
 
+# count of AFC and ALC
+Summary_afc_sibW <- sibW_LRS %>% mutate(b_year=substr(SUKULAISEN_SYNTYMAPV,1,4)) %>% group_by(afc) %>% 
+                                   summarize(count_afc_male=sum(SUKUPUOLI==1), count_afc_female=sum(SUKUPUOLI==2)) %>% rename(Age=afc)
+
+Summary_AgeChild_sibW <- sibW_LRS %>% mutate(b_year=substr(SUKULAISEN_SYNTYMAPV,1,4)) %>% group_by(alc) %>% 
+                                   summarize(count_alc_male=sum(SUKUPUOLI==1), count_alc_female=sum(SUKUPUOLI==2)) %>% rename(Age=alc) %>% 
+                                   full_join(Summary_afc_sibW, by="Age") %>% arrange(Age)
+
+write.table(Summary_AgeChild_sibW, "Summary_AgeChild_sibW.txt", append=F, quote=F, sep=" ", row.names=F, col.names=T)
 
