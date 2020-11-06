@@ -134,3 +134,5 @@ Summary_AgeChild_sibW <- sibW_LRS %>% mutate(b_year=substr(SUKULAISEN_SYNTYMAPV,
 
 write.table(Summary_AgeChild_sibW, "Summary_AgeChild_sibW.txt", append=F, quote=F, sep=" ", row.names=F, col.names=T)
 
+
+
