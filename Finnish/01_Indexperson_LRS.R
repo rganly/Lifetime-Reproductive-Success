@@ -29,6 +29,11 @@ length(unique(grandchild$KANTAHENKILON_TNRO))                   # 371,109 indexp
 length(unique(grandchild$SUKULAISEN_TNRO))                      # 482,777 grandchildren
 
 
+# death registry
+death <- data.frame(get(load(paste0(r_dir, "kuolemansyyt_u1477_a.Rdata")))) %>% mutate(death_year=substr(kuolpvm,1,4)) %>% select(TNRO, death_year) 
+
+
+
 
 ############################################
 #         QC for index person              #
@@ -117,8 +122,48 @@ indexW_LRS <- child %>% mutate(b_year=substr(SUKULAISEN_SYNTYMAPV,1,4)) %>% sele
                             right_join(lrs_all, by="KANTAHENKILON_TNRO") %>% 
                             select(KANTAHENKILON_TNRO, SUKULAISEN_SYNTYMAPV, SUKUPUOLI, n_child,n_child_Age4550, n_gchild, childless, childless_Age4550, afc, alc)
 
-save(indexW_LRS, file=paste0(r_dir, "indexW_LRS.Rdata"))  
 
+
+############################################
+#   lambda for index person with child     #
+############################################
+
+# 5 year as a window 
+lrs_age <- child %>% select(KANTAHENKILON_TNRO,SUKULAISEN_TNRO,SUKULAISEN_SYNTYMAPV) %>% 
+                     inner_join(indexW[,c("KANTAHENKILON_TNRO","SUKULAISEN_SYNTYMAPV","SUKUPUOLI")], by="KANTAHENKILON_TNRO") %>%  
+                     left_join(death, by=c("KANTAHENKILON_TNRO"="TNRO")) %>%                  
+                     mutate(b_year=as.numeric(substr(SUKULAISEN_SYNTYMAPV.y,1,4)), Age_child=as.numeric(substr(SUKULAISEN_SYNTYMAPV.x,1,4))-b_year, Age_death=as.numeric(death_year)-b_year) %>% 
+                     select(KANTAHENKILON_TNRO, b_year, SUKUPUOLI, Age_child, Age_death) %>% group_by(KANTAHENKILON_TNRO, SUKUPUOLI, Age_death) %>%
+                     summarize(lrs_0_4=0, lrs_5_9=0, lrs_10_14=sum(Age_child>=10 & Age_child<=14,na.rm=T), lrs_15_19=sum(Age_child>=15 & Age_child<=19,na.rm=T), lrs_20_24=sum(Age_child>=20 & Age_child<=24,na.rm=T), lrs_25_29=sum(Age_child>=25 & Age_child<=29,na.rm=T),
+                               lrs_30_34=sum(Age_child>=30 & Age_child<=34,na.rm=T), lrs_35_39=sum(Age_child>=35 & Age_child<=39,na.rm=T), lrs_40_44=sum(Age_child>=40 & Age_child<=44,na.rm=T), lrs_45_49=sum(Age_child>=45 & Age_child<=49,na.rm=T))
+
+lrs_age$Window_death <- ifelse((is.na(lrs_age$Age_death)|lrs_age$Age_death>=50) & lrs_age$SUKUPUOLI==1, 10, 
+                        ifelse((is.na(lrs_age$Age_death)|lrs_age$Age_death>=45) & lrs_age$SUKUPUOLI==2, 9,
+                        ifelse(!is.na(lrs_age$Age_death),lrs_age$Age_death%/%5+1, NA)))
+       
+age_bins <- c("lrs_0_4", "lrs_5_9", "lrs_10_14", "lrs_15_19", "lrs_20_24", "lrs_25_29", "lrs_30_34", "lrs_35_39", "lrs_40_44", "lrs_45_49")
+lrs_age <- data.frame(lrs_age)
+lrs_age[,"type"] <- apply(lrs_age[ ,c(age_bins,"Window_death")], 1, paste, collapse="-")
+
+
+# calculate lambda for each unique life-history pattern
+lrs_uniq <- lrs_age[,c(age_bins,"Window_death","type")] %>% distinct()
+for (i in 1:nrow(lrs_uniq)){
+	P_i <- rbind(matrix(0,nrow=1,ncol=lrs_uniq[i,"Window_death"]), cbind(diag(lrs_uniq[i,"Window_death"]-1),matrix(0,nrow=lrs_uniq[i,"Window_death"]-1,ncol=1)))
+	P_i[1,] <- unlist(lrs_uniq[i,age_bins[1:lrs_uniq[i,"Window_death"]]])/2
+	lrs_uniq[i,"lambda"] <- Re(eigen(P_i)$values[1]) 
+    lrs_uniq[i,"lambda_image"] <- Im(eigen(P_i)$values[1])
+	print(paste0(print(i),": ", lrs_uniq[i,"lambda"]))
+}
+
+
+# merge with for each individual
+indexW_LRS <- lrs_age %>% inner_join(lrs_uniq[, c("type", "lambda", "lambda_image")], by="type") %>% filter(lambda>0,lambda_image==0) %>% select(KANTAHENKILON_TNRO, lambda) %>% 
+			  right_join(indexW_LRS,by="KANTAHENKILON_TNRO") %>% mutate(lambda=ifelse((20200127-SUKULAISEN_SYNTYMAPV<=500000 & SUKUPUOLI==1)|(20200127-SUKULAISEN_SYNTYMAPV<=450000 & SUKUPUOLI==2)|n_child_Age4550<3,NA,lambda)) %>%
+			  select(KANTAHENKILON_TNRO, SUKULAISEN_SYNTYMAPV, SUKUPUOLI, n_child,n_child_Age4550, n_gchild, childless, childless_Age4550, lambda, afc, alc)
+
+save(indexW_LRS, file=paste0(r_dir, "indexW_LRS.Rdata"))  
+			  
 
 
 ############################################
@@ -145,5 +190,4 @@ Summary_AgeChild <- indexW_LRS %>% mutate(b_year=substr(SUKULAISEN_SYNTYMAPV,1,4
                                    full_join(Summary_afc, by="Age") %>% arrange(Age)
 
 write.table(Summary_AgeChild, "Summary_AgeChild.txt", append=F, quote=F, sep=" ", row.names=F, col.names=T)
-
 
