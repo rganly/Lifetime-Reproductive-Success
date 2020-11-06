@@ -1,11 +1,16 @@
 ## This script is to calculate LRS (N of children and N of grandchildren), childless, and age of having the first/last child for each index person.
- 
-setwd("/homes/aliu/DSGE_LRS/output/registry_edit/")
-r_dir <- "/homes/aliu/DSGE_LRS/input/r_files/"
 
-library(tidyverse)
+
+# Input: "tove_lev_index.Rdata", "tove_lev_koppl_index_barn.Rdata", "tove_lev_koppl_index_barnbarn.Rdata"
+# Output: "indexW.Rdata", "indexW_delivery.Rdata", "indexW_LRS.Rdata", "indexW_lrs_summary", "indexW_lrs_count_summary", "indexW_age_at_having_child_count", "indexW_age_at_having_child_summary"
+# Comments: 
+
+
+setwd("/home/aoxing/DSGE_LRS/out/registry_edit/")
+r_dir <- "/home/aoxing/DSGE_LRS/input/r_files/"
 
 '%!in%' <- function(x,y)!('%in%'(x,y))
+
 
 
 ############################################
@@ -13,24 +18,33 @@ library(tidyverse)
 ############################################
 
 # Index person (born 1956-1982)  
-index <- get(load(paste0(r_dir, "index.Rdata")))                # 2,365,707 indexperson
-table(index$SUKUPUOLI)                                          # 1,260,350 males and 1,105,357 females
+index <- data.frame(get(load(paste0(r_dir, "tove_lev_index.Rdata"))))    
+nrow(index)   # 2,893,654
+table(indexW$Kon)
 
 
-# Children of index person  
-child <- get(load(paste0(r_dir, "child.Rdata")))  
-length(unique(child$KANTAHENKILON_TNRO))                        # 1,555,839 indexperson with children
-length(unique(child$SUKULAISEN_TNRO))                           # 2,060,722 children
+# Children of index person
+child <- data.frame(get(load(paste0(r_dir, "tove_lev_koppl_index_barn.Rdata"))))     
+length(unique(child[,"LopNr"]))                                  # 2,202,668 indexperson with children
+length(unique(child[,"LopNrBarn"]))                              # 2,900,503 children
 
 
-# Grandchildren of index person  
-grandchild <- get(load(paste0(r_dir, "grandchild.Rdata")))  
-length(unique(grandchild$KANTAHENKILON_TNRO))                   # 371,109 indexperson with grandchildren
-length(unique(grandchild$SUKULAISEN_TNRO))                      # 482,777 grandchildren
+# Grandchildren of index person
+grandchild <- data.frame(get(load(paste0(r_dir, "tove_lev_koppl_index_barnbarn.Rdata"))))  
+nrow(grandchild)        # 1,241,918
+length(unique(grandchild[,c("LopNr")]))                          # 476,252 indexperson with grandchildren
+length(unique(grandchild[,c("LopNrBarn")]))                      # 450,005 children
+length(unique(grandchild[,c("LopNrBarnBarn")]))                  # 591,843 grandchildren
 
 
-# death registry
-death <- data.frame(get(load(paste0(r_dir, "kuolemansyyt_u1477_a.Rdata")))) %>% mutate(death_year=substr(kuolpvm,1,4)) %>% select(TNRO, death_year) 
+# Migration
+migra <- data.frame(get(load(paste0(r_dir,"tove_lev_migrationer.Rdata"))))
+nrow(migra)  # 2,066,867
+
+
+# Death
+death <- data.frame(get(load(paste0(r_dir,"tove_lev_doddatum.Rdata"))))
+nrow(death)  # 1,301,514
 
 
 
@@ -39,20 +53,16 @@ death <- data.frame(get(load(paste0(r_dir, "kuolemansyyt_u1477_a.Rdata")))) %>% 
 #         QC for index person              #
 ############################################
 
-# birth year 1956-1982, born in Finland, not imigrated/emigrated from Sweden, and alive until age 15
-index %>% filter(SYNTYMAKOTIKUNTA==200 & AIDINKIELI=="fi") %>% nrow()   # 60,890  born outside of Finland but with Finnish as mother tongue 
+# birth year 1956-1982, born in Sweden, not imigrated/emigrated from Sweden, and alive until age 15
+index <- merge(index, death, by="LopNr", all.x=T)
+index$dead_age <- as.numeric(substr(index$DodDatum,1,4)) - as.numeric(index$FodelseAr)
 
-indexW <- index %>% filter(SYNTYMAKOTIKUNTA!=200 & is.na(ULKOMAILLE_MUUTON_PV) & ULKOM_ASUINVALTIO=="" & ULKOM_ASUINVALTION_NIMI=="") %>%     # born in Finland and no emigration
-                    filter(substr(SUKULAISEN_SYNTYMAPV,1,4)>=1956 & substr(SUKULAISEN_SYNTYMAPV,1,4)<=1982) %>%                               # birth year 1956-1982
-                    filter(SUKULAISEN_KUOLINPV - SUKULAISEN_SYNTYMAPV>=150000|is.na(SUKULAISEN_KUOLINPV)|is.na(SUKULAISEN_SYNTYMAPV))         # avlive until 15
+indexW <- index[(index$LopNr %!in% unique(migra$LopNr)) & (index$dead_age>=15|is.na(index$dead_age)) & (index$AterPnr==0), c("LopNr","FodelseAr","FodelseLandNamn","FodelseLan","FodelseKommun","Kon","DodDatum")]
+nrow(indexW)   # 2,555,541
+table(indexW$Kon)                                                 # 1,318,132 males and 1,237,409 females 
+sum(indexW$Kon==1)/sum(indexW$Kon==2)   # 1.065236
+save(indexW, file=paste0(r_dir, "indexW.Rdata"))
 
-nrow(indexW)   # 1,802,891
-table(indexW$SUKUPUOLI)  # 929,448 males and 873,443 females
-
-
-# sex ratio for raw data and QCed data
-sum(index$SUKUPUOLI==1)/sum(index$SUKUPUOLI==2)     # 1.14022
-sum(indexW$SUKUPUOLI==1)/sum(indexW$SUKUPUOLI==2)   # 1.06412, sex ratio become normal after removing people born and moving out of Finland
 
 
 
@@ -61,51 +71,52 @@ sum(indexW$SUKUPUOLI==1)/sum(indexW$SUKUPUOLI==2)   # 1.06412, sex ratio become 
 ############################################
 
 # n_child
-index_lrs <- child %>% select(KANTAHENKILON_TNRO,SUKULAISEN_TNRO,SUKULAISEN_SYNTYMAPV) %>% 
-                           inner_join(indexW[,c("KANTAHENKILON_TNRO","SUKULAISEN_SYNTYMAPV","SUKUPUOLI")], by="KANTAHENKILON_TNRO") %>% 
-                           mutate(age_of_child=as.numeric(SUKULAISEN_SYNTYMAPV.x) - as.numeric(SUKULAISEN_SYNTYMAPV.y)) %>%
-                           filter(age_of_child>=100000) %>% 
-                           group_by(KANTAHENKILON_TNRO) %>% count() %>% rename(n_child=n) %>% data.frame()
-
-nrow(indexW) - nrow(index_lrs)    # 444,691 indexperson are childless
-mean(index_lrs[,"n_child"])       # 2.332206 for indexperson with children
-range(index_lrs[,"n_child"])      # from 1 to 19
+index_lrs <- data.frame(table(child[,"LopNr"]))                 # n_child for indexperson with children
+colnames(index_lrs) <- c("LopNr","n_child")                     # 2,202,668 indexperson with children
+mean(index_lrs[,"n_child"])                                     # 2.217 for indexperson with children
+table(index_lrs[,"n_child"])                                    # from 1 to 27
 
 
-# n_child_Age4550 
-index_lrs4550 <- child %>% select(KANTAHENKILON_TNRO,SUKULAISEN_TNRO,SUKULAISEN_SYNTYMAPV) %>% 
-                           inner_join(indexW[,c("KANTAHENKILON_TNRO","SUKULAISEN_SYNTYMAPV","SUKUPUOLI")], by="KANTAHENKILON_TNRO") %>% 
-                           mutate(age_of_child=as.numeric(SUKULAISEN_SYNTYMAPV.x) - as.numeric(SUKULAISEN_SYNTYMAPV.y)) %>%
-                           filter(age_of_child>=100000) %>% 
-                           filter((age_of_child<=500000 & SUKUPUOLI==1)|(age_of_child<=450000 & SUKUPUOLI==2)) %>% 
-                           group_by(KANTAHENKILON_TNRO) %>% count() %>% rename(n_child_Age4550=n) %>% data.frame()
-              
-nrow(indexW) - nrow(index_lrs4550)    # 445,842 indexperson are childless
-mean(index_lrs4550[,"n_child_Age4550"])       # 2.32883 for indexperson with children
-range(index_lrs4550[,"n_child_Age4550"])      # from 1 to 19
+# n_child_Age4550
+child_index <- merge(indexW[,c("LopNr","FodelseAr","Kon")], child, by="LopNr")
+nrow(child_index)  # 4,576,536
+child_index$age_of_child <- as.numeric(child_index$BarnFodelseAr) - as.numeric(child_index$FodelseAr)
+
+child_index_m <- child_index[child_index$age_of_child<=50 & child_index$Kon==1,]
+child_index_f <- child_index[child_index$age_of_child<=45 & child_index$Kon==2,]
+nrow(child_index_m)  # 2,188,222
+nrow(child_index_f)  # 2,380,510
+index_lrs50 <- data.frame(table(child_index_m[,"LopNr"]))
+index_lrs45 <- data.frame(table(child_index_f[,"LopNr"]))
+
+index_lrs4550 <- rbind(index_lrs50, index_lrs45)
+colnames(index_lrs4550) <- c("LopNr","n_child_Age4550")
+nrow(index_lrs4550)  # 2,055,483
 
 
 # n_grandchild
-index_glrs <- grandchild %>% filter(KANTAHENKILON_TNRO %in% indexW$KANTAHENKILON_TNRO) %>% group_by(KANTAHENKILON_TNRO) %>% count() %>% rename(n_gchild=n) %>% data.frame()  
-nrow(indexW) - nrow(index_glrs)     # 1,454,059 indexperson without grandchildren
-mean(index_glrs[,"n_gchild"])       # 2.908214 for indexperson with grandchildren 
-range(index_glrs[,"n_gchild"])      # from 1 to 89   ## the maximum is much higher than Swedish
+index_glrs <- data.frame(table(unique(grandchild[,c("LopNr","LopNrBarnBarn")])["LopNr"]))    # 476,252 indexperson with grandchildren
+colnames(index_glrs) <- c("LopNr","n_gchild")
+mean(index_glrs[,"n_gchild"])                                   # 2.608 for indexperson with grandchildren
+table(index_glrs[,"n_gchild"])                                  # from 1 to 34
 
 
 # combine
-lrs_all <- index_lrs %>% full_join(index_lrs4550, by="KANTAHENKILON_TNRO") %>%
-                         full_join(index_glrs, by="KANTAHENKILON_TNRO") %>%
-                         full_join(indexW[,c("KANTAHENKILON_TNRO","SUKULAISEN_SYNTYMAPV","SUKUPUOLI")], by="KANTAHENKILON_TNRO") %>%
-                         mutate(n_child=ifelse(is.na(n_child),0,n_child), n_gchild=ifelse(is.na(n_gchild),0,n_gchild)) %>%
-                         mutate(n_child_Age4550=ifelse((20200127-SUKULAISEN_SYNTYMAPV<=500000 & SUKUPUOLI==1)|(20200127-SUKULAISEN_SYNTYMAPV<=450000 & SUKUPUOLI==2), NA, ifelse(!is.na(n_child_Age4550),n_child_Age4550, 0))) %>% 
-                         mutate(childless=ifelse(n_child==0,1,0), childless_Age4550=ifelse(is.na(n_child_Age4550),NA,ifelse(n_child_Age4550==0,1,0))) %>%
-                         select(KANTAHENKILON_TNRO, SUKULAISEN_SYNTYMAPV, SUKUPUOLI, n_child, n_child_Age4550, n_gchild, childless, childless_Age4550)
+index_lrs_glrs <- merge(index_lrs, index_glrs, by="LopNr", all=T)  # 2,202,668, same as N of indexperson with children   
+index_lrs_glrs$LopNr <- as.character(index_lrs_glrs$LopNr)     
 
-range(lrs_all[is.na(lrs_all$n_child_Age4550),"SUKULAISEN_SYNTYMAPV"])  # should after 1970
-range(lrs_all[!is.na(lrs_all$n_child_Age4550),"SUKULAISEN_SYNTYMAPV"]) # should before 1975
+lrs_all <- merge(index_lrs_glrs, indexW, by="LopNr", all.y=T)    # add indexperson without children
+nrow(lrs_all)   # 2,555,541
+lrs_all[,"n_child"] <- ifelse(is.na(lrs_all[,"n_child"]), 0, lrs_all[,"n_child"])
+lrs_all[,"n_gchild"] <- ifelse(is.na(lrs_all[,"n_gchild"]), 0, lrs_all[,"n_gchild"])
+                             
+summary(lrs_all[lrs_all[,"Kon"]==1, c("n_child","n_gchild")])   # male, mean(n_child/n_grandchild) = 1.665/0.3581, max(n_child/n_grandchild) = 21/31
+summary(lrs_all[lrs_all[,"Kon"]==2, c("n_child","n_gchild")])   # female, mean(n_child/n_grandchild) = 1.925/0.5899, max(n_child/n_grandchild) = 19/34
 
-summary(lrs_all[lrs_all[,"SUKUPUOLI"]==1, c("n_child","n_child_Age4550","n_gchild")])  #   male: mean(n_child/n_child_Age4550/n_grandchild)=1.636/1.7/0.4476
-summary(lrs_all[lrs_all[,"SUKUPUOLI"]==2, c("n_child","n_child_Age4550","n_gchild")])  # female: mean(n_child/n_child_Age4550/n_grandchild)=1.886/1.92/0.6852
+
+# add childless 
+lrs_all[, "childless"] <- ifelse(lrs_all$n_child!=0,0,1)        # 1 for childless 
+
 
 
 
@@ -113,81 +124,131 @@ summary(lrs_all[lrs_all[,"SUKUPUOLI"]==2, c("n_child","n_child_Age4550","n_gchil
 #     Age of having first/last child       #
 ############################################
 
-indexW_LRS <- child %>% mutate(b_year=substr(SUKULAISEN_SYNTYMAPV,1,4)) %>% select(c("KANTAHENKILON_TNRO","SUKULAISEN_TNRO","b_year")) %>% 	
-                            group_by(KANTAHENKILON_TNRO) %>% 
-                            summarize(KANTAHENKILON_TNRO=KANTAHENKILON_TNRO[1], bf_year=b_year[which(b_year==min(b_year,na.rm=T))[1]], bl_year=b_year[which(b_year==max(b_year,na.rm=T))[1]]) %>% 
-                            inner_join(lrs_all[,c("KANTAHENKILON_TNRO","SUKULAISEN_SYNTYMAPV","SUKUPUOLI")], by="KANTAHENKILON_TNRO") %>%
-                            mutate(afc=as.numeric(as.character(bf_year))-as.numeric(substr(SUKULAISEN_SYNTYMAPV,1,4)), alc=as.numeric(as.character(bl_year))-as.numeric(substr(SUKULAISEN_SYNTYMAPV,1,4))) %>% 
-                            filter(afc>10 & alc>10) %>% select(KANTAHENKILON_TNRO, afc, alc) %>% 
-                            right_join(lrs_all, by="KANTAHENKILON_TNRO") %>% 
-                            select(KANTAHENKILON_TNRO, SUKULAISEN_SYNTYMAPV, SUKUPUOLI, n_child,n_child_Age4550, n_gchild, childless, childless_Age4550, afc, alc)
+## age at first/last delivery  
+child_bas <- child[order(child[,"LopNr"],child[,"BarnFodelseAr"]), c("LopNr","LopNrBarn","BarnFodelseAr")]  
+
+# first child 
+child_f_lst <- by(child_bas, child_bas["LopNr"], head, n=1)                       
+child_f <- do.call("rbind", child_f_lst)     
 
 
-
-############################################
-#   lambda for index person with child     #
-############################################
-
-# 5 year as a window 
-lrs_age <- child %>% select(KANTAHENKILON_TNRO,SUKULAISEN_TNRO,SUKULAISEN_SYNTYMAPV) %>% 
-                     inner_join(indexW[,c("KANTAHENKILON_TNRO","SUKULAISEN_SYNTYMAPV","SUKUPUOLI")], by="KANTAHENKILON_TNRO") %>%  
-                     left_join(death, by=c("KANTAHENKILON_TNRO"="TNRO")) %>%                  
-                     mutate(b_year=as.numeric(substr(SUKULAISEN_SYNTYMAPV.y,1,4)), Age_child=as.numeric(substr(SUKULAISEN_SYNTYMAPV.x,1,4))-b_year, Age_death=as.numeric(death_year)-b_year) %>% 
-                     select(KANTAHENKILON_TNRO, b_year, SUKUPUOLI, Age_child, Age_death) %>% group_by(KANTAHENKILON_TNRO, SUKUPUOLI, Age_death) %>%
-                     summarize(lrs_0_4=0, lrs_5_9=0, lrs_10_14=sum(Age_child>=10 & Age_child<=14,na.rm=T), lrs_15_19=sum(Age_child>=15 & Age_child<=19,na.rm=T), lrs_20_24=sum(Age_child>=20 & Age_child<=24,na.rm=T), lrs_25_29=sum(Age_child>=25 & Age_child<=29,na.rm=T),
-                               lrs_30_34=sum(Age_child>=30 & Age_child<=34,na.rm=T), lrs_35_39=sum(Age_child>=35 & Age_child<=39,na.rm=T), lrs_40_44=sum(Age_child>=40 & Age_child<=44,na.rm=T), lrs_45_49=sum(Age_child>=45 & Age_child<=49,na.rm=T))
-
-lrs_age$Window_death <- ifelse((is.na(lrs_age$Age_death)|lrs_age$Age_death>=50) & lrs_age$SUKUPUOLI==1, 10, 
-                        ifelse((is.na(lrs_age$Age_death)|lrs_age$Age_death>=45) & lrs_age$SUKUPUOLI==2, 9,
-                        ifelse(!is.na(lrs_age$Age_death),lrs_age$Age_death%/%5+1, NA)))
-       
-age_bins <- c("lrs_0_4", "lrs_5_9", "lrs_10_14", "lrs_15_19", "lrs_20_24", "lrs_25_29", "lrs_30_34", "lrs_35_39", "lrs_40_44", "lrs_45_49")
-lrs_age <- data.frame(lrs_age)
-lrs_age[,"type"] <- apply(lrs_age[ ,c(age_bins,"Window_death")], 1, paste, collapse="-")
+# last child
+child_l_lst <- by(child_bas, child_bas["LopNr"], tail, n=1)   
+child_l <- do.call("rbind", child_l_lst) 
 
 
-# calculate lambda for each unique life-history pattern
-lrs_uniq <- lrs_age[,c(age_bins,"Window_death","type")] %>% distinct()
-for (i in 1:nrow(lrs_uniq)){
-	P_i <- rbind(matrix(0,nrow=1,ncol=lrs_uniq[i,"Window_death"]), cbind(diag(lrs_uniq[i,"Window_death"]-1),matrix(0,nrow=lrs_uniq[i,"Window_death"]-1,ncol=1)))
-	P_i[1,] <- unlist(lrs_uniq[i,age_bins[1:lrs_uniq[i,"Window_death"]]])/2
-	lrs_uniq[i,"lambda"] <- Re(eigen(P_i)$values[1]) 
-    lrs_uniq[i,"lambda_image"] <- Im(eigen(P_i)$values[1])
-	print(paste0(print(i),": ", lrs_uniq[i,"lambda"]))
-}
+# combine
+child_fl <- merge(child_f, child_l, all=T, by="LopNr") 
+colnames(child_fl) <- c("LopNr","child_f_LopNr","bf_year","child_l_LopNr","bl_year")
+
+index_bas <- lrs_all[lrs_all[,"n_child"]!=0, c("LopNr","FodelseAr","Kon")]
+index_delivery <- merge(index_bas, child_fl, by="LopNr")
+nrow(index_delivery)     # 2,057,099
+
+index_delivery$afc <- as.numeric(index_delivery$bf_year) - as.numeric(index_delivery$FodelseAr)
+index_delivery$alc <- as.numeric(index_delivery$bl_year) - as.numeric(index_delivery$FodelseAr)
+save(index_delivery, file=paste0(r_dir, "indexW_delivery.Rdata"))  
+
+lrs_all <- merge(lrs_all, index_delivery[,c("LopNr","afc","alc")], by="LopNr", all.x=T)
+nrow(lrs_all)   # 2,555,541
+lrs_all$infertility <- NA
+lrs_all$lamda <- NA
 
 
-# merge with for each individual
-indexW_LRS <- lrs_age %>% inner_join(lrs_uniq[, c("type", "lambda", "lambda_image")], by="type") %>% filter(lambda>0,lambda_image==0) %>% select(KANTAHENKILON_TNRO, lambda) %>% 
-			  right_join(indexW_LRS,by="KANTAHENKILON_TNRO") %>% mutate(lambda=ifelse((20200127-SUKULAISEN_SYNTYMAPV<=500000 & SUKUPUOLI==1)|(20200127-SUKULAISEN_SYNTYMAPV<=450000 & SUKUPUOLI==2)|n_child_Age4550<3,NA,lambda)) %>%
-			  select(KANTAHENKILON_TNRO, SUKULAISEN_SYNTYMAPV, SUKUPUOLI, n_child,n_child_Age4550, n_gchild, childless, childless_Age4550, lambda, afc, alc)
+lrs_all_4550 <- merge(lrs_all, index_lrs4550, by="LopNr", all.x=T)
+nrow(lrs_all_4550)  # 2,555,541
+lrs_all_4550 <- lrs_all_4550[(2018-as.numeric(lrs_all_4550$FodelseAr)>=50 & lrs_all_4550$Kon==1)|(2018-as.numeric(lrs_all_4550$FodelseAr)>=45 & lrs_all_4550$Kon==2), ]
+nrow(lrs_all_4550)  # 1,537,480
+lrs_all_4550[,"n_child_Age4550"] <- ifelse(is.na(lrs_all_4550[,"n_child_Age4550"]), 0, lrs_all_4550[,"n_child_Age4550"])
+lrs_all_4550[,"afc_Age4550"] <- lrs_all_4550[,"afc"])
+lrs_all_4550[, "childless_Age4550"] <- ifelse(lrs_all_4550$n_child_Age4550!=0,0,1)        # 1 for childless 
+lrs_all_4550 <- lrs_all_4550[,c("LopNr","n_child_Age4550","childless_Age4550","afc_Age4550")] 
 
-save(indexW_LRS, file=paste0(r_dir, "indexW_LRS.Rdata"))  
-			  
+lrs_all <- merge(lrs_all, lrs_all_4550, by="LopNr", all.x=T)
+lrs_all[,"afc_Age4550"] <- ifelse((lrs_all$afc_Age4550>50 & lrs_all$Kon==1)|(lrs_all$afc_Age4550>45 & lrs_all$Kon==2), NA, lrs_all[,"afc_Age4550"])
+nrow(lrs_all)  # 2,555,541
+lrs_all <- lrs_all[,c("LopNr", "FodelseAr", "Kon", "n_child", "n_child_Age4550", "n_gchild", "childless", "childless_Age4550", "infertility", "lamda", "afc","afc_Age4550","alc")]
+save(lrs_all, file=paste0(r_dir, "indexW_LRS.Rdata"))                             
+
 
 
 ############################################
 #      Distribution of LRS                 #
 ############################################
 
-# LRS-related phenotypes by birth year and sex
-Summary_LRS <- indexW_LRS %>% mutate(b_year=substr(SUKULAISEN_SYNTYMAPV,1,4)) %>% group_by(b_year,SUKUPUOLI) %>% 
-                              summarize(birth_year=b_year[1], sex=SUKUPUOLI[1], N=sum(!is.na(n_child)),
-                                  n_child_mean=mean(n_child,na.rm=T), n_child_Age4550_mean=mean(n_child_Age4550,na.rm=T), n_gchild_mean=mean(n_gchild,na.rm=T),
-                                  n_child_max=max(n_child), n_child_Age4550_max=max(n_child_Age4550,na.rm=T), n_gchild_max=max(n_gchild,na.rm=T),
-                                  N_0child_Age4550=sum(n_child_Age4550==0), N_1child_Age4550=sum(n_child_Age4550==1), N_2child_Age4550=sum(n_child_Age4550==2), N_3child_Age4550=sum(n_child_Age4550==3), N_4child_Age4550=sum(n_child_Age4550==4)，
-                                  afc_mean=mean(afc,na.rm=T), alc_mean=mean(alc,na.rm=T)) 
+# remove age_at first/last child younger than 10
+index_delivery <- index_delivery[index_delivery$afc > 10 & index_delivery$alc > 10, ]     
 
-write.table(Summary_LRS, "Summary_LRS.txt", append=F, quote=F, sep=" ", row.names=F, col.names=T)
+# n_child and n_grandchild by gender and birth_year
+years <- sort(unique(lrs_all[,"FodelseAr"]))
+kons <- c("male","female")
+
+lrs_summary <- matrix(NA, ncol=11, nrow=length(years))          # average of LRS   
+colnames(lrs_summary) <- c("b_year",paste0("n_",kons),paste0(kons,"_n_child"),paste0(kons,"_n_gchild"),paste0(kons,"_n_child_max"),paste0(kons,"_n_gchild_max"))
+lrs_count_summary <- matrix(NA, ncol=13, nrow=length(years))    # count of LRS
+colnames(lrs_count_summary) <- c("b_year","n_male","n_female",paste("n_", rep(kons,each=5), "_", seq(0,4,1), "child", sep=""))
+
+for (year_n in 1:length(years)){
+	lrs_summary[year_n,"b_year"] <- lrs_count_summary[year_n,"b_year"] <- years[year_n]	
+	for (kon_n in 1:length(kons)){	
+		lrs_yearn_konn <- lrs_all[lrs_all[,"FodelseAr"]==years[year_n] & lrs_all[,"Kon"]==kon_n, c("Kon","n_child","n_gchild")]
+		lrs_summary[year_n, paste("n_",kons[kon_n],sep="")] <- lrs_count_summary[year_n, paste("n_",kons[kon_n],sep="")] <- nrow(lrs_yearn_konn)		
+		for (pop in c("child","gchild")){	
+			lrs_summary[year_n, paste(kons[kon_n],"n",pop,sep="_")] <- round(mean(lrs_yearn_konn[, paste0("n_",pop)]), 3)  
+			lrs_summary[year_n, paste(kons[kon_n],"n",pop,"max",sep="_")] <- max(lrs_yearn_konn[, paste0("n_",pop)])
+		}	
+		for (n in 0:4){	
+			lrs_count_summary[year_n, paste0("n_",kons[kon_n],"_",n,"child")] <- nrow(lrs_yearn_konn[lrs_yearn_konn[,"n_child"]==n, ])
+		}		
+		print(paste(year_n, kon_n, sep="_"))
+	}	
+}
+
+write.table(lrs_summary, "indexW_lrs_summary", append=F, quote=F, sep=" ", row.names=F, col.names=T)
+write.table(lrs_count_summary, "indexW_lrs_count_summary", append=F, quote=F, sep=" ",row.names=F, col.names=T)
 
 
-# count of AFC and ALC
-Summary_afc <- indexW_LRS %>% mutate(b_year=substr(SUKULAISEN_SYNTYMAPV,1,4)) %>% group_by(afc) %>% 
-                                   summarize(count_afc_male=sum(SUKUPUOLI==1), count_afc_female=sum(SUKUPUOLI==2)) %>% rename(Age=afc)
 
-Summary_AgeChild <- indexW_LRS %>% mutate(b_year=substr(SUKULAISEN_SYNTYMAPV,1,4)) %>% group_by(alc) %>% 
-                                   summarize(count_alc_male=sum(SUKUPUOLI==1), count_alc_female=sum(SUKUPUOLI==2)) %>% rename(Age=alc) %>% 
-                                   full_join(Summary_afc, by="Age") %>% arrange(Age)
+# count of age at first/last delivery for each gender
+k <- 1
+for (ac in c("afc","alc")){
+	for (kon_n in 1:length(kons)){	
+		summary(index_delivery[index_delivery[,"Kon"]==kon_n, ac])	
+		age <- as.data.frame(table(index_delivery[index_delivery[,"Kon"]==kon_n, ac]))
+		colnames(age) <- c("age", paste("count",ac,kons[kon_n],sep="_"))		
+		if (k==1){
+			age_total <- age
+		} else {
+			age_total <- merge(age_total, age, by="age", all=T)	
+		}			
+		k <- k+1					
+	}		
+}
 
-write.table(Summary_AgeChild, "Summary_AgeChild.txt", append=F, quote=F, sep=" ", row.names=F, col.names=T)
+age_total[is.na(age_total)] <- 0
+write.table(age_total, "indexW_age_at_having_child_count", append=F, quote=F, sep=" ", row.names=F, col.names=T)
+
+
+
+# count of age at first/last delivery for each gender for each birth year
+years <- sort(unique(index_delivery[,"FodelseAr"]))
+del_sum <- matrix(NA, ncol=7, nrow=length(years))           
+colnames(del_sum) <- c("b_year","male_n","female_n","male_afc","female_afc","male_alc","female_alc")
+
+for (year_n in 1:length(years)){
+	del_sum[year_n,"b_year"] <- years[year_n]
+	del_yearn <- index_delivery[index_delivery[,"FodelseAr"]==years[year_n], c("Kon","afc","alc")]
+	for (kon_n in 1:length(kons)){	
+		del_sum[year_n,paste(kons[kon_n],"_n",sep="")] <- nrow(del_yearn[del_yearn[,"Kon"]==kon_n, ])
+		for (ac in c("afc","alc")){			
+			del_sum[year_n, paste(kons[kon_n],ac,sep="_")] <- round(mean(del_yearn[del_yearn$Kon==kon_n,ac],na.rm=T), 3)       	
+			print(paste(year_n, kon_n, ac, sep="_"))		
+		}	
+	}
+}
+
+write.table(del_sum, "indexW_age_at_having_child_summary", append=F, quote=F, sep=" ", row.names=F, col.names=T)
+
+
+
 
