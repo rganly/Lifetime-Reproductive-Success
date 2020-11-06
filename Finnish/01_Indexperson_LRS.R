@@ -115,7 +115,7 @@ summary(lrs_all[lrs_all[,"SUKUPUOLI"]==2, c("n_child","n_child_Age4550","n_gchil
 
 indexW_LRS <- child %>% mutate(b_year=substr(SUKULAISEN_SYNTYMAPV,1,4)) %>% select(c("KANTAHENKILON_TNRO","SUKULAISEN_TNRO","b_year")) %>% 	
                             group_by(KANTAHENKILON_TNRO) %>% 
-                            summarize(KANTAHENKILON_TNRO=KANTAHENKILON_TNRO[1], bf_year=b_year[which(b_year==min(b_year,na.rm=T))[1]], bl_year=b_year[which(b_year==max(b_year,na.rm=T))[1]]) %>% 
+                            summarize(bf_year=b_year[which(b_year==min(b_year,na.rm=T))[1]], bl_year=b_year[which(b_year==max(b_year,na.rm=T))[1]]) %>% 
                             inner_join(lrs_all[,c("KANTAHENKILON_TNRO","SUKULAISEN_SYNTYMAPV","SUKUPUOLI")], by="KANTAHENKILON_TNRO") %>%
                             mutate(afc=as.numeric(as.character(bf_year))-as.numeric(substr(SUKULAISEN_SYNTYMAPV,1,4)), alc=as.numeric(as.character(bl_year))-as.numeric(substr(SUKULAISEN_SYNTYMAPV,1,4))) %>% 
                             filter(afc>10 & alc>10) %>% select(KANTAHENKILON_TNRO, afc, alc) %>% 
