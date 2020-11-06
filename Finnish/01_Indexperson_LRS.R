@@ -175,7 +175,7 @@ Summary_LRS <- indexW_LRS %>% mutate(b_year=substr(SUKULAISEN_SYNTYMAPV,1,4)) %>
                               summarize(birth_year=b_year[1], sex=SUKUPUOLI[1], N=sum(!is.na(n_child)),
                                   n_child_mean=mean(n_child,na.rm=T), n_child_Age4550_mean=mean(n_child_Age4550,na.rm=T), n_gchild_mean=mean(n_gchild,na.rm=T),
                                   n_child_max=max(n_child), n_child_Age4550_max=max(n_child_Age4550,na.rm=T), n_gchild_max=max(n_gchild,na.rm=T),
-                                  N_0child_Age4550=sum(n_child_Age4550==0), N_1child_Age4550=sum(n_child_Age4550==1), N_2child_Age4550=sum(n_child_Age4550==2), N_3child_Age4550=sum(n_child_Age4550==3), N_4child_Age4550=sum(n_child_Age4550==4)，
+                                  N_0child_Age4550=sum(n_child_Age4550==0), N_1child_Age4550=sum(n_child_Age4550==1), N_2child_Age4550=sum(n_child_Age4550==2), N_3child_Age4550=sum(n_child_Age4550==3), N_4child_Age4550=sum(n_child_Age4550==4),
                                   afc_mean=mean(afc,na.rm=T), alc_mean=mean(alc,na.rm=T)) 
 
 write.table(Summary_LRS, "Summary_LRS.txt", append=F, quote=F, sep=" ", row.names=F, col.names=T)
