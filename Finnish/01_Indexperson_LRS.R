@@ -1,11 +1,13 @@
-## This script is to calculate LRS (N of children and N of grandchildren), childless, and age of having the first/last child for each index person.
- 
+## This script is to calculate LRS (N of children and N of grandchildren), childless, lambda, and age of having the first/last child for each index person.
+
 setwd("/homes/aliu/DSGE_LRS/output/registry_edit/")
 r_dir <- "/homes/aliu/DSGE_LRS/input/r_files/"
 
 library(tidyverse)
 
 '%!in%' <- function(x,y)!('%in%'(x,y))
+
+## LRS <- data.frame(get(load(paste0(r_dir, "indexW_LRS.Rdata"))))
 
 
 ############################################
@@ -33,18 +35,22 @@ length(unique(grandchild$SUKULAISEN_TNRO))                      # 482,777 grandc
 death <- data.frame(get(load(paste0(r_dir, "kuolemansyyt_u1477_a.Rdata")))) %>% mutate(death_year=substr(kuolpvm,1,4)) %>% select(TNRO, death_year) 
 
 
+# marriage registry
+marriage <- data.frame(get(load(paste0(r_dir, "thl2019_804_avio.Rdata")))) 
+
 
 
 ############################################
 #         QC for index person              #
 ############################################
 
-# birth year 1956-1982, born in Finland, not imigrated/emigrated from Sweden, and alive until age 15
-index %>% filter(SYNTYMAKOTIKUNTA==200 & AIDINKIELI=="fi") %>% nrow()   # 60,890  born outside of Finland but with Finnish as mother tongue 
+# birth year 1956-1982, born in Finland, not imigrated/emigrated from Finland, and alive until age 15
+index %>% filter(SYNTYMAKOTIKUNTA==200) %>% nrow()   # 453,861 born outside of Finland
+index %>% filter(SYNTYMAKOTIKUNTA==200 & AIDINKIELI=="fi") %>% nrow()   # 60,890 born outside of Finland but with Finnish as mother tongue 
 
 indexW <- index %>% filter(SYNTYMAKOTIKUNTA!=200 & is.na(ULKOMAILLE_MUUTON_PV) & ULKOM_ASUINVALTIO=="" & ULKOM_ASUINVALTION_NIMI=="") %>%     # born in Finland and no emigration
                     filter(substr(SUKULAISEN_SYNTYMAPV,1,4)>=1956 & substr(SUKULAISEN_SYNTYMAPV,1,4)<=1982) %>%                               # birth year 1956-1982
-                    filter(SUKULAISEN_KUOLINPV - SUKULAISEN_SYNTYMAPV>=150000|is.na(SUKULAISEN_KUOLINPV)|is.na(SUKULAISEN_SYNTYMAPV))         # avlive until 15
+                    filter(SUKULAISEN_KUOLINPV - SUKULAISEN_SYNTYMAPV>=150000|is.na(SUKULAISEN_KUOLINPV)|is.na(SUKULAISEN_SYNTYMAPV))         # alive until 15
 
 nrow(indexW)   # 1,802,891
 table(indexW$SUKUPUOLI)  # 929,448 males and 873,443 females
@@ -159,11 +165,35 @@ for (i in 1:nrow(lrs_uniq)){
 
 # merge with for each individual
 indexW_LRS <- lrs_age %>% inner_join(lrs_uniq[, c("type", "lambda", "lambda_image")], by="type") %>% filter(lambda>0,lambda_image==0) %>% select(KANTAHENKILON_TNRO, lambda) %>% 
-			  right_join(indexW_LRS,by="KANTAHENKILON_TNRO") %>% mutate(lambda=ifelse((20200127-SUKULAISEN_SYNTYMAPV<=500000 & SUKUPUOLI==1)|(20200127-SUKULAISEN_SYNTYMAPV<=450000 & SUKUPUOLI==2)|n_child_Age4550<3,NA,lambda)) %>%
-			  select(KANTAHENKILON_TNRO, SUKULAISEN_SYNTYMAPV, SUKUPUOLI, n_child,n_child_Age4550, n_gchild, childless, childless_Age4550, lambda, afc, alc)
+			              right_join(indexW_LRS,by="KANTAHENKILON_TNRO") %>% mutate(lambda=ifelse((20200127-SUKULAISEN_SYNTYMAPV<=500000 & SUKUPUOLI==1)|(20200127-SUKULAISEN_SYNTYMAPV<=450000 & SUKUPUOLI==2)|n_child_Age4550<3,NA,lambda)) %>%
+			              select(KANTAHENKILON_TNRO, SUKULAISEN_SYNTYMAPV, SUKUPUOLI, n_child,n_child_Age4550, n_gchild, childless, childless_Age4550, lambda, afc, alc)
 
-save(indexW_LRS, file=paste0(r_dir, "indexW_LRS.Rdata"))  
-			  
+
+
+#########################################################
+#    Survival to 45/50 and Ever married before 45/50    #
+#########################################################		  
+
+indexW_LRS <- data.frame(get(load(paste0(r_dir,"indexW_LRS.Rdata"))))
+
+marriage_or_death <- marriage %>% mutate(start_year=substr(ALKUPAIVA,1,4), end_year=substr(ALKUPAIVA,1,4)) %>% select(TUTKHENK_TNRO, start_year, end_year) %>% 
+                                  group_by(TUTKHENK_TNRO) %>% summarize(min_start_year=min(start_year), max_end_year=max(end_year)) %>% 
+                                  right_join(indexW_LRS[,c("KANTAHENKILON_TNRO", "SUKULAISEN_SYNTYMAPV", "SUKUPUOLI")], by=c("TUTKHENK_TNRO"="KANTAHENKILON_TNRO")) %>%
+                                  left_join(death, by=c("TUTKHENK_TNRO"="TNRO")) %>% 
+                                  mutate(birth_year=as.numeric(substr(SUKULAISEN_SYNTYMAPV,1,4)),
+                                         death_year=as.numeric(death_year),
+                                         min_start_year=as.numeric(min_start_year),
+                                         survival_Age4550=ifelse((20200127-SUKULAISEN_SYNTYMAPV<=500000 & SUKUPUOLI==1)|(20200127-SUKULAISEN_SYNTYMAPV<=450000 & SUKUPUOLI==2),NA,                        
+                                                          ifelse(is.na(death_year)|(death_year-birth_year>=50 & SUKUPUOLI==1 & !is.na(death_year))|(death_year-birth_year>=45 & SUKUPUOLI==2 & !is.na(death_year)), 1, 0)),
+                                         has_spouse_Age4550=ifelse((20200127-SUKULAISEN_SYNTYMAPV<=500000 & SUKUPUOLI==1)|(20200127-SUKULAISEN_SYNTYMAPV<=450000 & SUKUPUOLI==2),NA,
+                                                          ifelse(is.na(min_start_year)|(!is.na(min_start_year) & min_start_year-birth_year>50 & SUKUPUOLI==1)|(!is.na(min_start_year) & min_start_year-birth_year>45 & SUKUPUOLI==2), 0, 1)))
+
+marriage_or_death %>% group_by(survival_Age4550, has_spouse_Age4550) %>% count()
+marriage_or_death %>% group_by(is.na(min_start_year),is.na(max_end_year)) %>% count()  # start_year and end_year are either both NA or non-NA               
+
+indexW_LRS <- indexW_LRS %>% left_join(marriage_or_death[c("TUTKHENK_TNRO","has_spouse_Age4550","survival_Age4550")],by=c("KANTAHENKILON_TNRO"="TUTKHENK_TNRO")) 
+save(indexW_LRS, file=paste0(r_dir, "indexW_LRS.Rdata")) 
+
 
 
 ############################################
@@ -190,6 +220,4 @@ Summary_AgeChild <- indexW_LRS %>% mutate(b_year=substr(SUKULAISEN_SYNTYMAPV,1,4
                                    full_join(Summary_afc, by="Age") %>% arrange(Age)
 
 write.table(Summary_AgeChild, "Summary_AgeChild.txt", append=F, quote=F, sep=" ", row.names=F, col.names=T)
-
-
 
