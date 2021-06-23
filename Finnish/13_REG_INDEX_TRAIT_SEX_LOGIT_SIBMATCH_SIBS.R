@@ -157,7 +157,7 @@ for (disease in disease30_lst$ENDPOINT ) {
 		dim(p)  # 405,857      9
 
 
-		## Within each family, randomly select one sibling with children as control, and one sibling with closest birth year no matter the outcome status;
+		## Within each family, randomly select one sibling with children, and another sibling with closest birth year (no matter the outcome status) with this sib;
 		p_outcome1 <- p %>% filter(status==1) %>% group_by(parent_id) %>% sample_n(1) %>% ungroup() %>% mutate(disease4550=ifelse(is.na(age_onset),0,1)) # 177,330		
 		p_outcome0 <- p %>% filter(index_id %!in% p_outcome1$index_id) %>% inner_join(p_outcome1[,c("parent_id","index_birth_date")], by="parent_id") %>% mutate(dif=abs(index_birth_date.y-index_birth_date.x)) %>% 
 		                   group_by(parent_id) %>% filter(dif==min(dif)) %>% 
@@ -173,7 +173,7 @@ for (disease in disease30_lst$ENDPOINT ) {
 		stop_y <- pp %>% filter(status==1) %>% group_by(parent_id) %>% mutate(stop.y=min(stop)) %>% select(parent_id, stop.y) %>% ungroup() %>% unique()
 		pp <- pp %>% inner_join(stop_y, by="parent_id")
 
-		## observation window for disease are the same for all siblings; for stop time, use the actual stop time for sib with children and the stop.y for childless individual; 
+		## observation window for disease are the same for all siblings; for stop time, use min(age at first birth) among sibs with children; 
 		if (mod_pattern=="sibmatch"){
 			ppp <- pp %>% mutate(age_onset=ifelse(age_onset>stop.y, NA, age_onset), stop=ifelse(status==0 & stop>stop.y, stop.y, stop)) %>% select(-stop.y) %>% 
 			              mutate(disease=ifelse(is.na(age_onset),0,1)) %>% mutate(age=2018-as.numeric(substr(as.character(index_birth_date),1,4)), age2=age^2)
@@ -197,7 +197,6 @@ for (disease in disease30_lst$ENDPOINT ) {
 		p <- outcome_window_endpoint %>% filter(parent_id %in% parent_outcome0$parent_id) %>% filter(parent_id %in% parent_outcome1$parent_id)
 		dim(p)  # 188911      9
 
-
 		## Within each family, randomly select one sibling with children as control, and the childless siblings with closest birth year with the control as case;
 		p_outcome1 <- p %>% filter(status==1) %>% group_by(parent_id) %>% sample_n(1) %>% ungroup() %>% mutate(disease4550=ifelse(is.na(age_onset),0,1)) # 79,122
 		p_outcome0 <- p %>% filter(status==0) %>% inner_join(p_outcome1[,c("parent_id","index_birth_date","stop")], by="parent_id") %>% mutate(dif=abs(index_birth_date.y-index_birth_date.x)) %>% 
@@ -212,7 +211,6 @@ for (disease in disease30_lst$ENDPOINT ) {
 	
 		## If the case and the control are also discordant on disease status at the time point when the event occurs to the case that is the age at first birth for case for childless, then we enroll this full-sibling pair into our matched pair case-control study; 		
 		if (mod_pattern=="sibmatch"){
-			### p_outcome0 <- p_outcome0 %>% mutate(age_onset=ifelse(age_onset>stop.y, NA, age_onset)) %>% select(-stop.y)
 			p_outcome1 <- p_outcome1 %>% mutate(age_onset=ifelse(age_onset>stop, NA, age_onset))
 			p_outcome0 <- p_outcome0 %>% mutate(age_onset=ifelse(age_onset>stop.y, NA, age_onset), stop=ifelse(stop>stop.y, stop.y, stop)) %>% select(-stop.y)
 		}   # otherwise all diagnose before stop
@@ -255,16 +253,14 @@ for (disease in disease30_lst$ENDPOINT ) {
 			p_outcome1 <- p_outcome1 %>% mutate(age_onset=ifelse(age_onset>stop, NA, age_onset))
 			p_outcome0 <- p_outcome0 %>% mutate(age_onset=ifelse(age_onset>stop.y, NA, age_onset), stop=stop.y) %>% select(-stop.y) 
 		}
-		
-		## All diagnose before stop (45/50 or 36/39)
-		if (mod_pattern=="AFB4550"|mod_pattern=="95AFB"){
-			p_outcome0 <- p_outcome0 %>% select(-stop.y)
-		}
-		
+				
 		pp <- rbind(p_outcome0, p_outcome1) %>% mutate(disease=ifelse(is.na(age_onset),0,1)) %>% mutate(age=2018-as.numeric(substr(as.character(index_birth_date),1,4)), age2=age^2)
+		
+		## also disconcordant on disease status
 		pp_dif <- intersect(pp[pp$disease==0,"parent_id"],pp[pp$disease==1,"parent_id"])
 		ppp <- pp %>% filter(parent_id %in% pp_dif$parent_id)   #  474  12
 		
+		## Count how many individuals with diagnose after stop were missclassfied as unsick due to the trunction from using sib-match design
 		N_MissClass10 <- ppp %>% mutate(miss=ifelse(is.na(age_onset) & disease4550==1, 1, 0 )) %>% filter(miss==1 & status==0) %>% nrow()  # for people with children
 		N_MissClass11 <- ppp %>% mutate(miss=ifelse(is.na(age_onset) & disease4550==1, 1, 0 )) %>% filter(miss==1 & status==1) %>% nrow()  # for childless people
 	}
@@ -275,7 +271,7 @@ for (disease in disease30_lst$ENDPOINT ) {
 	#                         regression analysis                             #
 	###########################################################################
 
-	if (ppp %>% select(index_id) %>% unique() %>% nrow()>=30){
+	if (ppp %>% select(index_id) %>% unique() %>% nrow()>=30){  # only analyze disease with more than 30 cases
 		ppp$parent_id <- factor(ppp$parent_id)
 		m_mod_sib <- clogit(status ~ disease + age + age2 + strata(parent_id), data=ppp)
 		df <- as.data.frame(t(as.data.frame(summary(m_mod_sib)$coeff["disease",])))
@@ -305,7 +301,6 @@ for (disease in disease30_lst$ENDPOINT ) {
 	df[1,"Endpoint"] <- disease
 
 	print(df)
-	# write.table(df, paste0("Compare_",mod_pattern, "_", outcomeName ,"_", sexs[sex_n], "_F5_SCHZPHR.tsv"), append=T, quote=F, sep="\t", row.names=F, col.names=F)
 
 	if (!file.exists(paste0("logit_",mod_pattern, "_", outcomeName ,"_", sexs[sex_n], "_SIB", sib_pattern, "_30.tsv"))){
 		write.table(df, paste0("logit_",mod_pattern, "_", outcomeName ,"_", sexs[sex_n], "_SIB", sib_pattern, "_30.tsv"), append=F, quote=F, sep="\t", row.names=F, col.names=T)
