@@ -48,7 +48,7 @@ Output: "sce_inc.Rdata"
 
 ## 4. Demographic info for everyone in the population register
 04_Pedigree.R  
-Aim: pedigree (id, father, mother, sex, and birth_date) 
+Aim: pedigree (id, father, mother, sex, and birth_date), which is an efficient way to store all familial relationships. 
 
 04_Demo.R  
 Aim: Demographic info for every one appear in the population register    
