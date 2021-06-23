@@ -140,7 +140,7 @@ for (disease in disease30_lst$ENDPOINT ) {
 			              mutate(disease=ifelse(is.na(age_onset),0,1)) %>% mutate(age=2018-as.numeric(substr(as.character(index_birth_date),1,4)), age2=age^2)
 		}   # otherwise all diagnose before stop
     
-    ## Count how many individuals with diagnose after stop were missclassfied as unsick due to the trunction from using sib-match design    
+    		## Count how many individuals with diagnose after stop were missclassfied as unsick due to the trunction from using sib-match design    
 		N_MissClass10 <- ppp %>% mutate(miss=ifelse(is.na(age_onset) & disease4550==1, 1, 0 )) %>% filter(miss==1 & status==0) %>% nrow()  # for people with children 
 		N_MissClass11 <- ppp %>% mutate(miss=ifelse(is.na(age_onset) & disease4550==1, 1, 0 )) %>% filter(miss==1 & status==1) %>% nrow()  # for childless people
 		
@@ -179,7 +179,7 @@ for (disease in disease30_lst$ENDPOINT ) {
 			              mutate(disease=ifelse(is.na(age_onset),0,1)) %>% mutate(age=2018-as.numeric(substr(as.character(index_birth_date),1,4)), age2=age^2)
 		}   # otherwise all diagnose before stop
 
-  ## Count how many individuals with diagnose after stop were missclassfied as unsick due to the trunction from using sib-match design    		
+	  	## Count how many individuals with diagnose after stop were missclassfied as unsick due to the trunction from using sib-match design    		
 		N_MissClass10 <- ppp %>% mutate(miss=ifelse(is.na(age_onset) & disease4550==1, 1, 0 )) %>% filter(miss==1 & status==0) %>% nrow()  # for people with children
 		N_MissClass11 <- ppp %>% mutate(miss=ifelse(is.na(age_onset) & disease4550==1, 1, 0 )) %>% filter(miss==1 & status==1) %>% nrow()  # for childless people
 	}
@@ -220,8 +220,10 @@ for (disease in disease30_lst$ENDPOINT ) {
 		
 		ppp <- rbind(p_outcome0, p_outcome1) %>% mutate(disease=ifelse(is.na(age_onset),0,1)) %>% 
 		            mutate(age=2018-as.numeric(substr(as.character(index_birth_date),1,4)), age2=age^2)
-		N_MissClass10 <- ppp %>% mutate(miss=ifelse(is.na(age_onset) & disease4550==1, 1, 0 )) %>% filter(miss==1 & status==0) %>% nrow()
-		N_MissClass11 <- ppp %>% mutate(miss=ifelse(is.na(age_onset) & disease4550==1, 1, 0 )) %>% filter(miss==1 & status==1) %>% nrow()
+		
+		## Count how many individuals with diagnose after stop were missclassfied as unsick due to the trunction from using sib-match design
+		N_MissClass10 <- ppp %>% mutate(miss=ifelse(is.na(age_onset) & disease4550==1, 1, 0 )) %>% filter(miss==1 & status==0) %>% nrow()  # for people with children
+		N_MissClass11 <- ppp %>% mutate(miss=ifelse(is.na(age_onset) & disease4550==1, 1, 0 )) %>% filter(miss==1 & status==1) %>% nrow()  # for childless people
 	}
 	
 	
@@ -262,8 +264,9 @@ for (disease in disease30_lst$ENDPOINT ) {
 		pp <- rbind(p_outcome0, p_outcome1) %>% mutate(disease=ifelse(is.na(age_onset),0,1)) %>% mutate(age=2018-as.numeric(substr(as.character(index_birth_date),1,4)), age2=age^2)
 		pp_dif <- intersect(pp[pp$disease==0,"parent_id"],pp[pp$disease==1,"parent_id"])
 		ppp <- pp %>% filter(parent_id %in% pp_dif$parent_id)   #  474  12
-		N_MissClass10 <- ppp %>% mutate(miss=ifelse(is.na(age_onset) & disease4550==1, 1, 0 )) %>% filter(miss==1 & status==0) %>% nrow()
-		N_MissClass11 <- ppp %>% mutate(miss=ifelse(is.na(age_onset) & disease4550==1, 1, 0 )) %>% filter(miss==1 & status==1) %>% nrow()
+		
+		N_MissClass10 <- ppp %>% mutate(miss=ifelse(is.na(age_onset) & disease4550==1, 1, 0 )) %>% filter(miss==1 & status==0) %>% nrow()  # for people with children
+		N_MissClass11 <- ppp %>% mutate(miss=ifelse(is.na(age_onset) & disease4550==1, 1, 0 )) %>% filter(miss==1 & status==1) %>% nrow()  # for childless people
 	}
 
 
