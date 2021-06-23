@@ -116,7 +116,7 @@ tuk_bas <- unique(tuk_bas)
 nrow(tuk_bas)
 
 
-# tlj for 
+# tlj 
 dup <- duplicated(tlj)    # this step need large memory
 tlj_uniq <- tlj[!dup, ]   
 nrow(tlj_uniq)       # 5,132,871 
