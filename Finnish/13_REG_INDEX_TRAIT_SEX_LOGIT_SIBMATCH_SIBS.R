@@ -112,7 +112,6 @@ for (disease in disease30_lst$ENDPOINT ) {
 	print(paste0(sexs[sex_n],": ",which(disease==disease30_lst$ENDPOINT),": ", disease))
 
 
-
 	###########################################################################
 	#               Add age onset for a specific disease                      #
 	###########################################################################
@@ -155,7 +154,6 @@ for (disease in disease30_lst$ENDPOINT ) {
 		parent_outcome1 <- outcome_window_endpoint %>% filter(status==1) %>% select(parent_id) %>% unique()  # 177,327
 		p <- outcome_window_endpoint %>% filter(parent_id %in% parent_outcome1$parent_id)
 		dim(p)  # 405,857      9
-
 
 		## Within each family, randomly select one sibling with children, and another sibling with closest birth year (no matter the outcome status) with this sib;
 		p_outcome1 <- p %>% filter(status==1) %>% group_by(parent_id) %>% sample_n(1) %>% ungroup() %>% mutate(disease4550=ifelse(is.na(age_onset),0,1)) # 177,330		
@@ -214,8 +212,7 @@ for (disease in disease30_lst$ENDPOINT ) {
 			p_outcome1 <- p_outcome1 %>% mutate(age_onset=ifelse(age_onset>stop, NA, age_onset))
 			p_outcome0 <- p_outcome0 %>% mutate(age_onset=ifelse(age_onset>stop.y, NA, age_onset), stop=ifelse(stop>stop.y, stop.y, stop)) %>% select(-stop.y)
 		}   # otherwise all diagnose before stop
-			
-		
+					
 		ppp <- rbind(p_outcome0, p_outcome1) %>% mutate(disease=ifelse(is.na(age_onset),0,1)) %>% 
 		            mutate(age=2018-as.numeric(substr(as.character(index_birth_date),1,4)), age2=age^2)
 		
@@ -236,7 +233,6 @@ for (disease in disease30_lst$ENDPOINT ) {
 		parent_outcome0 <- outcome_window_endpoint %>% filter(status==0) %>% select(parent_id) %>% unique()  # 97,080
 		p <- outcome_window_endpoint %>% filter(parent_id %in% parent_outcome0$parent_id) %>% filter(parent_id %in% parent_outcome1$parent_id)
 		dim(p)  # 188911      9
-	
 	
 		## Within each family, randomly select one sibling with children as control, and the childless siblings with closest birth year with the control as case;
 		p_outcome1 <- p %>% filter(status==1) %>% group_by(parent_id) %>% sample_n(1) %>% ungroup() %>% mutate(disease4550=ifelse(is.na(age_onset),0,1))  # 79,122
