@@ -64,5 +64,8 @@ Output: "HILMO_ICD_LONG_COMPLETE.Rdata", "CANCER_long.Rdata", "DEATH_long.Rdata"
 
 ## 13. Regression analysis
 13_REG_INDEX_TRAIT_SEX_LOGIT_SIBMATCH_SIBS.R   
-Aim: conditional logitic regression model for childless using sibling-match design
+Aim: conditional logitic regression model for childless, using sibling-match design
+
+13_REG_INDEX_TRAIT_SEX_COXVARY_SIBMATCH_SIBS.R   
+Aim: cox HR model stratified by full-sibling families for childless, using sibling-match design and considering disease status as time-varing covariable
 
