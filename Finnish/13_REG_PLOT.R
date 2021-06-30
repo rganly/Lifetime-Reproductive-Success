@@ -1,17 +1,10 @@
 
-# cd  /homes/aliu/DSGE_LRS/output/registry_edit/REGRESSION/
-# cat outcome_window_childless_*_*.tsv|grep Estimate|sort|uniq > outcome_window_childless_male_done.tsv
-# cat outcome_window_childless_*_*.tsv |sort|uniq >> outcome_window_childless_male_done.tsv
-
-
-
-
 ####################################################
 #       create function and set environments       #
 ####################################################
 
 
-setwd("/Users/aoxliu/Documents/Project1_Lifetime_Reproductive_Success/Main_analysis/Survival_analysis/")
+setwd("/Users/aoxliu/Documents/Project1_Lifetime_Reproductive_Success/Main_analysis/Survival_analysis/")   # change to the directory with input data
 library(dplyr)
 require(ggplot2)
 library(plotly)
@@ -20,7 +13,9 @@ library(htmlwidgets)
 
 
 sexs <- c("male","female")
-res_ep_info <- read.table("/Users/aoxliu/Documents/Project1_Lifetime_Reproductive_Success/Main_analysis/Rshiny/IndependentEndpoints_Info.tsv", sep="\t", header=T)
+# res_ep_info <- read.table("/Users/aoxliu/Documents/Project1_Lifetime_Reproductive_Success/Main_analysis/Rshiny/IndependentEndpoints_Info.tsv", sep="\t", header=T)
+res_ep_info <- read.table("/homes/aliu/DSGE_LRS/input/IndependentEndpoints_Info.tsv", sep="\t", header=T)
+
 
 mhd_index <- function(dat, NEB, sex, model, variable){
 	corlor <- ifelse(sex=="male",'steelblue4','VIOLETRED4')
@@ -95,11 +90,9 @@ for (sex_n in 1:2) {
 	res <- res %>% inner_join(res_ep_info, by="Endpoint") 
 	nrow(res)  # 1,397
 	p_raw <- mhd_index(dat=res, NEB="has a child", sex=sexs[sex_n], model=paste0("cox_vary_",mod_pattern," model consider disease status as time-varying covariate"), variable="Estimate")
-	# p <- mhd_index(dat=res %>% filter(HR<3.5), NEB="has a child", sex=sexs[sex_n], model="Cox model consider disease status as time-varying covariate", variable="Estimate")
 	ggsave(paste0("cox_vary_",mod_pattern, "_", outcomeName ,"_", sexs[sex_n], "_50.png"), width=13, height=5)
 	ply <- ggplotly(p_raw + theme(legend.position = "none"), tooltip="text")
 	saveWidget(ply, file=paste0("cox_vary_",mod_pattern, "_", outcomeName ,"_", sexs[sex_n], "_50.html"))
-	res %>% filter(SE>0.5 & P_val<0.05/1200)
 	
 }
 
