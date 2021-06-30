@@ -76,4 +76,6 @@ Aim: cox HR model stratified by full-sibling families for childless, using sibli
 Aim: 
 
 13_REG_PLOT.R   
-Aim: 
+Aim: (Interactive) Plot for effects of all disease endpoints for fertility phenotype in a specific sex
+
+
