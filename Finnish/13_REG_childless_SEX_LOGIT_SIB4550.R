@@ -1,5 +1,5 @@
 
-## logit model for childless
+## Aim: conditional logitic regression model for childless in sibling pairs disconcordant on outcomes, using disease diagnoses before age 45/50
 
 sex_n <- 1
 sexs <- c("male","female")
