@@ -68,13 +68,16 @@ Aim:
 
 ### childless --------------------
 13_REG_childless_SEX_GEE_EVERYONE_SIBS.R     
-Aim: GEE model for childless in the full population, considering disease diagnoses before age 45/50 
+Aim: GEE model for childless in the full population, using disease diagnoses before age 45/50 
+
+13_REG_childless_SEX_LOGIT_SIB4550.R   
+Aim: conditional logitic regression model for childless in sibling pairs disconcordant on outcomes, using disease diagnoses before age 45/50
 
 13_REG_childless_SEX_LOGIT_SIBMATCH_SIBS.R   
-Aim: conditional logitic regression model for childless, using sibling-match design
+Aim: conditional logitic regression model for childless in sibling pairs disconcordant on outcomes, using a sibling-match design
 
 13_REG_childless_SEX_COXVARY_SIBMATCH_SIBS.R   
-Aim: cox HR model stratified by full-sibling families for childless, using sibling-match design and considering disease status as time-varing covariable
+Aim: cox HR model stratified by full-sibling families for childless in sibling pairs disconcordant on outcomes, using a sibling-match design and considering disease status as time-varing covariable
 
 13_REG_INDEX_MBR_Data.R  
 Aim: 
