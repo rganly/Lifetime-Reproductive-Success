@@ -66,9 +66,7 @@ Output: "HILMO_ICD_LONG_COMPLETE.Rdata", "CANCER_long.Rdata", "DEATH_long.Rdata"
 13_Data_preparation_QC.R  
 Aim: 
 
-13_REG_MODEL_TRAIT_SEX.R    
-Aim: Regression analysis for disease status using everyone (for glm and gee) or all sibs (for cond model), including sick and unsick
-
+# childless --------------------
 13_REG_childless_SEX_GEE_EVERYONE_SIBS.R     
 Aim: Regression analysis for disease status before age 45/50 using a GEE model in the full population
 
@@ -80,6 +78,11 @@ Aim: cox HR model stratified by full-sibling families for childless, using sibli
 
 13_REG_INDEX_MBR_Data.R  
 Aim: 
+
+# parity --------------------
+
+13_REG_MODEL_TRAIT_SEX.R    
+Aim: Regression analysis for disease status using everyone (for glm and gee) or all sibs (for cond model), including sick and unsick
 
 13_REG_PLOT.R   
 Aim: (Interactive) Plot for effects of all disease endpoints for fertility phenotype in a specific sex
