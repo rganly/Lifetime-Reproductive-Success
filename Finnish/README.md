@@ -69,10 +69,13 @@ Aim:
 13_REG_MODEL_TRAIT_SEX.R    
 Aim: Regression analysis for disease status using everyone (for glm and gee) or all sibs (for cond model), including sick and unsick
 
-13_REG_INDEX_TRAIT_SEX_LOGIT_SIBMATCH_SIBS.R   
+13_REG_childless_SEX_GEE_EVERYONE_SIBS.R
+Aim: 
+
+13_REG_childless_SEX_LOGIT_SIBMATCH_SIBS.R   
 Aim: conditional logitic regression model for childless, using sibling-match design
 
-13_REG_INDEX_TRAIT_SEX_COXVARY_SIBMATCH_SIBS.R   
+13_REG_childless_SEX_COXVARY_SIBMATCH_SIBS.R   
 Aim: cox HR model stratified by full-sibling families for childless, using sibling-match design and considering disease status as time-varing covariable
 
 13_REG_INDEX_MBR_Data.R  
