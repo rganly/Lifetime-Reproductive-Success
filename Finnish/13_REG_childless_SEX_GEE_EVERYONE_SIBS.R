@@ -1,4 +1,4 @@
-## Regression analysis for disease status, including sick and unsick
+## Aim: Regression analysis for disease status before age 45/50 using a GEE model in the full population
 
 mod <- "MODELVAR"
 NEB <- "TRAITVAR"  
