@@ -69,8 +69,8 @@ Aim:
 13_REG_MODEL_TRAIT_SEX.R    
 Aim: Regression analysis for disease status using everyone (for glm and gee) or all sibs (for cond model), including sick and unsick
 
-13_REG_childless_SEX_GEE_EVERYONE_SIBS.R
-Aim: 
+13_REG_childless_SEX_GEE_EVERYONE_SIBS.R     
+Aim: Regression analysis for disease status before age 45/50 using a GEE model in the full population
 
 13_REG_childless_SEX_LOGIT_SIBMATCH_SIBS.R   
 Aim: conditional logitic regression model for childless, using sibling-match design
