@@ -1,5 +1,4 @@
 
-## conditional logitic regression model for childless using sibling-match design
 ## Aim: conditional logitic regression model for childless in sibling pairs disconcordant on outcomes, using a sibling-match design
 
 # To avoid the confounding from reverse causation and the higher prevalence of diseases in older people, 
