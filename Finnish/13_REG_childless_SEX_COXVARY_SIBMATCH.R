@@ -1,5 +1,5 @@
 
-## Considering reproductive behaviours as repeated measurements and disease status as time-varing covariable
+## Aim: cox HR model stratified by full-sibling families for childless in sibling pairs disconcordant on outcomes, using a sibling-match design and considering disease status as time-varing covariable
 
 sex_n <- 2
 # sex_n <- 2
