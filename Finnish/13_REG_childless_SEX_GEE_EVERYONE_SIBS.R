@@ -1,4 +1,4 @@
-## Aim: Regression analysis for disease status before age 45/50 using a GEE model in the full population
+## Aim: GEE model for childless in the full population, considering disease diagnoses before age 45/50 
 
 mod <- "MODELVAR"
 NEB <- "TRAITVAR"  
