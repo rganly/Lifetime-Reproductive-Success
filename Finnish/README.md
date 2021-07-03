@@ -68,7 +68,7 @@ Aim:
 
 ### childless --------------------
 13_REG_childless_SEX_GEE_EVERYONE_SIBS.R     
-Aim: Regression analysis for disease status before age 45/50 using a GEE model in the full population
+Aim: GEE model for childless in the full population, considering disease diagnoses before age 45/50 
 
 13_REG_childless_SEX_LOGIT_SIBMATCH_SIBS.R   
 Aim: conditional logitic regression model for childless, using sibling-match design
