@@ -1,4 +1,5 @@
-## Aim: GEE model for childless in the full population, considering disease diagnoses before age 45/50 
+## Aim: GEE model for childless in the full population, using disease diagnoses before age 45/50
+
 
 mod <- "MODELVAR"
 NEB <- "TRAITVAR"  
