@@ -1,4 +1,4 @@
-## Summarize education registry 
+## Summarize education registry and convert to ISCED97 and years of education
 
 
 setwd("/homes/aliu/DSGE_LRS/output/registry_edit/")
