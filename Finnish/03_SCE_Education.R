@@ -145,7 +145,7 @@ nrow(edu_hy)     # 3,655,057
 
 
 #-----------------------------------------------------------------------------------------
-# set those without education level as 2
+# set those without education level as 2 (according to discusssion with SF, the inviduals which are not available neither in koulutus_ala_aste_u1477* nor in ei_hnroa_u1477* are having the lowest eduation level.)
 edu_na <- edu[edu$TNRO %!in% edu_hy$TNRO, c("TNRO","kaste_t2")]
 edu_na$kaste_t2 <- 2  
 nrow(edu_na)     # 3,114,992
