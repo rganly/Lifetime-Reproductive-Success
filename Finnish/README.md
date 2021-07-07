@@ -44,7 +44,7 @@ Input: "sose_u1477_a.Rdata", "demo.Rdata", and "A_INCOME.txt"
 Output: "sce_inc.Rdata"  
 
 03_SCE_Impute.R  
-Aim: 
+Aim: impute missing income from education and experience using "Mincer regression" 
 
 03_SCE_Education.R  
 Aim: summarize education registry and convert to ISCED97 and years of education
