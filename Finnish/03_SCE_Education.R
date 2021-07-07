@@ -13,7 +13,7 @@ require(gridExtra)
 
 '%!in%' <- function(x,y)!('%in%'(x,y))
 
-# 
+# FR (fertility ratio for each education level (ISCED97))
 fr <- function(lrs, pop, sex){
 	lrs_sex <- lrs[lrs$SUKUPUOLI==sex, ]
 	gen_lrs <- mean(lrs_sex[ ,pop])	
@@ -43,7 +43,7 @@ fr <- function(lrs, pop, sex){
 
 
 
-# 
+# FR (fertility ratio for each education orientation)
 fr_cla <- function(lrs, pop, sex){
 	lrs_sex <- lrs[lrs$SUKUPUOLI==sex, ]
 	gen_lrs <- mean(lrs_sex[ ,pop])	
