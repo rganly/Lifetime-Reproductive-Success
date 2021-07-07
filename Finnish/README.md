@@ -79,8 +79,7 @@ Aim: conditional logitic regression model for childless in sibling pairs disconc
 13_REG_childless_SEX_COXVARY_SIBMATCH_SIBS.R   
 Aim: cox HR model stratified by full-sibling families for childless in sibling pairs disconcordant on outcomes, using a sibling-match design and considering disease status as time-varing covariable
 
-13_REG_INDEX_MBR_Data.R  
-Aim: 
+
 
 ### parity --------------------
 
