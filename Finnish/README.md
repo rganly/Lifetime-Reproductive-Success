@@ -43,7 +43,11 @@ Aim: create an individual-level yearly income data
 Input: "sose_u1477_a.Rdata", "demo.Rdata", and "A_INCOME.txt"  
 Output: "sce_inc.Rdata"  
 
+03_SCE_Impute.R  
+Aim: 
+
 03_SCE_Education.R  
+Aim: summarize education registry and convert to ISCED97 and years of education
 
 
 ## 4. Demographic info for everyone in the population register
