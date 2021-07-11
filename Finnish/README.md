@@ -84,7 +84,7 @@ Aim: conditional logitic regression model for childless in sibling pairs disconc
 Aim: cox HR model stratified by full-sibling families for childless in sibling pairs disconcordant on outcomes, using a sibling-match design and considering disease status as time-varing covariable
 
 13_Marginal_Effect _Regression_Model.R.   
-Aim: Interpreting model estimates for different non-linear regression models: from the scale of estimation to the scale of interest (outcome)
+Aim: Interpreting model estimates for non-linear regression models (logitstic and poisson): from the scale of estimation to the scale of interest (outcome)
 
 
 ### parity --------------------
