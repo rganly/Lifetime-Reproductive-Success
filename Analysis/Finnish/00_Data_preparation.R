@@ -2,7 +2,7 @@
 ## Data preparation-------------------- 
 # Data dictionary: https://docs.google.com/spreadsheets/d/16E40mY9Avffnq6u5DhtQbisohG3ctzmU/edit#gid=947231392
 
-# Index person: birth year 1956-1982, born in Finland, not emigrated from Finland, alive until age 16, have same-sex full sib
+# Index person: birth year 1956-1982, born in Finland, not emigrated from Finland, alive until age 16
 
 # QC criteria
 # Start of follow-up is age 16: Index person dead before 16 were removed. Children born before age 16 were considered as born at age 16.
