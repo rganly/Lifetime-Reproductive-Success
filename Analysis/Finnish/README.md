@@ -1,5 +1,5 @@
 ## Impact of disease on lifetime childless, parity, and age at first birth 
-Methods: https://docs.google.com/document/d/1mOqFSQv8Y9_LxhBRvH_SOIcAgK7H76B36JrdZO7pmEk/edit
+Method descriptions: https://docs.google.com/document/d/1mOqFSQv8Y9_LxhBRvH_SOIcAgK7H76B36JrdZO7pmEk/edit
 
 
 # 00_Data_preparation.R   
@@ -35,6 +35,11 @@ Examples of outputs:
 
 
 ## 01_REG_childless_main.R
+
+
+## 
+
+##
 
 
 
