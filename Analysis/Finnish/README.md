@@ -6,14 +6,14 @@ Method descriptions: https://docs.google.com/document/d/1mOqFSQv8Y9_LxhBRvH_SOIc
 Aim: prepare lists of index person for different regression analyisis (e.g. population-based/sibling-design) and QCed children/marriage/endpoint registry for the entire Finnish population born in 1956-1982.
 
 Examples of outputs: 
-"indexW_5682_everyone.Rdata" for birth year 1956-1982, not imigrated/emigrated from Finland, alive until age 16, and with both father_id and mother_id available;  
-"indexW_5682_fullsib.Rdata" for "indexW_5682_everyone.Rdata" with same-sex full sibs; 
-"indexW_4550_everyone.Rdata" for "indexW_5682_everyone.Rdata" men born in 1956-1968 and women in 1956-1973 (45/50 years of follow-up for women/men); 
+"indexW_5682_everyone.Rdata" for birth year 1956-1982, not imigrated/emigrated from Finland, alive until age 16, and with both father_id and mother_id available;    
+"indexW_5682_fullsib.Rdata" for "indexW_5682_everyone.Rdata" with same-sex full sibs;    
+"indexW_4550_everyone.Rdata" for "indexW_5682_everyone.Rdata" men born in 1956-1968 and women in 1956-1973 (45/50 years of follow-up for women/men);    
 "indexW_4550_fullsib.Rdata" for "indexW_4550_everyone.Rdata" with same-sex full sibs.     
 
-"indexW_5682_everyone_child.Rdata" are children registry for "indexW_5682_everyone.Rdata"; 
-"indexW_5682_everyone_marriage.Rdata" are marriage registry for "indexW_5682_everyone.Rdata";  
-"indexW_5682_everyone_endpoint.Rdata" are endpoint registry for "indexW_5682_everyone.Rdata". 
+"indexW_5682_everyone_child.Rdata" are children registry for "indexW_5682_everyone.Rdata";   
+"indexW_5682_everyone_marriage.Rdata" are marriage registry for "indexW_5682_everyone.Rdata";    
+"indexW_5682_everyone_endpoint.Rdata" are endpoint registry for "indexW_5682_everyone.Rdata".   
 
 
 # 00_Define_reproductive_phenotypes.R    
