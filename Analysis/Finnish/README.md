@@ -32,6 +32,9 @@ Examples of outputs:
 
 
 ## 01_REG_childless_main.R
+which model: 
+which samples: 
+sed
 
 
 ## 01_REG_childless_main.R
