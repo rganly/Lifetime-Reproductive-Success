@@ -15,9 +15,6 @@
 # 4) If the case and the control are also discordant on disease status at the time point when the event occurs to the case that is the age at first birth for case for childless, 
 #    then we enroll this full-sibling pair into our matched pair case-control study;
 
-## Model 3: cond_coxvary_sibmatch: (need to use the full sample since it can manage the censoring) -------------------
-# cox HR model stratified by full-sibling families for childless in sibling pairs disconcordant on outcomes, using a sibling-match design and considering disease status as time-varing covariable
-
 
 
 
@@ -28,13 +25,14 @@
 ######## Only change this part when running for different scenarios ########
 # which sex?
 sex_n <- 1
+# sex_n <- 2
 sexs <- c("male","female")
 
 # which outcome?
 outcomeName <- "childless"  
 
 # which diagnose to use?
-mod_pattern <- "cond_logit_4550"   
+# mod_pattern <- "cond_logit_4550"   
 # mod_pattern <- "cond_logit_sibmatch"    
 # mod_pattern <- "cond_coxvary_sibmatch"  
 
@@ -76,32 +74,28 @@ invlogit <- function (x) {1/(1+exp(-x))}
 #########################################################
 
 ## Demographic info, the same for all analyses, born from 1956 to 1982
-indexW <- data.frame(get(load(paste0(r_dir, "indexW_fullsib.Rdata")))) %>% filter(index_sex==sex_n) %>% 
+indexW <- data.frame(get(load(paste0(r_dir, "indexW_4550_fullsib.Rdata")))) %>% filter(index_sex==sex_n) %>% 
       select(index_id, index_sex, parent_id, index_birth_date, endfollowup4550_date, endfollowup4550_age)
-nrow(indexW)  # 443,695 for male
+nrow(indexW)  # 223,196 for male
 
 
-outcome_age_dat <- data.frame(get(load(paste0(r_dir, "indexW_fullsib_",outcomeName,".Rdata")))) %>% filter(index_id %in% indexW$index_id) %>%
+outcome_age_dat <- data.frame(get(load(paste0(r_dir, "indexW_5682_everyone_",outcomeName,".Rdata")))) %>% filter(index_id %in% indexW$index_id) %>%
 	                     mutate(outcome_age=outcome_age-1)   # change from age at giving birth to age at pregnancy
-nrow(outcome_age_dat)  # 317,772
+nrow(outcome_age_dat)  # 162,346
 
 
 ## Date at diagnosis
-ry_first_index <- data.frame(get(load(paste0(r_dir,"indexW_fullsib_endpoint.Rdata")))) %>% filter(ID %in% indexW$index_id) 
-nrow(ry_first_index)  # 2,086,640
-
-res_ep_info <- read.table("/homes/aliu/DSGE_LRS/input/IndependentEndpoints_Info.tsv", sep="\t", header=T)  # only keep independent endpoints
-ry_first_index <- ry_first_index %>% filter(ENDPOINT %in% res_ep_info$Endpoint)
-nrow(ry_first_index)  # 2,086,640, already QCed
+ry_first_index <- data.frame(get(load(paste0(r_dir,"indexW_5682_everyone_endpoint.Rdata")))) %>% filter(ID %in% indexW$index_id) 
+nrow(ry_first_index)  # 986,015
 
 
 ## Disease endpoint list (skip endpoints already done)
-mod_pattern <- "cond_logit_4550"   
+mod_pattern <- "cond_logit_sibmatch"   
 disease30_lst <- ry_first_index %>% mutate(ENDPOINT=as.character(ENDPOINT)) %>% group_by(ENDPOINT) %>% count() %>% filter(n>=30)  # 1,253
-if (file.exists(paste0("RES_",mod_pattern,"_", outcomeName ,"_", sexs[sex_n], ".tsv"))){
-	done <- read.table(paste0("RES_",mod_pattern,"_", outcomeName ,"_", sexs[sex_n], ".tsv"), header=T)
+if (file.exists(paste0("RESULT_",mod_pattern,"_", outcomeName ,"_", sexs[sex_n], ".tsv"))){
+	done <- read.table(paste0("RESULT_",mod_pattern,"_", outcomeName ,"_", sexs[sex_n], ".tsv"), header=T)
 	disease30_lst <- disease30_lst %>% filter(ENDPOINT %!in% done$Endpoint)
-}
+}  # 1,186 
 
 
 
@@ -144,7 +138,7 @@ for (disease in disease30_lst$ENDPOINT ) {
 	parent_outcome1 <- outcome_window_endpoint %>% filter(status==1) %>% select(parent_id) %>% unique()  # 177,327
 	parent_outcome0 <- outcome_window_endpoint %>% filter(status==0) %>% select(parent_id) %>% unique()  # 97,080
 	p <- outcome_window_endpoint %>% filter(parent_id %in% parent_outcome0$parent_id) %>% filter(parent_id %in% parent_outcome1$parent_id)
-	dim(p)  # 188911      9
+	dim(p)  # 93270      9
 
 
 	## Within each family, randomly select one sibling with children as control, and the childless siblings with closest birth year with the control as case;
@@ -153,8 +147,8 @@ for (disease in disease30_lst$ENDPOINT ) {
 	                   group_by(parent_id) %>% filter(dif==min(dif)) %>% sample_n(1) %>% 
 	                   select(-index_birth_date.y, -dif) %>% rename(index_birth_date="index_birth_date.x") %>% ungroup()
 	
-	dim(p_outcome0)  # 79153     10
-	dim(p_outcome1)  # 79153     10
+	dim(p_outcome0)  # 38762     10
+	dim(p_outcome1)  # 38762     10
 
 	for (mod_pattern in c("cond_logit_4550","cond_logit_sibmatch")){
 	
@@ -237,10 +231,10 @@ for (disease in disease30_lst$ENDPOINT ) {
 		df[1,"Endpoint"] <- disease
 	
 		print(df)
-		if (!file.exists(paste0("RES_",mod_pattern,"_", outcomeName ,"_", sexs[sex_n], ".tsv"))){
-			write.table(df, paste0("RES_",mod_pattern,"_", outcomeName ,"_", sexs[sex_n], ".tsv"), append=F, quote=F, sep="\t", row.names=F, col.names=T)
+		if (!file.exists(paste0("RESULT_",mod_pattern,"_", outcomeName ,"_", sexs[sex_n], ".tsv"))){
+			write.table(df, paste0("RESULT_",mod_pattern,"_", outcomeName ,"_", sexs[sex_n], ".tsv"), append=F, quote=F, sep="\t", row.names=F, col.names=T)
 		} else {
-			write.table(df, paste0("RES_",mod_pattern,"_", outcomeName ,"_", sexs[sex_n], ".tsv"), append=T, quote=F, sep="\t", row.names=F, col.names=F)
+			write.table(df, paste0("RESULT_",mod_pattern,"_", outcomeName ,"_", sexs[sex_n], ".tsv"), append=T, quote=F, sep="\t", row.names=F, col.names=F)
 		}
 	
 	}
