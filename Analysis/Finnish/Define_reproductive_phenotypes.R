@@ -9,108 +9,115 @@ library(dplyr)
 
 
 
+
+#----------------------------
+# outcomeName   # c("childless", "parity", "NEB", "has_spouse", "age at first birth")
+# recurrent     # 1 for recurrent-event and time-varing coxph model, 0 for non-recurrent time-varing coxph model.
+# includeZero   # whether only keep individuals with 0 event of outcome or not.
+#----------------------------
+
+
+
+
 ################################################
 #              read in data                    # 
 ################################################
 
-indexW_fullsib <- data.frame(get(load(paste0(r_dir, "indexW_fullsib.Rdata"))))
-indexW_fullsib_child <- data.frame(get(load(paste0(r_dir, "indexW_fullsib_child.Rdata"))))
-indexW_fullsib_endpoint <- data.frame(get(load(paste0(r_dir, "indexW_fullsib_endpoint.Rdata"))))
-indexW_fullsib_marriage <- data.frame(get(load(paste0(r_dir, "indexW_fullsib_marriage.Rdata"))))
+indexW <- data.frame(get(load(paste0(r_dir, "indexW_5682_everyone.Rdata")))) %>% 
+      select(index_id, index_sex, parent_id, index_birth_date, endfollowup4550_date, endfollowup4550_age)
+nrow(indexW)  # 1,723,014
+
+indexW_5682_everyone_child <- data.frame(get(load(paste0(r_dir, "indexW_5682_everyone_child.Rdata"))))
+indexW_5682_everyone_endpoint <- data.frame(get(load(paste0(r_dir, "indexW_5682_everyone_endpoint.Rdata"))))
+indexW_5682_everyone_marriage <- data.frame(get(load(paste0(r_dir, "indexW_5682_everyone_marriage.Rdata"))))
 
 
 
 
 ################################################
-#                 childless                    # 
+#                Giving birth                  #
 ################################################
 
-# childless --------------------
-define_childless <- indexW_fullsib %>% mutate(childless=ifelse(id %in% indexW_fullsib_child$id, 0, 1))
-table(define_childless$childless)   # 201,103 with 0 and 649,017 with 1
+## NofChildren, parity, childless, and AgeFirstBirth ------------------------
+# NofChildren and parity is different at includeZero or not
+# childless and AgeFirstBirth is different at includeZero or not
+
+# ------------------------
+for (outcomeName in c("parity","childless","AgeFirstBirth")) {
+	outcome_age_dat <- data.frame(get(load(paste0(r_dir, "indexW_5682_everyone_child.Rdata")))) %>% rename(outcome_age="index_birth_age") 
+	if (outcomeName %in% c("childless","AgeFirstBirth")) { outcome_age_dat <- outcome_age_dat %>% group_by(index_id) %>% slice_min(outcome_age,1) %>% distinct(index_id, outcome_age,.keep_all=F)}
+	print(paste0(outcomeName, ": ", nrow(outcome_age_dat)))  # 1,546,175
+	save(outcome_age_dat, file=paste0(r_dir, "indexW_5682_everyone_",outcomeName,".Rdata"))
+}
+# [1] "parity: 3011597"
+# [1] "childless: 1295105"
+# [1] "AgeFirstBirth: 1295105"
 
 
-# childless, excluding children dead before 28 days --------------------
-indexW_fullsib_child %>% filter(child_death_before28days==0) %>% select(id) %>% unique() %>% mutate(childless_NoDeathBefore28days=0) %>% 
-        right_join(indexW_fullsib, by="id") %>% mutate(childless_NoDeathBefore28days=ifelse(is.na(childless_NoDeathBefore28days),1,0)) %>% 
-        group_by(childless_NoDeathBefore28days) %>% count()   # 201,251 with 1 and 648,869 with 0
+# ------------------------
+# (???how to deal with is.na(child_ART)), which are children not registered in medical birth registry) --------------------
+for (outcomeName in c("parity_NoART","childless_NoART","AgeFirstBirth_NoART")) {
+	outcome_age_dat <- data.frame(get(load(paste0(r_dir, "indexW_5682_everyone_child.Rdata")))) %>% rename(outcome_age="index_birth_age") %>% 
+	      filter(child_ART==0|is.na(child_ART)) 
+	if (outcomeName %in% c("childless_NoART","AgeFirstBirth_NoART")) { outcome_age_dat <- outcome_age_dat %>% group_by(index_id) %>% slice_min(outcome_age,1) %>% distinct(index_id, outcome_age,.keep_all=F)}
+	print(paste0(outcomeName, ": ", nrow(outcome_age_dat)))  # 1,546,175
+	save(outcome_age_dat, file=paste0(r_dir, "indexW_5682_everyone_",outcomeName,".Rdata"))
+}
+# "parity_NoART: 2980345" (31252 were removed)
+# "childless_NoART: 1282391" (12714 were removed)
+# "AgeFirstBirth_NoART: 1282391" (12714 were removed)
 
 
-# childless, excluding children using ART (???how to deal with is.na(child_ART)), which are children not registered in medical birth registry) --------------------
-indexW_fullsib_child %>% filter(child_ART==0 | is.na(child_ART)) %>% select(id) %>% unique() %>% mutate(childless_NoART=0) %>% 
-       right_join(indexW_fullsib, by="id") %>% mutate(childless_NoART=ifelse(is.na(childless_NoART),1,0)) %>% 
-       group_by(childless_NoART) %>% count()   # 206,656 with 1 and 643,464 with 0
+# ------------------------
+for (outcomeName in c("parity_NoDeath28","childless_NoDeath28","AgeFirstBirth_NoDeath28")) {
+	outcome_age_dat <- data.frame(get(load(paste0(r_dir, "indexW_5682_everyone_child.Rdata")))) %>% rename(outcome_age="index_birth_age") %>% 
+	      filter(child_death_before28days==0) 
+	if (outcomeName %in% c("childless_NoDeath28","AgeFirstBirth_NoDeath28")) { outcome_age_dat <- outcome_age_dat %>% group_by(index_id) %>% slice_min(outcome_age,1) %>% distinct(index_id, outcome_age,.keep_all=F)}
+	print(paste0(outcomeName, ": ", nrow(outcome_age_dat)))  # 1,546,175
+	save(outcome_age_dat, file=paste0(r_dir, "indexW_5682_everyone_",outcomeName,".Rdata"))
+}
+# "parity_NoDeath28: 3004345" (7252 were removed)
+# "childless_NoDeath28: 1294790" (12399 were removed)
+# "AgeFirstBirth_NoDeath28: 1294790" (12399 were removed)
 
 
-# childless, excluding children using ART or dead before 28 days --------------------
-indexW_fullsib_child %>% filter(child_death_before28days==0 & (child_ART==0 | is.na(child_ART))) %>% select(id) %>% unique() %>% mutate(childless_NoDeathBefore28daysNoART=0) %>% 
-       right_join(indexW_fullsib, by="id") %>% mutate(childless_NoDeathBefore28daysNoART=ifelse(is.na(childless_NoDeathBefore28daysNoART),1,0)) %>% 
-       group_by(childless_NoDeathBefore28daysNoART) %>% count()   # 206,801 with 1 and 643,319 with 0
-
-
-
-
-################################################
-#  parity (only for individuals with children) # 
-################################################
-
-# parity --------------------
-indexW_fullsib_child %>% group_by(id) %>% count() %>% rename(parity="n") %>% 
-       group_by(parity) %>% count()  # from 1 to 19
-
-
-# parity, excluding children dead before 28 days --------------------
-indexW_fullsib_child %>% filter(child_death_before28days==0) %>% group_by(id) %>% count() %>% rename(parity_NoDeathBefore28days="n") %>% 
-       group_by(parity_NoDeathBefore28days) %>% count()  # from 1 to 19
-
-
-# parity, excluding children dead before 28 days using ART (???how to deal with is.na(child_ART)), which are children not registered in medical birth registry) --------------------
-
-
-# parity, excluding children using ART or dead before 28 days --------------------
-
-
-
-
-################################################
-#  number of children (including 0 children)   # 
-################################################
-
-# number of children --------------------
-
-
-# number of children, excluding children dead before 28 days --------------------
-
-
-# number of children, excluding children dead before 28 days using ART (???how to deal with is.na(child_ART)), which are children not registered in medical birth registry) --------------------
-
-
-# number of children, excluding children using ART or dead before 28 days --------------------
+# ------------------------
+for (outcomeName in c("parityNoARTNoDeath28","childlessNoARTNoDeath28","AgeFirstBirthNoARTNoDeath28")) {
+	outcome_age_dat <- data.frame(get(load(paste0(r_dir, "indexW_5682_everyone_child.Rdata")))) %>% rename(outcome_age="index_birth_age") %>% 
+	      filter((child_ART==0|is.na(child_ART)) & child_death_before28days==0) 
+	if (outcomeName %in% c("childlessNoARTNoDeath28","AgeFirstBirthNoARTNoDeath28")) { outcome_age_dat <- outcome_age_dat %>% group_by(index_id) %>% slice_min(outcome_age,1) %>% distinct(index_id, outcome_age,.keep_all=F)}
+	print(paste0(outcomeName, ": ", nrow(outcome_age_dat)))  # 1,546,175
+	save(outcome_age_dat, file=paste0(r_dir, "indexW_5682_everyone_",outcomeName,".Rdata"))
+}
+# "parityNoARTNoDeath28: 2973174" (38423 were removed)
+# "childlessNoARTNoDeath28: 1282076" (13029 were removed)
+# "AgeFirstBirthNoARTNoDeath28: 1282076" (13029 were removed)
 
 
 
 
 ################################################
-#            Age at first birth                #
+#                Mate choice                   #
 ################################################
 
+## NofChildren, parity, childless, and AgeFirstBirth ------------------------
+# spouseless and AgeFirstSpouse is different at includeZero or not
+
+for (outcomeName in c("spouseless","AgeFirstSpouse")) {
+
+	outcome_age_dat <- data.frame(get(load(paste0(r_dir, "indexW_5682_everyone_marriage.Rdata")))) %>% rename(outcome_age="index_marry_age") %>% 
+	      distinct(index_id, outcome_age,.keep_all=F) %>% 
+	      group_by(index_id) %>% slice_min(outcome_age,1)
+	
+	print(paste0(outcomeName, ": ", nrow(outcome_age_dat)))  # 1,546,175
+	print(head(outcome_age_dat))
+	save(outcome_age_dat, file=paste0(r_dir, "indexW_5682_everyone_",outcomeName,".Rdata"))
+	
+}
+# "spouseless: 1190827"
+# "AgeFirstSpouse: 1190827"
 
 
-################################################
-#             Finding a spouse                 #
-################################################
-
-
-
-################################################
-#             Preterm births                   #
-################################################
-
-
-
-################################################
-#         Congenital anomalies                 #
-################################################
 
 
 
