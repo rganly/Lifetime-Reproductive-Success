@@ -11,9 +11,9 @@ Examples of outputs:
 "indexW_4550_everyone.Rdata" for women/men in "indexW_5682_everyone.Rdata" born in 1956-1973/1968 (45/50 years of follow-up for women/men);    
 "indexW_4550_fullsib.Rdata" for "indexW_4550_everyone.Rdata" with same-sex full sibs.     
 
-"indexW_5682_everyone_child.Rdata" are children registry for "indexW_5682_everyone.Rdata";   
-"indexW_5682_everyone_marriage.Rdata" are marriage registry for "indexW_5682_everyone.Rdata";    
-"indexW_5682_everyone_endpoint.Rdata" are endpoint registry for "indexW_5682_everyone.Rdata".   
+"indexW_5682_everyone_child.Rdata" is children registry for "indexW_5682_everyone.Rdata";   
+"indexW_5682_everyone_marriage.Rdata" is marriage registry for "indexW_5682_everyone.Rdata";    
+"indexW_5682_everyone_endpoint.Rdata" is endpoint registry for "indexW_5682_everyone.Rdata".   
 
 
 # 00_Define_reproductive_phenotypes.R    
