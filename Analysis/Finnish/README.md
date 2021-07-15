@@ -3,7 +3,7 @@ Method descriptions: https://docs.google.com/document/d/1mOqFSQv8Y9_LxhBRvH_SOIc
 
 
 # 00_Data_preparation.R   
-#Aim: prepare lists of index person for different regression analyisis (e.g. population-based/sibling-design) and QCed children/marriage/endpoint registry for the entire Finnish population born in 1956-1982.
+Aim: prepare lists of index person for different regression analyisis (e.g. population-based/sibling-design) and QCed children/marriage/endpoint registry for the entire Finnish population born in 1956-1982.
 
 Examples of outputs:   
 "indexW_5682_everyone.Rdata" for birth year 1956-1982, not imigrated/emigrated from Finland, alive until age 16, and with both father_id and mother_id available;    
