@@ -1,4 +1,5 @@
-## 
+## Impact of disease on lifetime childless, parity, and age at first birth (https://docs.google.com/document/d/1mOqFSQv8Y9_LxhBRvH_SOIcAgK7H76B36JrdZO7pmEk/edit)
+
 
 # 00_Data_preparation.R   
 Aim: prepare lists of index person for different regression analyisis (e.g. population-based/sibling-design) and QCed children/marriage/endpoint registry for the entire Finnish population born in 1956-1982.
@@ -29,6 +30,10 @@ Examples of outputs:
 "indexW_5682_everyone_parity_NoDeath28.Rdata" for .
 
 
-##---------------------------------------------------------------------------------------------
+## 01_REG_childless_main.R
+
+
+## 01_REG_childless_main.R
+
 
 
