@@ -271,7 +271,7 @@ for (k in wfile){
 indexW_5682_fullsib <- indexW_5682_everyone %>% group_by(parent_id) %>% count() %>% filter(n>1) %>% inner_join(indexW_5682_everyone, by="parent_id")
 
 
-# birth year: men in 1956-1968, women in 1956-1973; with both father_id and mother_id available; with same-sex full-siblings
+# birth year: men in 1956-1968, women in 1956-1973; with both father_id and mother_id available
 indexW_4550_everyone <- indexW_5682_everyone %>% filter((index_sex==1 & index_birth_date<=19681231)|(index_sex==2 & index_birth_date<=19731231)) 
 
 
