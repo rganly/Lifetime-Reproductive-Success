@@ -59,7 +59,7 @@ demo <- data.frame(get(load(paste0(r_dir, "demo.Rdata"))))
 dim(demo)
 
 
-# pedgree
+# pedigree
 ped <- data.frame(get(load(paste0(r_dir, "ped_all_bdate.Rdata"))))
 dim(ped)  # 5091592       5
 dup <- ped[duplicated(ped$id),"id"]
