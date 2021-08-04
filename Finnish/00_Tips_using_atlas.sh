@@ -42,7 +42,7 @@ ulimit -s unlimited
 qstat  -g  c      # check the availability of the queues
 qstat      # check the status of your job
 status
-
+qstat -j <job-id>|grep maxvmem   # To find the memory usage of your jobs run 
 
 ## cancel submitted job
 qdel  your_job_id
@@ -89,6 +89,7 @@ source $HOME/.bashrc && conda activate r_env && conda install -c r r-hmisc      
 
  # Rscript with conda environment for your .sh file when you submit job using qsub
 /homes/aliu/DSGE_LRS/software/Rscript     
+
 
 
 
