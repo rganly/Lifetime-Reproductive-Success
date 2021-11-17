@@ -16,20 +16,16 @@ chmod +x Dockerfile
 
 gcloud builds submit --tag  eu.gcr.io/finngen-refinery-dsgelab/ldsc_rg:01  --gcs-source-staging-dir=gs://dsge-aoxing/mocha
 #
-
-           
+          
 ### 2. Run GWAS for 6 disease endpoints (signifcantly reduce childlessness) using FinnGen R8 data in women and men separately
 
-
-
-
+#
 ### 3. Munge summary statistics for finngen disease endpoints and childlessness/NEB (Mathieson et al., 2020)
 
-
-
+#
 ### 4. Run LDSC
 
-
+#
 ### 5. Extract h2 and rg from the log file and only keep traits with SNP heriability Z-score higher than 4
 
 
