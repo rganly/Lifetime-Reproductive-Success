@@ -10,8 +10,3 @@ gs://dsge-aoxing/childlessness/Positive_Associations/M13_KNEEDERANGEMENTS_Female
 gs://dsge-aoxing/childlessness/Positive_Associations/M13_KNEEDERANGEMENTS_Male.gz	#chrom	pos	pval	10
 gs://dsge-aoxing/childlessness/Positive_Associations/M13_MENISCUSDERANGEMENTS_Female.gz	#chrom	pos	pval	10
 gs://dsge-aoxing/childlessness/Positive_Associations/M13_MENISCUSDERANGEMENTS_Male.gz	#chrom	pos	pval	10
-
-gs://dsge-aoxing/mocha/LRS/ldsc_rg/SSGC_Females_childless_Imputed.gz	CHR	BP	P_BOLT_LMM_INF	40
-gs://dsge-aoxing/mocha/LRS/ldsc_rg/SSGC_Males_childless_Imputed.gz	CHR	BP	P_BOLT_LMM_INF	40
-gs://dsge-aoxing/mocha/LRS/ldsc_rg/meta_NEB_MEN_chr1to22_pos_snpid.txt.gz	CHR	POS	Pvalue	40
-gs://dsge-aoxing/mocha/LRS/ldsc_rg/meta_NEB_WOMEN_chr1to22_pos_snpid.txt.gz	CHR	POS	Pvalue	40
