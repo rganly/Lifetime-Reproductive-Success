@@ -15,7 +15,7 @@ cat Dockerfile_original |sed s/"ldsc.git &&"/"ldsc.git"/g > Dockerfile
 chmod +x Dockerfile 
 
 gcloud builds submit --tag  eu.gcr.io/finngen-refinery-dsgelab/ldsc_rg:01  --gcs-source-staging-dir=gs://dsge-aoxing/mocha
-
+#
 
            
 ### 2. Run GWAS for 6 disease endpoints (signifcantly reduce childlessness) using FinnGen R8 data in women and men separately
