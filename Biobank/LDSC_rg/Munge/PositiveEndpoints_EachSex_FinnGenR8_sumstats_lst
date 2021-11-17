@@ -1,0 +1,12 @@
+J10_CHRONTONSADEN_Female	gs://dsge-aoxing/childlessness/Positive_Associations/J10_CHRONTONSADEN_Female.gz	25944	140647	gs://dsge-aoxing/mocha/LOY_GWAS/Meta_mLOX/rs_snp.formated.header.phewed_hapmap3.lst
+J10_CHRONTONSADEN_Male	gs://dsge-aoxing/childlessness/Positive_Associations/J10_CHRONTONSADEN_Male.gz	13039	117906	gs://dsge-aoxing/mocha/LOY_GWAS/Meta_mLOX/rs_snp.formated.header.phewed_hapmap3.lst
+J10_TONSILLITIS_Female	gs://dsge-aoxing/childlessness/Positive_Associations/J10_TONSILLITIS_Female.gz	5317	160853	gs://dsge-aoxing/mocha/LOY_GWAS/Meta_mLOX/rs_snp.formated.header.phewed_hapmap3.lst
+J10_TONSILLITIS_Male	gs://dsge-aoxing/childlessness/Positive_Associations/J10_TONSILLITIS_Male.gz	6501	120103	gs://dsge-aoxing/mocha/LOY_GWAS/Meta_mLOX/rs_snp.formated.header.phewed_hapmap3.lst
+J10_PERITONSABSC_Female	gs://dsge-aoxing/childlessness/Positive_Associations/J10_PERITONSABSC_Female.gz	3688	140647	gs://dsge-aoxing/mocha/LOY_GWAS/Meta_mLOX/rs_snp.formated.header.phewed_hapmap3.lst
+J10_PERITONSABSC_Male	gs://dsge-aoxing/childlessness/Positive_Associations/J10_PERITONSABSC_Male.gz	2982	117906	gs://dsge-aoxing/mocha/LOY_GWAS/Meta_mLOX/rs_snp.formated.header.phewed_hapmap3.lst
+K11_APPENDACUT_Female	gs://dsge-aoxing/childlessness/Positive_Associations/K11_APPENDACUT_Female.gz	13873	175771	gs://dsge-aoxing/mocha/LOY_GWAS/Meta_mLOX/rs_snp.formated.header.phewed_hapmap3.lst
+K11_APPENDACUT_Male	gs://dsge-aoxing/childlessness/Positive_Associations/K11_APPENDACUT_Male.gz	11833	138992	gs://dsge-aoxing/mocha/LOY_GWAS/Meta_mLOX/rs_snp.formated.header.phewed_hapmap3.lst
+M13_KNEEDERANGEMENTS_Female	gs://dsge-aoxing/childlessness/Positive_Associations/M13_KNEEDERANGEMENTS_Female.gz	16282	120007	gs://dsge-aoxing/mocha/LOY_GWAS/Meta_mLOX/rs_snp.formated.header.phewed_hapmap3.lst
+M13_KNEEDERANGEMENTS_Male	gs://dsge-aoxing/childlessness/Positive_Associations/M13_KNEEDERANGEMENTS_Male.gz	15585	101316	gs://dsge-aoxing/mocha/LOY_GWAS/Meta_mLOX/rs_snp.formated.header.phewed_hapmap3.lst
+M13_MENISCUSDERANGEMENTS_Female	gs://dsge-aoxing/childlessness/Positive_Associations/M13_MENISCUSDERANGEMENTS_Female.gz	10970	120007	gs://dsge-aoxing/mocha/LOY_GWAS/Meta_mLOX/rs_snp.formated.header.phewed_hapmap3.lst
+M13_MENISCUSDERANGEMENTS_Male	gs://dsge-aoxing/childlessness/Positive_Associations/M13_MENISCUSDERANGEMENTS_Male.gz	10787	101316	gs://dsge-aoxing/mocha/LOY_GWAS/Meta_mLOX/rs_snp.formated.header.phewed_hapmap3.lst
