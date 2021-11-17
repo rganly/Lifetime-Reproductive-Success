@@ -1,0 +1,5 @@
+{
+    "ldsc_rg.docker": "eu.gcr.io/finngen-refinery-dsgelab/ldsc_rg:01",
+    "ldsc_rg.sumstats_munged_lst": "gs://dsge-aoxing/childlessness/Positive_Associations/LDSC_PositiveEndpoints_EachSex_FinnGenR8_premunged_lst",
+    "ldsc_rg.gather.outfile": "LDSC_PositiveEndpoints_EachSex_FinnGenR8_results.txt"
+}
