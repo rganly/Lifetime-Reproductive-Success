@@ -1,12 +1,12 @@
-gs://dsge-aoxing/childlessness/Positive_Associations/J10_CHRONTONSADEN_Female.gz	#chrom	pos	pval	30
-gs://dsge-aoxing/childlessness/Positive_Associations/J10_CHRONTONSADEN_Male.gz	#chrom	pos	pval	15
-gs://dsge-aoxing/childlessness/Positive_Associations/J10_PERITONSABSC_Female.gz	#chrom	pos	pval	15
-gs://dsge-aoxing/childlessness/Positive_Associations/J10_PERITONSABSC_Male.gz	#chrom	pos	pval	15
-gs://dsge-aoxing/childlessness/Positive_Associations/J10_TONSILLITIS_Female.gz	#chrom	pos	pval	10
-gs://dsge-aoxing/childlessness/Positive_Associations/J10_TONSILLITIS_Male.gz	#chrom	pos	pval	10
-gs://dsge-aoxing/childlessness/Positive_Associations/K11_APPENDACUT_Female.gz	#chrom	pos	pval	35
-gs://dsge-aoxing/childlessness/Positive_Associations/K11_APPENDACUT_Male.gz	#chrom	pos	pval	35
-gs://dsge-aoxing/childlessness/Positive_Associations/M13_KNEEDERANGEMENTS_Female.gz	#chrom	pos	pval	10
-gs://dsge-aoxing/childlessness/Positive_Associations/M13_KNEEDERANGEMENTS_Male.gz	#chrom	pos	pval	10
-gs://dsge-aoxing/childlessness/Positive_Associations/M13_MENISCUSDERANGEMENTS_Female.gz	#chrom	pos	pval	10
-gs://dsge-aoxing/childlessness/Positive_Associations/M13_MENISCUSDERANGEMENTS_Male.gz	#chrom	pos	pval	10
+gs://dsge-aoxing/childlessness/Positive_Associations/J10_CHRONTONSADEN_Female.gz	J10_CHRONTONSADEN_Female	#chrom	pos	pval	30
+gs://dsge-aoxing/childlessness/Positive_Associations/J10_CHRONTONSADEN_Male.gz	J10_CHRONTONSADEN_Male	#chrom	pos	pval	15
+gs://dsge-aoxing/childlessness/Positive_Associations/J10_PERITONSABSC_Female.gz	J10_PERITONSABSC_Female	#chrom	pos	pval	15
+gs://dsge-aoxing/childlessness/Positive_Associations/J10_PERITONSABSC_Male.gz	J10_PERITONSABSC_Male	#chrom	pos	pval	15
+gs://dsge-aoxing/childlessness/Positive_Associations/J10_TONSILLITIS_Female.gz	J10_TONSILLITIS_Female	#chrom	pos	pval	10
+gs://dsge-aoxing/childlessness/Positive_Associations/J10_TONSILLITIS_Male.gz	J10_TONSILLITIS_Male	#chrom	pos	pval	10
+gs://dsge-aoxing/childlessness/Positive_Associations/K11_APPENDACUT_Female.gz	K11_APPENDACUT_Female	#chrom	pos	pval	35
+gs://dsge-aoxing/childlessness/Positive_Associations/K11_APPENDACUT_Male.gz	K11_APPENDACUT_Male	#chrom	pos	pval	35
+gs://dsge-aoxing/childlessness/Positive_Associations/M13_KNEEDERANGEMENTS_Female.gz	M13_KNEEDERANGEMENTS_Female	#chrom	pos	pval	10
+gs://dsge-aoxing/childlessness/Positive_Associations/M13_KNEEDERANGEMENTS_Male.gz	M13_KNEEDERANGEMENTS_Male	#chrom	pos	pval	10
+gs://dsge-aoxing/childlessness/Positive_Associations/M13_MENISCUSDERANGEMENTS_Female.gz	M13_MENISCUSDERANGEMENTS_Female	#chrom	pos	pval	10
+gs://dsge-aoxing/childlessness/Positive_Associations/M13_MENISCUSDERANGEMENTS_Male.gz	M13_MENISCUSDERANGEMENTS_Male	#chrom	pos	pval	10
