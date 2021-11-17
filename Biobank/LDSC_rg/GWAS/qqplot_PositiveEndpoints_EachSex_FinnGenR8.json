@@ -1,5 +1,4 @@
 {
     "qq_manha.colfile": "gs://dsge-aoxing/childlessness/qq_manha_PositiveEndpoints_EachSex_FinnGenR8_lst",
-    # "qq_manha.docker": "gcr.io/finngen-refinery-dev/saige:0.39.1-fg"
     "qq_manha.docker": "eu.gcr.io/finngen-refinery-dsgelab/saige_withqqplot:0.44.6.5"
 }
