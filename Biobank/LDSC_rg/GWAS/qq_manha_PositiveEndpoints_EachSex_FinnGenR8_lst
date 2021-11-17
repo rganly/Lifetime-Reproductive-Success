@@ -1,0 +1,17 @@
+gs://dsge-aoxing/childlessness/Positive_Associations/J10_CHRONTONSADEN_Female.gz	#chrom	pos	pval	30
+gs://dsge-aoxing/childlessness/Positive_Associations/J10_CHRONTONSADEN_Male.gz	#chrom	pos	pval	15
+gs://dsge-aoxing/childlessness/Positive_Associations/J10_PERITONSABSC_Female.gz	#chrom	pos	pval	15
+gs://dsge-aoxing/childlessness/Positive_Associations/J10_PERITONSABSC_Male.gz	#chrom	pos	pval	15
+gs://dsge-aoxing/childlessness/Positive_Associations/J10_TONSILLITIS_Female.gz	#chrom	pos	pval	10
+gs://dsge-aoxing/childlessness/Positive_Associations/J10_TONSILLITIS_Male.gz	#chrom	pos	pval	10
+gs://dsge-aoxing/childlessness/Positive_Associations/K11_APPENDACUT_Female.gz	#chrom	pos	pval	35
+gs://dsge-aoxing/childlessness/Positive_Associations/K11_APPENDACUT_Male.gz	#chrom	pos	pval	35
+gs://dsge-aoxing/childlessness/Positive_Associations/M13_KNEEDERANGEMENTS_Female.gz	#chrom	pos	pval	10
+gs://dsge-aoxing/childlessness/Positive_Associations/M13_KNEEDERANGEMENTS_Male.gz	#chrom	pos	pval	10
+gs://dsge-aoxing/childlessness/Positive_Associations/M13_MENISCUSDERANGEMENTS_Female.gz	#chrom	pos	pval	10
+gs://dsge-aoxing/childlessness/Positive_Associations/M13_MENISCUSDERANGEMENTS_Male.gz	#chrom	pos	pval	10
+
+gs://dsge-aoxing/mocha/LRS/ldsc_rg/SSGC_Females_childless_Imputed.gz	CHR	BP	P_BOLT_LMM_INF	40
+gs://dsge-aoxing/mocha/LRS/ldsc_rg/SSGC_Males_childless_Imputed.gz	CHR	BP	P_BOLT_LMM_INF	40
+gs://dsge-aoxing/mocha/LRS/ldsc_rg/meta_NEB_MEN_chr1to22_pos_snpid.txt.gz	CHR	POS	Pvalue	40
+gs://dsge-aoxing/mocha/LRS/ldsc_rg/meta_NEB_WOMEN_chr1to22_pos_snpid.txt.gz	CHR	POS	Pvalue	40
