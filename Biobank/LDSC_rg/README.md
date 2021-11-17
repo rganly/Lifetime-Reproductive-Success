@@ -1,5 +1,5 @@
 
-# 1. Build docker for LDSC -------
+## 1. Build docker for LDSC -------
 
 cd /Users/aoxliu/Documents/WDL_pipelines/LDSC_rg/
 
